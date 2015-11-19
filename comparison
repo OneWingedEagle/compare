@@ -1,89 +1,61 @@
 Result locations:
-release:	\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\periodic_source\static\independent\Igiven\coil\refine 1\REGULARIZATION 0\total_reduced_on_boundary\release\output
-para_1:	\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\periodic_source\static\independent\Igiven\coil\refine 1\REGULARIZATION 0\total_reduced_on_boundary\MPI para 1\output
-para_8:	\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\periodic_source\static\independent\Igiven\coil\refine 1\REGULARIZATION 0\total_reduced_on_boundary\MPI para 8\output
+network:	\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\SPM\OneMesh\FGCE\static\Igiven\circuit\refine 0\REGULARIZATION 1\release\output
+circuit:	\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\SPM\OneMesh\FGCE\static\Igiven\circuit\refine 0\REGULARIZATION 1\release\output
 
 Analysis date:
-release:	                                   Fri Nov 13 21:45:52 2015
-para_1:	                                   Fri Nov 13 21:28:41 2015
-para_8:	                                   Fri Nov 13 21:29:55 2015
+network:	                                   Wed Nov 18 17:57:01 2015
+circuit:	                                   Wed Nov 18 17:57:01 2015
+
+Module version: 
+        network: r11.2.5/20151106
+        circuit: r11.2.5/20151106
+
+Refine: 
+        network:               0
+        circuit:               0
+
 
 Node and element numbers:
-release:
-Total number of nodes: 28786
-Total number of elements: 26496
-para_1:
-Total number of nodes: 28786
-Total number of elements: 26496
-para_8:
-Total number of nodes: 4120
-Total number of elements: 3376
+network:
+Total number of nodes: 107848
+Total number of elements: 102880
+circuit:
+Total number of nodes: 107848
+Total number of elements: 102880
 
 
 Number of iterations:
-release:
-Total ICCG: 257
-Total Nonlinear: 0
-para_1:
-Total ICCG: 254
-Total Nonlinear: 0
-para_8:
-Total ICCG: 262
-Total Nonlinear: 0
+network:
+Total ICCG: 1710
+Total Nonlinear: 8
+circuit:
+Total ICCG: 1710
+Total Nonlinear: 8
 
 Total time:
-release:	8.0
-para_1:	5.5
-para_8:	2.7
+network:	81.0
+circuit:	81.0
 
 Comparison of results:
 
 Max errors:
-              para_1 against release:            0.6614 % at: Magnetic Energies  Step.No:        1        Energy23(J)
-               para_8 against para_1:             0.484 % at: Magnetic Energies  Step.No:        3        Energy24(J)
+             circuit against network:               0.0 % at:   Power Sources    Step.No:        0            Step.No
 
 Accumulated errors:
-              para_1 against release:            4.9132 %
-               para_8 against para_1:              6.65 %
+             circuit against network:               0.0 %
 
 
-****   Power Sources   ************************************************************
+********   Power Sources   ********************************************************************************
 
-           Step.No        Time(sec.)            PS1(A)            PS1(A)            PS1(A)            PS1(V)            PS1(V)            PS1(V)   PS1(A) Err. (%)   PS1(A) Err. (%)   PS1(V) Err. (%)   PS1(V) Err. (%)
-                                               release            para_1            para_8           release            para_1            para_8            2 vs.1            3 vs.2            2 vs.1            3 vs.2
-------------------------------------------------------------
-                 1               1.0   1.00000000e+000      1.00000e+000      1.00000e+000   4.50000000e+001      4.50000e+001      4.50000e+001               0.0               0.0               0.0               0.0
-                 2               2.0   2.00000000e+000      2.00000e+000      2.00000e+000   9.00000000e+001      9.00000e+001      9.00000e+001               0.0               0.0               0.0               0.0
-                 3               3.0   3.00000000e+000      3.00000e+000      3.00000e+000   1.35000000e+002      1.35000e+002      1.35000e+002               0.0               0.0               0.0               0.0
-                 4               4.0   4.00000000e+000      4.00000e+000      4.00000e+000   1.80000000e+002      1.80000e+002      1.80000e+002               0.0               0.0               0.0               0.0
-
-*****   Field Sources   ***************************************************************************
-
-           Step.No        Time(sec.)            FS1(A)            FS1(A)            FS1(A)            FS1(V)            FS1(V)            FS1(V)           FS1(Wb)           FS1(Wb)           FS1(Wb)   FS1(A) Err. (%)   FS1(A) Err. (%)   FS1(V) Err. (%)   FS1(V) Err. (%)  FS1(Wb) Err. (%)  FS1(Wb) Err. (%)
-                                               release            para_1            para_8           release            para_1            para_8           release            para_1            para_8            2 vs.1            3 vs.2            2 vs.1            3 vs.2            2 vs.1            3 vs.2
----------------------------------------------------------------------------
-                 1               1.0   1.00000000e+000      1.00000e+000      1.00000e+000   4.50000000e+001      4.50000e+001      4.50000e+001   3.04713503e-001      3.04588e-001      3.04100e-001               0.0               0.0               0.0               0.0            0.0411            0.1602
-                 2               2.0   2.00000000e+000      2.00000e+000      2.00000e+000   9.00000000e+001      9.00000e+001      9.00000e+001   6.10230002e-001      6.09855e-001      6.09024e-001               0.0               0.0               0.0               0.0            0.0614            0.1362
-                 3               3.0   3.00000000e+000      3.00000e+000      3.00000e+000   1.35000000e+002      1.35000e+002      1.35000e+002   9.17285780e-001      9.16564e-001      9.14993e-001               0.0               0.0               0.0               0.0            0.0786            0.1714
-                 4               4.0   4.00000000e+000      4.00000e+000      4.00000e+000   1.80000000e+002      1.80000e+002      1.80000e+002   1.22466836e+000      1.22451e+000      1.22168e+000               0.0               0.0               0.0               0.0            0.0129            0.2311
-
-***      Fluxes       *********************************************
-
-           Step.No        Time(sec.)         Flux1(Wb)         Flux1(Wb)         Flux1(Wb)Flux1(Wb) Err. (%)Flux1(Wb) Err. (%)
-                                               release            para_1            para_8            2 vs.1            3 vs.2
----------------------------------------------
-                 1               1.0   7.85311459e-005      7.85409e-005      7.84219e-005            0.0124            0.1515
-                 2               2.0   1.56955830e-004      1.56817e-004      1.57008e-004            0.0884            0.1217
-                 3               3.0   2.35970182e-004      2.35728e-004      2.35786e-004            0.1026            0.0246
-                 4               4.0   3.14531924e-004      3.14900e-004      3.14794e-004             0.117            0.0336
-
-******** Magnetic Energies ************************************************************************************************************************
-
-           Step.No        Time(sec.)        Energy1(J)        Energy1(J)        Energy1(J)       Energy22(J)       Energy22(J)       Energy22(J)       Energy23(J)       Energy23(J)       Energy23(J)       Energy24(J)       Energy24(J)       Energy24(J)        Energy4(J)        Energy4(J)        Energy4(J)    EnergyTotal(J)    EnergyTotal(J)    EnergyTotal(J)Energy1(J) Err. (%)Energy1(J) Err. (%)Energy22(J) Err. (%)Energy22(J) Err. (%)Energy23(J) Err. (%)Energy23(J) Err. (%)Energy24(J) Err. (%)Energy24(J) Err. (%)Energy4(J) Err. (%)Energy4(J) Err. (%)EnergyTotal(J) Err. (%)EnergyTotal(J) Err. (%)
-                                               release            para_1            para_8           release            para_1            para_8           release            para_1            para_8           release            para_1            para_8           release            para_1            para_8           release            para_1            para_8            2 vs.1            3 vs.2            2 vs.1            3 vs.2            2 vs.1            3 vs.2            2 vs.1            3 vs.2            2 vs.1            3 vs.2            2 vs.1            3 vs.2
+           Step.No        Time(sec.)            PS1(A)            PS1(A)            PS2(A)            PS2(A)            PS3(A)            PS3(A)            PS1(V)            PS1(V)            PS2(V)            PS2(V)            PS3(V)            PS3(V)   PS1(A) Err. (%)   PS2(A) Err. (%)   PS3(A) Err. (%)   PS1(V) Err. (%)   PS2(V) Err. (%)   PS3(V) Err. (%)
+                                               network           circuit           network           circuit           network           circuit           network           circuit           network           circuit           network           circuit            2 vs.1            2 vs.1            2 vs.1            2 vs.1            2 vs.1            2 vs.1
 ------------------------------------------------------------------------------------------------------------------------
-                 1               1.0   5.52319490e-005       5.5216e-005       5.4959e-005   1.27087148e-003       1.2707e-003       1.2728e-003   6.18783064e-004       6.1991e-004       6.1761e-004   4.29356159e-004       4.2819e-004       4.2844e-004   1.41941184e-002       1.4181e-002       1.4157e-002   1.65683610e-002       1.6555e-002       1.6530e-002            0.0288            0.4654            0.0134            0.1652            0.1821             0.371            0.2716            0.0583            0.0924            0.1692            0.0806             0.151
-                 2               2.0   2.20391109e-004       2.2012e-004       2.2097e-004   5.09583949e-003       5.0857e-003       5.0882e-003   2.49188226e-003       2.4754e-003       2.4686e-003   1.71735605e-003       1.7179e-003       1.7096e-003   5.68529749e-002       5.6814e-002       5.6757e-002   6.63784438e-002       6.6313e-002       6.6245e-002             0.123            0.3861            0.1989            0.0491            0.6614            0.2747            0.0316            0.4831            0.0685            0.1003            0.0985            0.1025
-                 3               3.0   4.97945140e-004       4.9726e-004       4.9845e-004   1.14818938e-002       1.1439e-002       1.1463e-002   5.59839675e-003       5.5865e-003       5.5626e-003   3.87693510e-003       3.8677e-003       3.8577e-003   1.28388632e-001       1.2825e-001       1.2807e-001   1.49843803e-001       1.4964e-001       1.4946e-001            0.1375            0.2393            0.3735            0.2098            0.2125            0.4278            0.2382            0.2585            0.1079            0.1403             0.136            0.1202
-                 4               4.0   8.85777324e-004       8.8737e-004       8.8916e-004   2.02815517e-002       2.0359e-002       2.0385e-002   9.90043705e-003       9.9585e-003       9.9299e-003   6.89064525e-003       6.8999e-003       6.8665e-003   2.28807015e-001       2.2875e-001       2.2834e-001   2.66765426e-001       2.6686e-001       2.6641e-001            0.1798            0.2017            0.3818            0.1277            0.5864            0.2871            0.1343             0.484            0.0249            0.1792            0.0354            0.1686
+                 1               0.0     -1.41421e+000     -1.41421e+000      2.82843e+000      2.82843e+000     -1.41421e+000     -1.41421e+000     -2.82843e-002     -2.82843e-002      5.65686e-002      5.65686e-002     -2.82843e-002     -2.82843e-002               0.0               0.0               0.0               0.0               0.0               0.0
+
+*******   Field Sources   **********************************************************************
+
+           Step.No        Time(sec.)            FS1(A)            FS1(A)            FS2(A)            FS2(A)           FS11(A)           FS11(A)           FS12(A)           FS12(A)           FS13(A)           FS13(A)   FS1(A) Err. (%)   FS2(A) Err. (%)  FS11(A) Err. (%)  FS12(A) Err. (%)  FS13(A) Err. (%)
+                                               network           circuit           network           circuit           network           circuit           network           circuit           network           circuit            2 vs.1            2 vs.1            2 vs.1            2 vs.1            2 vs.1
+---------------------------------------------------------------------------------------------------------
+                 1               0.0      1.00000e+000      1.00000e+000      1.00000e+000      1.00000e+000     -1.41421e+000     -1.41421e+000      2.82843e+000      2.82843e+000     -1.41421e+000     -1.41421e+000               0.0               0.0               0.0               0.0               0.0
 ==================================================
