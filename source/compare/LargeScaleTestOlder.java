@@ -81,7 +81,7 @@ public class LargeScaleTestOlder {
 		
 		String[] file=new String[nFiles];
 		
-		int[][] stepNumbs=new int[nFiles][10000];
+		int[][] stepNumb=new int[nFiles][10000];
 		Vect[] time=	new Vect[nFiles];
 		
 		String[][][] sourceVoltage=new String[nFiles][][];
@@ -90,7 +90,7 @@ public class LargeScaleTestOlder {
 		String[][][] fieldSourceVoltage=new String[nFiles][][];
 		String[][][] fieldSourceCurrent=new String[nFiles][][];
 		String[][][] flux=new String[nFiles][][];
-		String[][][] energy=new String[nFiles][][];
+		String[][][][] energy=new String[nFiles][][][];
 		String[][][] heat=new String[nFiles][][];
 		
 		String[][][] networkElementFlux=new String[nFiles][][];
@@ -101,8 +101,11 @@ public class LargeScaleTestOlder {
 		int[] nNetworkElementVoltages =new int[nFiles];
 		int[] nNetworkElementFluxes =new int[nFiles];
 		
-		String[][] sourceID=new String[nFiles][];
-		String[][] fieldSourceID=new String[nFiles][];
+		String[][] sourceCurrentID=new String[nFiles][];
+		String[][] sourceVoltageID=new String[nFiles][];
+		String[][] fieldSourceCurrentID=new String[nFiles][];
+		String[][] fieldSourceVoltageID=new String[nFiles][];
+		String[][] fieldSourceFluxID=new String[nFiles][];
 		String[][] fluxID=new String[nFiles][];
 		String[][] energyID=new String[nFiles][];
 		String[][] heatID=new String[nFiles][];
@@ -111,7 +114,8 @@ public class LargeScaleTestOlder {
 		String[][][][] table=new String[nFiles][][][];//[nTot][nT][2+(2*nPowerSources+2*nFieldSources+nFluxes+nEnergies+nHeats)];
 		String[][][] titles1=new String[nFiles][][];
 		String[][][] titles2=new String[nFiles][][];
-		int[] nPowerSources =new int[nFiles];
+		int[] nPowerSourceCurrents =new int[nFiles];
+		int[] nPowerSourceVoltages =new int[nFiles];
 		int[] nFieldSourcesCurrent =new int[nFiles];
 		int[] nFieldSourcesVoltage =new int[nFiles];
 		int[] nFieldSourcesFlux =new int[nFiles];
@@ -167,7 +171,7 @@ public class LargeScaleTestOlder {
 				 
 	
 
-		time[nfile]=	loadTimesSteps(stepNumbs[nfile], file[nfile]);
+		time[nfile]=	loadTimesSteps(stepNumb[nfile], file[nfile]);
 
 		if(time[nfile]==null)
 		{
@@ -251,26 +255,41 @@ public class LargeScaleTestOlder {
 				String[] v=loadSourceCurrentString(file[nfile],i+1,dummy);
 			
 				if(v==null) break;
-				nPowerSources[nfile]++;
+				nPowerSourceCurrents[nfile]++;
 			}
 			
 			
-			sourceID[nfile]=new String[nPowerSources[nfile]];
+			sourceCurrentID[nfile]=new String[nPowerSourceCurrents[nfile]];
 			
-			sourceVoltage[nfile]=new String[nPowerSources[nfile]][nT];
-			sourceCurrent[nfile]=new String[nPowerSources[nfile]][nT];
+			sourceCurrent[nfile]=new String[nPowerSourceCurrents[nfile]][nT];
 
-				for(int i=0;i<nPowerSources[nfile];i++){
-					sourceVoltage[nfile][i]=loadSourceVoltageString(file[nfile],i+1,dummy);
+				for(int i=0;i<nPowerSourceCurrents[nfile];i++){
 		
 					sourceCurrent[nfile][i]=loadSourceCurrentString(file[nfile],i+1,dummy);
 				
-					sourceID[nfile][i]=dummy[0];
+					sourceCurrentID[nfile][i]=dummy[0];
 				
 
 			}
 				
+		
+				for(int i=0;i<nPowerSourceCurrents[nfile];i++){
+					String[] v=loadSourceVoltageString(file[nfile],i+1,dummy);
 				
+					if(v==null) break;
+					nPowerSourceVoltages[nfile]++;
+				}
+				
+				sourceVoltageID[nfile]=new String[nPowerSourceVoltages[nfile]];
+				
+				sourceVoltage[nfile]=new String[nPowerSourceVoltages[nfile]][nT];
+				
+				for(int i=0;i<nPowerSourceVoltages[nfile];i++){
+					sourceVoltage[nfile][i]=loadSourceVoltageString(file[nfile],i+1,dummy);
+					
+					sourceVoltageID[nfile][i]=dummy[0];
+
+			}
 	
 			
 		//--------------------------------------------
@@ -284,13 +303,13 @@ public class LargeScaleTestOlder {
 			
 			}
 			
-			fieldSourceID[nfile]=new String[nFieldSourcesCurrent[nfile]];
+			fieldSourceCurrentID[nfile]=new String[nFieldSourcesCurrent[nfile]];
 			fieldSourceCurrent[nfile]=new String[nFieldSourcesCurrent[nfile]][nT];
 			
 				for(int i=0;i<nFieldSourcesCurrent[nfile];i++){
 				
 					fieldSourceCurrent[nfile][i]=loadFieldSourceCurrentString(file[nfile],i+1,dummy);
-					fieldSourceID[nfile][i]=dummy[0];
+					fieldSourceCurrentID[nfile][i]=dummy[0];
 		
 				}
 				
@@ -301,46 +320,63 @@ public class LargeScaleTestOlder {
 		//--------------------------------------------
 			
 		
-			
-			for(int i=0;i<nMax;i++){
+				int[] hasVoltageIndex=new int[nFieldSourcesCurrent[nfile]];
+		
+				int ix=0;
+			for(int i=0;i<nFieldSourcesCurrent[nfile];i++){
 				String[] v=loadFieldSourceVoltageString(file[nfile],i+1,dummy);
-				if(v==null) break;
+			if(v==null) continue;
+			hasVoltageIndex[ix++]=i;
 				nFieldSourcesVoltage[nfile]++;
 			
 			}
 			
+			fieldSourceVoltageID[nfile]=new String[nFieldSourcesVoltage[nfile]];
+			
 			fieldSourceVoltage[nfile]=new String[nFieldSourcesVoltage[nfile]][nT];
 			
-			
+	
 			for(int i=0;i<nFieldSourcesVoltage[nfile];i++){
 				
 
-					fieldSourceVoltage[nfile][i]=loadFieldSourceVoltageString(file[nfile],i+1,dummy);
+				int index=hasVoltageIndex[i];
+					fieldSourceVoltage[nfile][i]=loadFieldSourceVoltageString(file[nfile],index+1,dummy);
+					
+					fieldSourceVoltageID[nfile][i]=dummy[0];
 				}
-				
 				
 			
-				int nHasFux=0;
-				for(int i=0;i<nMax;i++){
+			ix=0;
+			int[] hasFluxIndex=new int[nFieldSourcesCurrent[nfile]];
+			for(int i=0;i<nFieldSourcesCurrent[nfile];i++){
 					
 					String[] v=loadCurFluxString(file[nfile],i+1,dummy);
-					if(v==null) break;
-					nHasFux++;
+					if(v==null) continue;
+					hasFluxIndex[ix++]=i;
+					nFieldSourcesFlux[nfile]++;
 	
 			}
+
 				
-				nFieldSourcesFlux[nfile]=nHasFux;
 				fieldSourceFlux[nfile]=new String[nFieldSourcesFlux[nfile]][nT];
-	
+				
+				fieldSourceFluxID[nfile]=new String[nFieldSourcesFlux[nfile]];
+
+
+				
 				
 				for(int i=0;i<nFieldSourcesFlux[nfile];i++){
-					
+					int index=hasVoltageIndex[i];
 
-					fieldSourceFlux[nfile][i]=loadCurFluxString(file[nfile],i+1,dummy);
+					fieldSourceFlux[nfile][i]=loadCurFluxString(file[nfile],index+1,dummy);
+					
+					fieldSourceFluxID[nfile][i]=dummy[0];
 				}
 				
 				
 			}
+			
+		//	System.out.println(nFieldSourcesVoltage[nfile]);
 				
 			//--------------------------------------------	
 			
@@ -365,14 +401,14 @@ public class LargeScaleTestOlder {
 		//--------------------------------------------	
 				
 				for(int i=0;i<nMax;i++){
-					String[] v=loadMagEnergyString(file[nfile],i+1,dummy);
+					String[][] v=loadMagEnergyString(file[nfile],i+1,dummy);
 					if(v==null) break;
 					nEnergies[nfile]++;
 				//	energy[0][i]=v.deepCopy();
 				}
 				
 				energyID[nfile]=new String[nEnergies[nfile]];
-				energy[nfile]=new String[nEnergies[nfile]][nT];
+				energy[nfile]=new String[nEnergies[nfile]][nT][3];
 			
 					for(int i=0;i<nEnergies[nfile];i++){
 
@@ -400,8 +436,17 @@ public class LargeScaleTestOlder {
 					}
 
 				
-					int nTot=5;
-				
+					int nTot=0;
+					if(sourceCurrent[nfile]!=null) nTot++;
+					if(sourceVoltage[nfile]!=null) nTot++;
+					if(fieldSourceCurrent[nfile]!=null) nTot++;
+					if(fieldSourceVoltage[nfile]!=null) nTot++;
+					if(fieldSourceFlux[nfile]!=null) nTot++;
+					if(flux[nfile]!=null) nTot++;
+					if(energy[nfile]!=null) nTot+=3;
+					if(heat[nfile]!=null) nTot++;
+					
+					
 					table[nfile]=new String[nTot][][];//;[nT][2+(2*nPowerSources[nfile]+2*nFieldSources[nfile]+nFluxes[nfile]+nEnergies[nfile]+nHeats[nfile])];		
 					
 				
@@ -416,7 +461,7 @@ public class LargeScaleTestOlder {
 		table[nfile][iGroup]=new String[nT][2+(nNetworkElements[nfile])+(nNetworkElementVoltages[nfile])+nNetworkElementFluxes[nfile]];	
 		for(int t=0;t<nT;t++){
 			int ix=0;
-			table[nfile][iGroup][t][ix++]=Integer.toString(stepNumbs[nfile][t]);
+			table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
 			table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
 						for(int i=0;i<nNetworkElements[nfile];i++){
 							table[nfile][iGroup][t][ix++]=networkElementCurrent[nfile][i][t];	
@@ -436,41 +481,77 @@ public class LargeScaleTestOlder {
 		
 	}
 	else{
-	table[nfile][iGroup]=new String[nT][2+(2*nPowerSources[nfile])];	
+		
+	table[nfile][iGroup]=new String[nT][2+nPowerSourceCurrents[nfile]];	
 	for(int t=0;t<nT;t++){
 		int ix=0;
-		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumbs[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
 		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
-					for(int i=0;i<nPowerSources[nfile];i++){
+					for(int i=0;i<nPowerSourceCurrents[nfile];i++){
 						table[nfile][iGroup][t][ix++]=sourceCurrent[nfile][i][t];	
 					
 				}
-					
-					for(int i=0;i<nPowerSources[nfile];i++){
-						table[nfile][iGroup][t][ix++]=sourceVoltage[nfile][i][t];	
-					
-				}
-		
-					
+	
 				
 					
 		
 	}
+	
+	iGroup++;
+	table[nfile][iGroup]=new String[nT][2+nPowerSourceVoltages[nfile]];	
+	for(int t=0;t<nT;t++){
+		int ix=0;
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
+
+					
+					for(int i=0;i<nPowerSourceVoltages[nfile];i++){
+						table[nfile][iGroup][t][ix++]=sourceVoltage[nfile][i][t];	
+					
+				}
+
+	}
 
 	
 	iGroup++;
-	table[nfile][iGroup]=new String[nT][2+(nFieldSourcesCurrent[nfile])+(nFieldSourcesVoltage[nfile])+nFieldSourcesFlux[nfile]];	
+	table[nfile][iGroup]=new String[nT][2+(nFieldSourcesCurrent[nfile])];
 	for(int t=0;t<nT;t++){
 		int ix=0;
-		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumbs[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
 		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
 					for(int i=0;i<nFieldSourcesCurrent[nfile];i++){
 						table[nfile][iGroup][t][ix++]=fieldSourceCurrent[nfile][i][t];	
 				}
 					
+				
+	}
+	
+	//=======
+	
+	iGroup++;
+	table[nfile][iGroup]=new String[nT][2+(nFieldSourcesVoltage[nfile])];
+	for(int t=0;t<nT;t++){
+		int ix=0;
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
+	
+					
 					for(int i=0;i<nFieldSourcesVoltage[nfile];i++){
 						table[nfile][iGroup][t][ix++]=fieldSourceVoltage[nfile][i][t];	
 				}
+	
+
+	}
+	
+	//====
+	
+	iGroup++;
+	table[nfile][iGroup]=new String[nT][2+(nFieldSourcesFlux[nfile])];
+	for(int t=0;t<nT;t++){
+		int ix=0;
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
+	
 	
 
 					if(nFieldSourcesFlux[nfile]>0)
@@ -482,51 +563,87 @@ public class LargeScaleTestOlder {
 	
 	}
 	
+	
+	
 	iGroup++;
 	table[nfile][iGroup]=new String[nT][2+(nFluxes[nfile])];	
 	for(int t=0;t<nT;t++){
 		int ix=0;
-		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumbs[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
 		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
 					for(int i=0;i<nFluxes[nfile];i++){
 						table[nfile][iGroup][t][ix++]=flux[nfile][i][t];	
 				}
 	}
 	
+	//===========
 	iGroup++;
-	table[nfile][iGroup]=new String[nT][2+(nEnergies[nfile])];	
+	table[nfile][iGroup]=new String[nT][2+nEnergies[nfile]];	
 	for(int t=0;t<nT;t++){
 		int ix=0;
-		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumbs[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
 		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
 					for(int i=0;i<nEnergies[nfile];i++){
-						table[nfile][iGroup][t][ix++]=energy[nfile][i][t];	
+						table[nfile][iGroup][t][ix++]=energy[nfile][i][t][0];	
 				}
+
+	}
+	
+	//==========
+	
+	iGroup++;
+	table[nfile][iGroup]=new String[nT][2+nEnergies[nfile]];	
+	for(int t=0;t<nT;t++){
+		int ix=0;
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
+					for(int i=0;i<nEnergies[nfile];i++){
+						table[nfile][iGroup][t][ix++]=energy[nfile][i][t][1];	
+				}
+				
+	}
+	
+//================
+	
+	iGroup++;
+	table[nfile][iGroup]=new String[nT][2+nEnergies[nfile]];	
+	for(int t=0;t<nT;t++){
+		int ix=0;
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
+	
+					for(int i=0;i<nEnergies[nfile];i++){
+						table[nfile][iGroup][t][ix++]=energy[nfile][i][t][2];	
+				}
+					
+		
 	}
 	
 
 	iGroup++;
+	
+	
 	table[nfile][iGroup]=new String[nT][2+(nHeats[nfile])];	
 	for(int t=0;t<nT;t++){
 		int ix=0;
-		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumbs[nfile][t]);
+		table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
 		table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
 					for(int i=0;i<nHeats[nfile];i++){
 						table[nfile][iGroup][t][ix++]=heat[nfile][i][t];	
 				}
 	}
 
+	iGroup++;
 
-	//int nTot=iGroup;
 
+	 nTot=iGroup;
+
+	// System.out.println(nTot);
 			
 		titles1[nfile]=new String[nTot][];
 		titles2[nfile]=new String[nTot][];
 			
-		//	try{
-			//	 compWriter[nfile] = new PrintWriter(new BufferedWriter(new FileWriter("dataOut"+nfile)));		
 
-		
 	
 			//===================
 			
@@ -617,21 +734,19 @@ public class LargeScaleTestOlder {
 			 compWriter[nfile].println("Comparison of results:");
 			 compWriter[nfile].println();
 			 
-		
-			 for(int i=0;i<nTot;i++){
 
-				titles1[nfile][i]=new String[table[nfile][i][0].length];
-			
-			 }
 
 			 //int fRef=0;
 
 			 int ix=0;
 			 iGroup=0;
-			titles1[nfile][iGroup][ix++]="Step.No";	
-			titles1[nfile][iGroup][ix++]="Time(sec.)";	
+	
 			
 			if(nNetworkElements[nfile]>0){
+				titles1[nfile][iGroup]=new String[100];///lllll
+				
+				titles1[nfile][iGroup][ix++]="Step.No";	
+				titles1[nfile][iGroup][ix++]="Time(sec.)";	
 
 				iGroup++;
 				 ix=0;
@@ -641,87 +756,138 @@ public class LargeScaleTestOlder {
 				for (int i=0;i<nNetworkElements[nfile];i++){
 				
 					
-					titles1[nfile][iGroup][ix++]="Elem. "+(networkElementID[nfile][i])+"(A)";	
+					titles1[nfile][iGroup][ix++]="Elem. "+(networkElementID[nfile][i])+"";	
 		
 				}
 				
 				for (int i=0;i<nNetworkElementVoltages[nfile];i++){
-					titles1[nfile][iGroup][ix++]="Elem. "+(networkElementID[nfile][i])+"(V)";	
+					titles1[nfile][iGroup][ix++]="Elem. "+(networkElementID[nfile][i])+"";	
 		
 				}
 	
 				for (int i=0;i<nNetworkElementFluxes[nfile];i++){
-					titles1[nfile][iGroup][ix++]="Elem. "+(networkElementID[nfile][i])+"(Wb)";	
+					titles1[nfile][iGroup][ix++]="Elem. "+(networkElementID[nfile][i])+"";	
 		
 				}
 				
 				
 			}
 			else{
-			for (int i=0;i<nPowerSources[nfile];i++){
+				
+				ix=0;
+				titles1[nfile][iGroup]=new String[2+nPowerSourceCurrents[nfile]];
+				titles1[nfile][iGroup][ix++]="Step.No";	
+				titles1[nfile][iGroup][ix++]="Time(sec.)";	
+				
+			for (int i=0;i<nPowerSourceCurrents[nfile];i++){
 
-				titles1[nfile][iGroup][ix++]="PS"+(sourceID[nfile][i])+"(A)";	
+				titles1[nfile][iGroup][ix++]=""+(sourceCurrentID[nfile][i])+"";	
 	
 			}
 			
-			for (int i=0;i<nPowerSources[nfile];i++){
+			iGroup++;
+			ix=0;
+			titles1[nfile][iGroup]=new String[2+nPowerSourceVoltages[nfile]];
+			titles1[nfile][iGroup][ix++]="Step.No";	
+			titles1[nfile][iGroup][ix++]="Time(sec.)";	
+			
+			for (int i=0;i<nPowerSourceVoltages[nfile];i++){
 				
-				titles1[nfile][iGroup][ix++]="PS"+(sourceID[nfile][i])+"(V)";	
+				titles1[nfile][iGroup][ix++]=""+(sourceVoltageID[nfile][i])+"";	
 	
 			}
 			
 			
 			iGroup++;
-			 ix=0;
-			 titles1[nfile][iGroup][ix++]="Step.No";	
-				titles1[nfile][iGroup][ix++]="Time(sec.)";	
+			ix=0;
+			titles1[nfile][iGroup]=new String[2+nFieldSourcesCurrent[nfile]];
+			titles1[nfile][iGroup][ix++]="Step.No";	
+			titles1[nfile][iGroup][ix++]="Time(sec.)";	
 	
 			for (int i=0;i<nFieldSourcesCurrent[nfile];i++){
-				titles1[nfile][iGroup][ix++]="FS"+(fieldSourceID[nfile][i])+"(A)";	
+				titles1[nfile][iGroup][ix++]=""+(fieldSourceCurrentID[nfile][i])+"";	
 	
 			}
+			
+			iGroup++;
+			
+			ix=0;
+			titles1[nfile][iGroup]=new String[2+nFieldSourcesVoltage[nfile]];
+			titles1[nfile][iGroup][ix++]="Step.No";	
+			titles1[nfile][iGroup][ix++]="Time(sec.)";	
 			
 			for (int i=0;i<nFieldSourcesVoltage[nfile];i++){
-				titles1[nfile][iGroup][ix++]="FS"+(fieldSourceID[nfile][i])+"(V)";	
+				titles1[nfile][iGroup][ix++]=""+(fieldSourceVoltageID[nfile][i])+"";	
 	
-			}
-			
-			if(nFieldSourcesFlux[nfile]>0)
-			for (int i=0;i<nFieldSourcesFlux[nfile];i++){
-				titles1[nfile][iGroup][ix++]="FS"+(fieldSourceID[nfile][i])+"(Wb)";	
-	
-			}
 			}
 			
 			iGroup++;
-			 ix=0;
-			 titles1[nfile][iGroup][ix++]="Step.No";	
-				titles1[nfile][iGroup][ix++]="Time(sec.)";	
+			
+			ix=0;
+			titles1[nfile][iGroup]=new String[2+nFieldSourcesFlux[nfile]];
+			titles1[nfile][iGroup][ix++]="Step.No";	
+			titles1[nfile][iGroup][ix++]="Time(sec.)";	
+	
+			for (int i=0;i<nFieldSourcesFlux[nfile];i++){
+				titles1[nfile][iGroup][ix++]=""+(fieldSourceFluxID[nfile][i])+"";	
+	
+			}
+			
+			}
+			
+			iGroup++;
+			ix=0;
+			titles1[nfile][iGroup]=new String[2+nFluxes[nfile]];
+			titles1[nfile][iGroup][ix++]="Step.No";	
+			titles1[nfile][iGroup][ix++]="Time(sec.)";	
 	
 			for (int i=0;i<nFluxes[nfile];i++){
-				titles1[nfile][iGroup][ix++]="Flux"+(fluxID[nfile][i])+"(Wb)";	
+				titles1[nfile][iGroup][ix++]=""+(fluxID[nfile][i])+"";	
 	
 			}
 			
 			
 			iGroup++;
-			 ix=0;
-			 titles1[nfile][iGroup][ix++]="Step.No";	
-				titles1[nfile][iGroup][ix++]="Time(sec.)";	
+			ix=0;
+			titles1[nfile][iGroup]=new String[2+nEnergies[nfile]];
+			titles1[nfile][iGroup][ix++]="Step.No";	
+			titles1[nfile][iGroup][ix++]="Time(sec.)";	
+	
 	
 			for (int i=0;i<nEnergies[nfile];i++){
-				titles1[nfile][iGroup][ix++]="Energy"+(energyID[nfile][i])+"(J)";	
+				titles1[nfile][iGroup][ix++]=""+(energyID[nfile][i])+"";	
+	
+			}
+			
+			iGroup++;
+			ix=0;
+			titles1[nfile][iGroup]=new String[2+nEnergies[nfile]];
+			titles1[nfile][iGroup][ix++]="Step.No";	
+			titles1[nfile][iGroup][ix++]="Time(sec.)";	
+			for (int i=0;i<nEnergies[nfile];i++){
+				titles1[nfile][iGroup][ix++]=""+(energyID[nfile][i])+"";	
+	
+			}
+			
+			iGroup++;
+			ix=0;
+			titles1[nfile][iGroup]=new String[2+nEnergies[nfile]];
+			titles1[nfile][iGroup][ix++]="Step.No";	
+			titles1[nfile][iGroup][ix++]="Time(sec.)";	
+			for (int i=0;i<nEnergies[nfile];i++){
+				titles1[nfile][iGroup][ix++]=""+(energyID[nfile][i])+"";	
 	
 			}
 			
 			
 			iGroup++;
-			 ix=0;
-			 titles1[nfile][iGroup][ix++]="Step.No";	
-				titles1[nfile][iGroup][ix++]="Time(sec.)";	
+			ix=0;
+			titles1[nfile][iGroup]=new String[2+nEnergies[nfile]];
+			titles1[nfile][iGroup][ix++]="Step.No";	
+			titles1[nfile][iGroup][ix++]="Time(sec.)";	
 	
 			for (int i=0;i<nHeats[nfile];i++){
-				titles1[nfile][iGroup][ix++]="Heat"+(heatID[nfile][i])+"(J)";	
+				titles1[nfile][iGroup][ix++]="Heat"+(heatID[nfile][i])+"";	
 	
 			}
 			
@@ -729,11 +895,30 @@ public class LargeScaleTestOlder {
 			
 	 group=new String[nTot];
 
-	 		group[0]="   Power Sources   ";
-			group[1]="   Field Sources   ";
-			group[2]="      Fluxes       ";
-			group[3]=" Magnetic Energies ";
-			group[4]="      Heat         ";
+	 		group[0]="   Power Sources Currents";
+	 		group[1]="   Power Sources Volatges";
+	 		group[2]="   Field Sources Currents";
+			group[3]="   Field Sources Volatges";
+			group[4]="   Field Sources Fluxes";
+			group[5]="      Fluxes";
+			group[6]=" Magnetic Energies";
+			group[7]=" Magnetic Co-energy";
+			group[8]=" Magnetic Ave.energy";
+			group[9]="      Heat         ";
+			
+			
+			String[] unit=new String[nTot];
+			
+			unit[0]=" (A)  ";
+			unit[1]=" (V)  ";
+			unit[2]=" (A)  ";
+			unit[3]=" (V)  ";
+			unit[4]=" (Wb) ";
+			unit[5]=" (Wb) ";
+			unit[6]=" (J)  ";
+			unit[7]=" (J)  ";
+			unit[8]=" (J)  ";
+			unit[9]=" (J)  ";
 			
 			for(int i=0;i<nTot;i++){
 				if(table[nfile][i][0].length<3) continue;
@@ -741,7 +926,7 @@ public class LargeScaleTestOlder {
 				for(int p=0;p<table[nfile][i][0].length;p++)
 					for(int h=0;h<5;h++)
 				compWriter[nfile].print("*");
-							compWriter[nfile].print(group[i]);
+							compWriter[nfile].print(group[i]+unit[i]);
 				for(int p=0;p<table[nfile][i][0].length;p++)
 					for(int h=0;h<5;h++)
 				compWriter[nfile].print("*");
@@ -798,7 +983,7 @@ public class LargeScaleTestOlder {
 					sumWriter.println("File #"+nfile+" does not match with File #0 in times steps.");
 					machingFiles=false;
 					}
-				if(nPowerSources[nfile]!=nPowerSources[0]){
+				if(nPowerSourceCurrents[nfile]!=nPowerSourceCurrents[0]){
 					sumWriter.print("Error: ");
 					sumWriter.println("File #"+nfile+" does not match with File #0 in number of power sources.");
 					machingFiles=false;
@@ -1023,7 +1208,7 @@ public class LargeScaleTestOlder {
 								if(err>errorMax[nfile]){
 									errorMax[nfile]=err;
 									errorMaxCoord[nfile][0]=i;
-									errorMaxCoord[nfile][1]=j;
+									errorMaxCoord[nfile][1]=stepNumb[fRef][j];
 									errorMaxCoord[nfile][2]=k;
 									
 								}
@@ -1052,7 +1237,7 @@ public class LargeScaleTestOlder {
 						else title=tip[nfile]+" against "+tip[1];
 						if(!formatErr[nfile]){
 				 sumWriter.format("%36s:%18s %1s",title,errorMax[nfile],"%");
-				 sumWriter.format(" at:%18s Step.No: %8s %18s\n",group[errorMaxCoord[nfile][0]],errorMaxCoord[nfile][1],titles1[nfile][errorMaxCoord[nfile][0]][errorMaxCoord[nfile][2]]);
+				 sumWriter.format(" at: %18s%12s%3s%20s%15s\n",group[errorMaxCoord[nfile][0]]," ,Step No: ",errorMaxCoord[nfile][1]," ,variable ID: ",titles1[nfile][errorMaxCoord[nfile][0]][errorMaxCoord[nfile][2]]);
 						}
 						else
 				 sumWriter.format("%18s:%18s\n","NA"," Warning: There are number format errors in results.");
@@ -1099,7 +1284,7 @@ public class LargeScaleTestOlder {
 			for(int j=2;j<table[fRef][i][0].length;j++){
 
 				for(int nfile=1;nfile<nFiles;nfile++){
-					sumWriter.format("%18s",titles1[nfile][i][j]+" Err. (%)");	
+					sumWriter.format("%18s","Err. of "+titles1[nfile][i][j]+" (%)");	
 			}
 				}
 			
@@ -1117,9 +1302,9 @@ public class LargeScaleTestOlder {
 
 				for(int nfile=1;nfile<nFiles;nfile++){
 					if(nfile==1)
-						sumWriter.format("%18s",(nfile+1)+" vs."+1);	
+						sumWriter.format("%18s",tip[nfile]+"/"+tip[0]);	
 					else
-						sumWriter.format("%18s",(nfile+1)+" vs."+2);	
+						sumWriter.format("%18s",tip[nfile]+"/"+tip[1]);	
 			}
 				}
 			
@@ -1131,7 +1316,7 @@ public class LargeScaleTestOlder {
 			
 			
 			for(int j=0;j<table[fRef][i].length;j++){
-				sumWriter.format("%18s",stepNumbs[fRef][j]);
+				sumWriter.format("%18s",stepNumb[fRef][j]);
 				sumWriter.format("%18s",time[fRef].el[j]);
 				
 		
@@ -1506,10 +1691,13 @@ public String[] loadFieldSourceVoltageString(String file,int sourceIndex, String
 			while((line=br.readLine())!=null && !line.startsWith("***  Sources ")){}
 			if(line==null) {break;}
 			line=br.readLine();
+			
+		
 			for(int i=0;i<sourceIndex;i++){
 			line=br.readLine();
 			if(line.startsWith("**")) break;
 			}
+
 			if(line.startsWith("**")) break;
 			sp=line.split(regex);
 			if(sp.length<=3) break;
@@ -1613,11 +1801,11 @@ public String[] loadMagFluxString(String file,int loopID,String[] id){
 
 	
 
-public String[] loadMagEnergyString(String file,int matIndex, String[] id){
+public String[][] loadMagEnergyString(String file,int matIndex, String[] id){
 
 	
 	
-	String[] magEnergyTemp=new String[10000];
+	String[][] magEnergyTemp=new String[10000][3];
 
 	try{
 	
@@ -1640,12 +1828,13 @@ public String[] loadMagEnergyString(String file,int matIndex, String[] id){
 		if(line.startsWith("**")) break;
 		sp=line.split(regex);
 	
-		if(sp.length<=2) break;
+		if(sp.length<=4) break;
 	
 		id[0]=sp[1];
 	
-		magEnergyTemp[ix]=sp[2];
-		
+		magEnergyTemp[ix][0]=sp[2];
+		magEnergyTemp[ix][1]=sp[3];
+		magEnergyTemp[ix][2]=sp[4];
 		ix++;
 
 		
@@ -1658,7 +1847,7 @@ fr.close();
 
 if(ix==0) return null;
 
-String[] magFnergy=new String[ix];
+String[][] magFnergy=new String[ix][3];
 
 for(int i=0;i<ix;i++){
 	magFnergy[i]=magEnergyTemp[i];
