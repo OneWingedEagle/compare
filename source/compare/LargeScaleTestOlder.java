@@ -899,16 +899,16 @@ public class LargeScaleTestOlder {
 
 					group=new String[nTot];
 
-					group[0]="   Power Sources Currents";
-					group[1]="   Power Sources Volatges";
-					group[2]="   Field Sources Currents";
-					group[3]="   Field Sources Volatges";
-					group[4]="   Field Sources Fluxes";
-					group[5]="      Fluxes";
-					group[6]=" Magnetic Energies";
-					group[7]=" Magnetic Co-energy";
-					group[8]=" Magnetic Ave.energy";
-					group[9]="      Heat         ";
+					group[0]=" Power Source Currents ";
+					group[1]=" Power Source Volatges ";
+					group[2]=" Field Source Currents ";
+					group[3]=" Field Source Volatges ";
+					group[4]=" Field Source Fluxes ";
+					group[5]=" Fluxes ";
+					group[6]=" Magnetic Energies ";
+					group[7]=" Magnetic Co-energies ";
+					group[8]=" Magnetic Ave.energies ";
+					group[9]=" Heats ";
 
 
 					String[] unit=new String[nTot];
@@ -1248,10 +1248,10 @@ public class LargeScaleTestOlder {
 				else title=tip[nfile]+" against "+tip[1];
 				//if(!formatErr[nfile]){
 					sumWriter.format("%36s:%18s %1s",title,errorMax[nfile],"%");
-					sumWriter.format(" at: %18s%12s%3s%20s%15s\n",group[errorMaxCoord[nfile][0]]," ,Step No: ",errorMaxCoord[nfile][1]," ,variable ID: ",titles1[nfile][errorMaxCoord[nfile][0]][errorMaxCoord[nfile][2]]);
+					sumWriter.format(" at: %18s%12s%3s%20s%15s\n\n",group[errorMaxCoord[nfile][0]]," ,Step No: ",errorMaxCoord[nfile][1]," ,variable ID: ",titles1[nfile][errorMaxCoord[nfile][0]][errorMaxCoord[nfile][2]]);
 				//}
 				//else
-					sumWriter.format("                  Warning!: There are number format errors in results, or the comparsion error is undefined for some outputs: NA error \n");
+					sumWriter.format("                  Warning!: There are number format errors in results, or the comparsion error is undefined for some outputs: NA error \n\n");
 			}
 			sumWriter.println();	
 
@@ -1263,9 +1263,9 @@ public class LargeScaleTestOlder {
 				else title=tip[nfile]+" against "+tip[1];
 
 				//if(!formatErr[nfile])
-					sumWriter.format("%36s:%18s %1s\n",title,errorSum[nfile],"%");
+					sumWriter.format("%36s:%18s %1s\n\n",title,errorSum[nfile],"%");
 				//else
-					sumWriter.format("                  Warning!: There are number format errors in results, or the comparsion error is undefined for some outputs: NA error \n");
+					sumWriter.format("                  Warning!: There are number format errors in results, or the comparsion error is undefined for some outputs: NA error \n\n");
 			}
 			sumWriter.println();	
 
@@ -1274,13 +1274,21 @@ public class LargeScaleTestOlder {
 			for(int i=0;i<nTot;i++){
 				if(table[fRef][i][0].length<3) continue;
 				sumWriter.println();
-				for(int p=0;p<table[fRef][i][0].length;p++)
-					for(int h=0;h<1;h++)
+				sumWriter.println();
+				int Lt=group[i].length();
+
+				int L=2+(table[fRef][i][0].length-2)*(2*nFiles-1);
+				int Lf=L/2;
+				if(2*Lf<L)
+					Lf+=1;
+				for(int p=0;p<Lf;p++){
+					for(int h=0;h<3;h++)
 						sumWriter.print("*");
 				sumWriter.print(group[i]);
-				for(int p=0;p<table[fRef][i][0].length;p++)
-					for(int h=0;h<5*nFiles;h++)
+				
+					for(int h=0;h<36-Lt-3;h++)
 						sumWriter.print("*");
+				}
 				sumWriter.println();
 				sumWriter.println();
 				sumWriter.format("%18s",titles1[fRef][i][0]);
@@ -1320,8 +1328,8 @@ public class LargeScaleTestOlder {
 				}
 
 				sumWriter.println();
-				for(int p=0;p<table[fRef][i][0].length;p++)
-					for(int h=0;h<15;h++)
+				for(int p=0;p<L;p++)
+					for(int h=0;h<18;h++)
 						sumWriter.print("-");
 				sumWriter.println();
 
@@ -1363,6 +1371,12 @@ public class LargeScaleTestOlder {
 
 
 				}
+			//	sumWriter.println();
+			//	sumWriter.println();
+				for(int p=0;p<L;p++)
+					for(int h=0;h<18;h++)
+						sumWriter.print("-");
+				sumWriter.println();
 
 
 			}
