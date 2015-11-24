@@ -1,0 +1,8 @@
+EMSol/
+bin/
+.gitignore
+.settings/org.eclipse.core.resources.prefs
+bin/
+bin/fem/
+sourcebb/
+sourcevv/
