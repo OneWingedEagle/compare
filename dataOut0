@@ -1,26 +1,39 @@
+<<<<<<< HEAD
 \\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\SPM\OneMesh\periodic\PHICOIL\transient\Igiven\circuit\refine 0\REGULARIZATION 1\release\output Result locations:	
 
 Analysis date:
        Start at :                                    Thu Nov 19 18:55:52 2015
     Completed at:                                    Thu Nov 19 19:05:44 2015
+=======
+C:\Users\Me\Desktop\KameNetwork\output Result locations:	
+Analysis date:	                                   Sat Nov 07 02:06:20 2015
+>>>>>>> Shirakaba/master
 
-Module version:  r11.2.5/20151106
+Module version:             null
 
 
 Node and element numbers:
-Total number of nodes: 107848
-Total number of elements: 102880
+Total number of nodes: 56
+Total number of elements: 18
 
 
 Number of iterations:
+<<<<<<< HEAD
 Total ICCG: 11742
 Total Nonlinear: 58
 
 Total time:	592.0
+=======
+Total ICCG: 20
+Total Nonlinear: 0
+
+Total time:	0.0
+>>>>>>> Shirakaba/master
 
 Comparison of results:
 
 
+<<<<<<< HEAD
 ************************* Power Source Currents  (A)  *************************
 
            Step.No        Time(sec.)                 1                 2                 3
@@ -254,3 +267,49 @@ Comparison of results:
                 19      0.0010555545       1.9784e-004       1.9784e-004       3.9567e-004
                 20        0.00111111       1.9513e-004       1.9513e-004       3.9026e-004
 ---------------------------------------------------------------------------
+=======
+********************   Power Sources Currents (A)  ********************
+
+           Step.No        Time(sec.)                 1                 2
+------------------------------------------------------------
+                 1               1.0      1.00000e+004      5.00000e+003
+                 2               2.0      2.00000e+004      5.09510e+003
+                 3               3.0      3.00000e+004      9.90852e+003
+------------------------------------------------------------
+
+********************   Power Sources Volatges (V)  ********************
+
+           Step.No        Time(sec.)                 1                 2
+------------------------------------------------------------
+                 1               1.0      1.41018e-002      0.00000e+000
+                 2               2.0      4.16180e-002      0.00000e+000
+                 3               3.0      5.60227e-002      0.00000e+000
+------------------------------------------------------------
+
+********************   Field Sources Currents (A)  ********************
+
+           Step.No        Time(sec.)                 1                 2
+------------------------------------------------------------
+                 1               1.0      5.00000e+003      5.00000e+003
+                 2               2.0      1.49049e+004      5.09510e+003
+                 3               3.0      2.00915e+004      9.90852e+003
+------------------------------------------------------------
+
+********************   Field Sources Volatges (V)  ********************
+
+           Step.No        Time(sec.)                 1                 2
+------------------------------------------------------------
+                 1               1.0      1.41018e-002      1.39698e-002
+                 2               2.0      4.16180e-002      1.42314e-002
+                 3               3.0      5.60227e-002      2.76044e-002
+------------------------------------------------------------
+
+********************   Field Sources Fluxes (Wb) ********************
+
+           Step.No        Time(sec.)                 1                 2
+------------------------------------------------------------
+                 1               1.0      1.46913e-004      1.46913e-004
+                 2               2.0      4.25905e-004      1.61747e-004
+                 3               3.0      5.77842e-004      3.03636e-004
+------------------------------------------------------------
+>>>>>>> Shirakaba/master

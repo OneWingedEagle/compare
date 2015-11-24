@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 EMSol/
 bin/
 .gitignore
@@ -6,3 +7,6 @@ bin/
 bin/fem/
 sourcebb/
 sourcevv/
+=======
+/bin/
+>>>>>>> Shirakaba/master
