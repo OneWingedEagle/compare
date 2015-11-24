@@ -128,6 +128,9 @@ public class LargeScaleTestOlder {
 		int[][] nodeEl=new int[nFiles][2];
 
 		boolean[] isRelease=new boolean[nFiles];
+		
+		String[][] tt=new String[nFiles][11];
+
 
 
 		String[] group=null;
@@ -659,17 +662,18 @@ public class LargeScaleTestOlder {
 
 
 
-					String[][] tt=new String[nFiles][11];
 					tt[nfile]=getComputationTimesAndDate( file[nfile]);
 
-
-					compWriter[nfile].print("Analysis date:\t");
+					compWriter[nfile].println();
+					compWriter[nfile].print("Analysis date:\n");
 
 					// compWriter[nfile].print(tip[nfile]+"\t"+Double.parseDouble(tt[nfile][3]));
 					//compWriter[nfile].println(tt[nfile][1]);
 					//String[] sp=tt[nfile][9].split(regex);
 
-					compWriter[nfile].println(tt[nfile][9]);
+			
+					compWriter[nfile].println("       Start at : "+tt[nfile][9]);
+					compWriter[nfile].println("    Completed at: "+tt[nfile][11]);
 
 					compWriter[nfile].println();
 
@@ -1041,18 +1045,24 @@ public class LargeScaleTestOlder {
 
 
 
-			String[][] tt=new String[nFiles][11];
+			
 			for(int nfile=0;nfile<nFiles;nfile++){
 				tt[nfile]=getComputationTimesAndDate( file[nfile]);
 			}
 
 			sumWriter.println("Analysis date:");
+			sumWriter.println();
 			for(int nfile=0;nfile<nFiles;nfile++){
 				// sumWriter.print(tip[nfile]+"\t"+Double.parseDouble(tt[nfile][3]));
 				//sumWriter.println(tt[nfile][1]);
 				//String[] sp=tt[nfile][9].split(regex);
+				sumWriter.println("\t\t"+tip[nfile]+":\n");
+				sumWriter.println("       Start at : "+tt[nfile][9]);
+				sumWriter.println("    Completed at: "+tt[nfile][11]);
+				sumWriter.println();
 
-				sumWriter.println(tip[nfile]+":\t"+tt[nfile][9]);
+
+		
 			}
 			sumWriter.println();
 
@@ -2169,7 +2179,7 @@ public class LargeScaleTestOlder {
 
 
 
-		String[] tt=new String[11];
+		String[] tt=new String[12];
 
 		try{
 			FileReader fr=new FileReader(file);
@@ -2197,6 +2207,9 @@ public class LargeScaleTestOlder {
 					tt[i]=line;
 					line=br.readLine();
 				}
+				
+				line=br.readLine();
+				tt[11]=line;
 
 			}
 

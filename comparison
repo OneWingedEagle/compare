@@ -4,9 +4,22 @@ para_1:	\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\r
 para_8:	\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\SPM\OneMesh\periodic\PHICOIL\transient\Igiven\circuit\refine 0\REGULARIZATION 1\MPI para 8\output
 
 Analysis date:
-release:	                                   Thu Nov 19 18:55:52 2015
-para_1:	                                   Thu Nov 19 18:55:01 2015
-para_8:	                                   Fri Nov 20 09:06:54 2015
+
+		release:
+
+       Start at :                                    Thu Nov 19 18:55:52 2015
+    Completed at:                                    Thu Nov 19 19:05:44 2015
+
+		para_1:
+
+       Start at :                                    Thu Nov 19 18:55:01 2015
+    Completed at:                                    Thu Nov 19 19:10:06 2015
+
+		para_8:
+
+       Start at :                                    Fri Nov 20 09:06:54 2015
+    Completed at:                                    Fri Nov 20 09:14:17 2015
+
 
 Module version: 
         release: r11.2.5/20151106
