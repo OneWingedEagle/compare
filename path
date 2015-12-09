@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-3
-\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\SPM\OneMesh\periodic\PHICOIL\transient\Igiven\circuit\refine 0\REGULARIZATION 1\release\output
-\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\SPM\OneMesh\periodic\PHICOIL\transient\Igiven\circuit\refine 0\REGULARIZATION 1\MPI para 1\output
-\\192.168.12.103\\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\SPM\OneMesh\periodic\PHICOIL\transient\Igiven\circuit\refine 0\REGULARIZATION 1\MPI para 8\output
-release
-para_1
-para_8
-r11.2.5/20151106
-r4.2.2/20151113152852
-r4.2.2/20151113152852
-=======
 2
-C:\Users\Me\Desktop\KameNetwork\output
-C:\Users\Me\Desktop\KameNetwork\output
+C:\Users\Hassan Ebrahimi\JavaWorks\Compare\output
+C:\Users\Hassan Ebrahimi\JavaWorks\Compare\output
 release
-para_1
->>>>>>> Shirakaba/master
+release
+r11.2.5/20151106
+r11.2.5/20151106
+
+
+C:\Users\hassan\Documents\Large Scale Test\FieldSources\results\version 20151113 152852\SPM\OneMesh\non-periodic\PHICOIL\transient\Igiven\circuit\refine 0\REGULARIZATION 0-smallstep\release

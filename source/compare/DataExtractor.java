@@ -281,5 +281,243 @@ public String[] getComputationTimesAndDate(String file,PrintWriter stderr){
 
 }
 
+public int[] getNodeElNumbs(String file){
+
+
+
+	int[] neNumbs=new int[2];
+
+	try{
+		FileReader fr=new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String line;
+		String s;
+		String[] sp;
+
+		while((line=br.readLine())!=null){
+			while((line=br.readLine())!=null && !line.startsWith("                         total number of nodes")){}
+			if(line==null) {break;}
+
+			//line=br.readLine();
+
+			//util.pr(line);
+			//	line=br.readLine();
+			sp=line.split(regex);
+
+			neNumbs[0]=Integer.parseInt(sp[6]);
+
+			while((line=br.readLine())!=null && !line.startsWith("                         total number of volume elements")){}
+			if(line==null) {break;}
+
+			sp=line.split(regex);
+
+			neNumbs[1]=Integer.parseInt(sp[7]);
+			//line=br.readLine();
+			//sp=line.split(regex);
+
+		}
+
+		br.close();
+		fr.close();
+
+
+
+
+	}
+
+	catch(IOException e){System.err.println("Error in loading output file.");
+	}
+
+	return neNumbs;
+}	
+
+public String[] getComputationTimesAndDate(String file){
+
+
+
+	String[] tt=new String[12];
+
+	try{
+		FileReader fr=new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String line;
+		String s;
+		String[] sp;
+
+		while((line=br.readLine())!=null){
+			while((line=br.readLine())!=null && !line.startsWith("*                     CPU Times")){}
+			if(line==null) {break;}
+
+			tt[0]=line;
+			for(int i=1;i<7;i++){
+				line=br.readLine();
+				tt[i]=line;
+			}
+
+			for(int i=0;i<3;i++){
+				line=br.readLine();
+			}
+
+			for(int i=8;i<11;i++){
+				line=br.readLine();
+				tt[i]=line;
+				line=br.readLine();
+			}
+			
+			line=br.readLine();
+			tt[11]=line;
+
+		}
+
+		br.close();
+		fr.close();
+
+
+
+	}
+
+	catch(IOException e){System.err.println("Error in loading output file.");
+
+	}
+	return tt;
+
+
+}	
+
+public int getRefine(String file){
+	int refine=0;
+
+
+	int L=file.length();
+
+	int ix=0;
+	while(file.charAt(L-1-ix)!='\\'){
+		ix++;
+		if(ix>L-2) break;
+	}
+
+
+	String checkfile="";
+	for(int i=0;i<L-ix;i++)
+		checkfile=checkfile+file.charAt(i);
+	checkfile=checkfile+"check";
+
+	try{
+		FileReader fr=new FileReader(checkfile);
+		BufferedReader br = new BufferedReader(fr);
+		String line;
+
+
+		while((line=br.readLine())!=null){
+			while((line=br.readLine())!=null && !line.startsWith("* INPUT_MESH_FILE *  UNIT  * NO_MESH *")){}
+			if(line==null) {break;}
+			line=br.readLine();
+			String[] sp2=line.split(regex);
+
+			int ib=0;
+			if(sp2[0].equals("")) ib=1;
+
+			if(sp2.length-ib>5) refine=Integer.parseInt(sp2[ib+5]);
+
+
+		}
+
+		br.close();
+		fr.close();
+
+
+	}
+	catch(IOException e){};
+
+	return refine;
+
+}
+
+public boolean isRelease(String file){
+
+	boolean rel=false;
+
+
+	try{
+		FileReader fr=new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+
+		String line;
+		for(int i=0;i<100;i++){
+			line=br.readLine();
+			if(line==null) {break;}
+			if(line.startsWith("      No. of Parallel")){
+				rel=true; 
+				br.close();
+				fr.close();
+				break;
+				
+			}
+		}
+	
+
+		br.close();
+		fr.close();
+
+	}
+
+	catch(IOException e){System.err.println("Error in loading output file.");
+	}
+
+
+			return rel;
+
+}
+
+public int[] getIterNumb(String file){
+
+
+
+	int[] iterNumbs=new int[2];
+
+	try{
+		FileReader fr=new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String line;
+		String s;
+		String[] sp;
+
+		while((line=br.readLine())!=null){
+			while((line=br.readLine())!=null && !line.startsWith("**** Total number of ICCG")){}
+			if(line==null) {break;}
+
+			//line=br.readLine();
+
+			//util.pr(line);
+			//	line=br.readLine();
+			sp=line.split(regex);
+
+			iterNumbs[0]=Integer.parseInt(sp[6]);
+
+			while((line=br.readLine())!=null && !line.startsWith("**** Total number of nonlinear")){}
+			if(line==null) {break;}
+
+			sp=line.split(regex);
+
+			iterNumbs[1]=Integer.parseInt(sp[6]);
+			//line=br.readLine();
+			//sp=line.split(regex);
+
+		}
+
+		br.close();
+		fr.close();
+
+
+
+
+	}
+
+	catch(IOException e){System.err.println("Error in loading output file.");
+	}
+
+	return iterNumbs;
+}
+
 
 }

@@ -28,9 +28,34 @@ public class LargeScaleTestOlder {
 
 		//	x.compareOutputs();
 		x.compareOutputsAndWrite();
+	//	x.loadPSvoltage();
 
 	}
+	private void loadPSvoltage(){
+		
 
+		String file="W:/Large Scale Test/FieldSources/results/version 20151113 152852/SPM/OneMesh/non-periodic/PHICOIL/transient/Igiven/circuit/refine 0/coil-magnet/release/output";
+		
+	//	W:\Large Scale Test\FieldSources\domain
+		//file="\\C:/Users/Hassan Ebrahimi/Desktop/forDiff/output";
+		//Vect time=loadTimeSteps(file);
+		//Vect time=loadTimeSteps(new int[100],file);
+		file="C:/Users/Hassan Ebrahimi/Desktop/PM-in-ELCUR/MPI para 1/output";
+//Vect v=loadFieldSourceVoltage(file,2);
+Vect v=loadFlux(file,1);
+	
+		
+
+		util.plot(v);
+		
+	//	 file="W:/Large Scale Test/FieldSources/domain/output";
+		
+		//  v=loadFieldSourceVoltage(file,2);
+			
+			
+
+		//	util.plot(v);
+	}
 
 	private void compareOutputsAndWrite(){
 
@@ -178,7 +203,7 @@ public class LargeScaleTestOlder {
 
 
 
-					time[nfile]=	loadTimesSteps(stepNumb[nfile], file[nfile]);
+					time[nfile]=	loadTimeSteps(stepNumb[nfile], file[nfile]);
 
 					if(time[nfile]==null)
 					{
@@ -629,13 +654,14 @@ public class LargeScaleTestOlder {
 
 					iGroup++;
 
-
 					table[nfile][iGroup]=new String[nT][2+(nHeats[nfile])];	
+				
 					for(int t=0;t<nT;t++){
 						int ix=0;
 						table[nfile][iGroup][t][ix++]=Integer.toString(stepNumb[nfile][t]);
 						table[nfile][iGroup][t][ix++]=Double.toString(time[nfile].el[t]);
 						for(int i=0;i<nHeats[nfile];i++){
+
 							table[nfile][iGroup][t][ix++]=heat[nfile][i][t];	
 						}
 					}
@@ -890,10 +916,11 @@ public class LargeScaleTestOlder {
 
 					iGroup++;
 					ix=0;
-					titles1[nfile][iGroup]=new String[2+nEnergies[nfile]];
+					titles1[nfile][iGroup]=new String[2+nHeats[nfile]];
 					titles1[nfile][iGroup][ix++]="Step.No";	
 					titles1[nfile][iGroup][ix++]="Time(sec.)";	
 
+					
 					for (int i=0;i<nHeats[nfile];i++){
 						titles1[nfile][iGroup][ix++]="Heat"+(heatID[nfile][i])+"";	
 
@@ -1201,7 +1228,7 @@ public class LargeScaleTestOlder {
 							}
 							catch(NumberFormatException e){numb=false;}
 
-							if(!numb0 || !numb || 	(isRelease[fRef] && (i==6 || i==7 || i==8)) ){
+							if(!numb0 || !numb /*|| 	(isRelease[fRef] && (i==6 || i==7 || i==8))*/ ){
 								errorTable[nfile][i][j][nr]=-1;
 
 								if(!formatErr[nfile])
@@ -1256,11 +1283,11 @@ public class LargeScaleTestOlder {
 				String title="";
 				if(nfile==1) title=tip[nfile]+" against "+tip[0];
 				else title=tip[nfile]+" against "+tip[1];
-				//if(!formatErr[nfile]){
+				if(!formatErr[nfile]){
 					sumWriter.format("%36s:%18s %1s",title,errorMax[nfile],"%");
 					sumWriter.format(" at: %18s%12s%3s%20s%15s\n\n",group[errorMaxCoord[nfile][0]]," ,Step No: ",errorMaxCoord[nfile][1]," ,variable ID: ",titles1[nfile][errorMaxCoord[nfile][0]][errorMaxCoord[nfile][2]]);
-				//}
-				//else
+				}
+				else
 					sumWriter.format("                  Warning!: There are number format errors in results, or the comparsion error is undefined for some outputs: NA error \n\n");
 			}
 			sumWriter.println();	
@@ -1272,9 +1299,9 @@ public class LargeScaleTestOlder {
 				if(nfile==1) title=tip[nfile]+" against "+tip[0];
 				else title=tip[nfile]+" against "+tip[1];
 
-				//if(!formatErr[nfile])
+				if(!formatErr[nfile])
 					sumWriter.format("%36s:%18s %1s\n\n",title,errorSum[nfile],"%");
-				//else
+				else
 					sumWriter.format("                  Warning!: There are number format errors in results, or the comparsion error is undefined for some outputs: NA error \n\n");
 			}
 			sumWriter.println();	
@@ -1918,26 +1945,33 @@ public class LargeScaleTestOlder {
 			String s;
 			String[] sp;
 			int ix=0;
+		
 			while((line=br.readLine())!=null){
+				
 				while((line=br.readLine())!=null && !line.startsWith("*** Total Joule heat")){}
 				if(line==null) {break;}
 				line=br.readLine();
+			//	System.out.println(ix+"   --->  "+line);
+
 				for(int i=0;i<matIndex;i++){
 					line=br.readLine();
 					if(line.startsWith("**")) break;
 				}
+			
 				if(line.startsWith("**")) break;
+				
 				sp=line.split(regex);
-				//util.pr(sp.length);
-
+			
 				if(sp.length<=2) break;
+
 				id[0]=sp[1];
 				heatTemp[ix]=sp[2];
 
 				ix++;
 
 
-			}
+		}	
+			
 
 
 
@@ -1946,17 +1980,17 @@ public class LargeScaleTestOlder {
 
 			if(ix==0) return null;
 
-			String[] magFnergy=new String[ix];
+			String[] heat=new String[ix];
 
 			for(int i=0;i<ix;i++){
-				magFnergy[i]=heatTemp[i];
+				heat[i]=heatTemp[i];
 
 			}
 
 			//util.plot(voltage);
 			//util.plot(NRerr);
 
-			return magFnergy;
+			return heat;
 		}
 
 
@@ -1969,7 +2003,7 @@ public class LargeScaleTestOlder {
 	}	
 
 
-	public Vect loadTimesSteps(int[] stepNumb,String file){
+	public Vect loadTimeSteps(int[] stepNumb,String file){
 
 
 		Vect powerSourceCurrent=new Vect(stepNumb.length);
@@ -2022,7 +2056,7 @@ public class LargeScaleTestOlder {
 
 	}
 
-	public Vect loadTimesSteps(String file){
+	public Vect loadTimeSteps(String file){
 
 
 
@@ -2495,6 +2529,69 @@ public class LargeScaleTestOlder {
 				return rel;
 
 	}
+	
+	public Vect loadPowerSourceVoltage(String file, int index){
+		
+	
+		String[] dummy =new String[1];
+			String[] v=loadSourceVoltageString(file,index,dummy);
+			
+		if(v==null) return null;
+		else{
+			return new Vect(v);
+		}
 
+	}
+	
+	public Vect loadFieldSourceVoltage(String file, int index){
+		
+		
+		String[] dummy =new String[1];
+			String[] v=loadFieldSourceVoltageString(file,index,dummy);
+			
+		if(v==null) return null;
+		else{
+			return new Vect(v);
+		}
 
+	}
+	
+	public Vect loadPowerSourceCurrent(String file, int index){
+		
+		
+		String[] dummy =new String[1];
+			String[] v=loadSourceCurrentString(file,index,dummy);
+			
+		if(v==null) return null;
+		else{
+			return new Vect(v);
+		}
+
+	}
+	
+	public Vect loadFieldSourceCurrent(String file, int index){
+		
+		
+		String[] dummy =new String[1];
+			String[] v=loadFieldSourceCurrentString(file,index,dummy);
+			
+		if(v==null) return null;
+		else{
+			return new Vect(v);
+		}
+
+	}
+	
+	public Vect loadFlux(String file, int index){
+		
+		String[] dummy =new String[1];
+			String[] v=loadMagFluxString(file,index,dummy);
+			
+		if(v==null) return null;
+		else{
+			return new Vect(v);
+		}
+
+	}
+	
 }

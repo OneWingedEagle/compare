@@ -20,6 +20,13 @@ public class Vect{
 		this.length=array.length;
 		this.el=Arrays.copyOf(array, length);
 	}
+	
+	public Vect(String[] array){
+		this.length=array.length;
+		this.el=new double[this.length];
+		for(int i=0;i<this.length;i++)
+		this.el[i]=Double.parseDouble(array[i]);
+	}
 
 	public Vect(double x,double y,double z){
 		length=3;
