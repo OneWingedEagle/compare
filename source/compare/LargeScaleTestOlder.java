@@ -724,7 +724,7 @@ Vect v=loadFlux(file,1);
 
 					if(nfile>0){
 
-						compWriter[nfile].format("%15s %15s\n","Module version: ",nRefine[nfile]);
+						compWriter[nfile].format("%15s %15s\n","Refine: ",nRefine[nfile]);
 
 						compWriter[nfile].println();
 

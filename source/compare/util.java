@@ -286,6 +286,12 @@ public class util {
 			System.out.println();
 	}
 	
+	public static void hshow(String[] v){
+		for(int i=0;i<v.length;i++)
+				System.out.format("%s\t",v[i]);
+			System.out.println();
+	}
+	
 	public static void show(byte[] v){
 		for(int i=0;i<v.length;i++)
 				System.out.format("%d\t",v[i]);
