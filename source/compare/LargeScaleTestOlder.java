@@ -1070,13 +1070,13 @@ Vect v=loadFlux(file,1);
 			}
 			sumWriter.println();
 
-
+/*
 
 			
 			for(int nfile=0;nfile<nFiles;nfile++){
 				tt[nfile]=getComputationTimesAndDate( file[nfile]);
 			}
-
+*/
 			sumWriter.println("Analysis date:");
 			sumWriter.println();
 			for(int nfile=0;nfile<nFiles;nfile++){

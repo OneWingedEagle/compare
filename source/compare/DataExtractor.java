@@ -12,8 +12,15 @@ public class DataExtractor {
 	
 	
 
+
+
+	public String[][] loadDataString(String file, String key,int nDataMax,int nTmax,PrintWriter stderr){
+		
+		return  loadDataString( file,  key,1, nDataMax, nTmax, stderr);
+	}
 	
-public String[][] loadDataString(String file, String key,int nDataMax,int nTmax,PrintWriter stderr){
+	
+	public String[][] loadDataString(String file, String key, int nLinesAfter,int nDataMax,int nTmax,PrintWriter stderr){
 
 	
 		
@@ -31,21 +38,32 @@ public String[][] loadDataString(String file, String key,int nDataMax,int nTmax,
 			while((line=br.readLine())!=null && !line.startsWith(key)){}
 		
 			if(line==null) {break;}
-			line=br.readLine();
-			//line=br.readLine();
+			
+			for(int i=0;i<nLinesAfter;i++){
+	
+				line=br.readLine();
+				}
+			if(line==null) {break;}
+			
+
 			
 			sourceIndex=0;
 
-			data1[sourceIndex++][ix]=line;
-			line=br.readLine();
 
 			data1[sourceIndex++][ix]=line;
 			line=br.readLine();
 
 			while(line!=null && !line.startsWith("*")){
 				sp=line.split(regex);
+				if(sp.length>1 && nLinesAfter==4){
+					line="";
+					for(int k=1;k<sp.length;k++)
+						line=line+sp[k]+"  ";
+
+				}
 				if(sp.length<2) break;
 				data1[sourceIndex][ix]=line;
+
 			sourceIndex++;
 		
 			line=br.readLine();

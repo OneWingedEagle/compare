@@ -1,12 +1,12 @@
 2
-C:\Users\Hassan Ebrahimi\JavaWorks\Compare\output
-C:\Users\Hassan Ebrahimi\JavaWorks\Compare\output
+\\192.168.12.103\Users\hassan\Documents\Large Scale Test\FieldSources\results\Kameari_develop20151209\tests\results\SPM\no_periodic\static_linear_Vgiven\release\output
+\\192.168.12.103\Users\hassan\Documents\Large Scale Test\FieldSources\results\Kameari_develop20151209\tests\results\SPM\no_periodic\static_linear_Vgiven\MPI para 1\output
 release
-release
+para_1
 //module versions
-version
 r11.2.5/20151106
-r11.2.5/20151106
+r4.2.2/Kameari_develop20151209
+
 outputs
 1 2
 1 1

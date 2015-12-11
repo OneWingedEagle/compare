@@ -48,6 +48,7 @@ public class LargeScaleTest {
 	String[] file,tip,moduleVersion;
 
 	String[] key;
+	int[] nLineAfter;
 	String[] outputTitles;
 	boolean[] isRelease;
 	int[] nRefine;
@@ -66,6 +67,11 @@ public class LargeScaleTest {
 	String[][] analysisDate;
 	int[][] iterationNumber;
 	String[][] computationTimeAndDate;
+	
+	double[] errorMax;
+	int[][] errorMaxCoord;
+
+	boolean[] formatErr;
 	
 	int[] wantedOutputId;
 	String[][] wantedOutputItemId;
@@ -95,6 +101,16 @@ public class LargeScaleTest {
 		key[3]="*            Magnetic fluxes of flux loops";
 		key[4]="*** Total magnetic";
 		key[5]="*** Total Joule heat";
+		
+		
+		nLineAfter=new int[nOutputGroupsMax];
+		nLineAfter[0]=1;
+		nLineAfter[1]=1;
+		nLineAfter[2]=1;
+		nLineAfter[3]=4;
+		nLineAfter[4]=1;
+		nLineAfter[5]=1;
+		
 
 		outputTitles=new String[nOutputGroupsMax];
 
@@ -135,33 +151,6 @@ public class LargeScaleTest {
 		this.getErrorTable();
 
 
-
-		for(int nfile=1;nfile<-nFiles;nfile++){
-
-			for(int i=0;i<outputId.length;i++){
-
-				for(int j=1;j<outputItemId[i].length;j++){
-
-					for(int k=0;k<nT[nfile]/20;k++){
-						System.out.print(stepNumbs[nfile][k]+" >> \t" );
-						for(int p=0;p<outputString[nfile][i][j].length;p++)
-								System.out.print(outputString[nfile][i][j][p][k]+"\t");
-							//System.out.print(outputString[nfile][i][j][p][k]+"\t"+outputString[0][i][j][p][k]+"\t"+errorTable[nfile][i][j][p][k]+"\t");
-
-						System.out.println();
-
-
-					}
-
-
-					System.out.println("-------------------");
-
-
-				}
-				System.out.println("=======================");
-			}
-		}
-
 	}
 
 
@@ -175,78 +164,376 @@ public class LargeScaleTest {
 
 		WritableWorkbook workbook;
 		try {
+			
 			workbook = Workbook.createWorkbook(new File(path));
+			
+			
+			WritableSheet summarySheet=workbook.createSheet("summary",0);
+			
+			
+			Label label=null;
+			Number number=null;
+		
+			int rw=1;
+			int clm=0;
+			
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+
+			label=new Label(clm,rw,"Result location:");
+			summarySheet.addCell(label);
+			rw++;
+			for(int nfile=0;nfile<nFiles;nfile++){
+
+				label=new Label(clm,rw,tip[nfile]+":\t"+file[nfile]);
+				summarySheet.addCell(label);
+				
+				rw++;
+				
+			}
+
+			rw++;
+
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+
+			label=new Label(clm,rw,"Analysis date:");
+			summarySheet.addCell(label);
+
+			rw++;
+			for(int nfile=0;nfile<nFiles;nfile++){
+
+				label=new Label(clm,rw,"\t\t"+tip[nfile]+":\n");
+				summarySheet.addCell(label);
+				
+				rw++;
+				
+				label=new Label(clm,rw,"       Start at : "+computationTimeAndDate[nfile][9]);
+				summarySheet.addCell(label);
+				
+				rw++;
+				
+				label=new Label(clm,rw,"    Completed at: "+computationTimeAndDate[nfile][11]);
+				summarySheet.addCell(label);
+				
+				rw++;
+				
+			}
+			
+			rw++;
+	
+
+			// == module version
+			
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+			
+			label=new Label(clm,rw,"Module version: ");
+			summarySheet.addCell(label);
+
+			rw++;
+			for(int nfile=0;nfile<nFiles;nfile++){
+
+				label=new Label(clm,rw,tip[nfile]+" :");
+				summarySheet.addCell(label);
+				
+				label=new Label(clm+1,rw,moduleVersion[nfile]);
+				summarySheet.addCell(label);
+				
+				rw++;
+				
+							
+			}
+			
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+			
+			label=new Label(clm,rw,"Refine: ");
+			summarySheet.addCell(label);
+
+			rw++;
+			for(int nfile=0;nfile<nFiles;nfile++){
+
+				label=new Label(clm,rw,tip[nfile]+" :");
+				summarySheet.addCell(label);
+				
+				number=new Number(clm+1,rw,nRefine[nfile]);
+				summarySheet.addCell(number);
+				
+				rw++;
+				
+							
+			}
+			
+			rw++;
+			
+			
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+			
+			label=new Label(clm,rw,"Max errors (%):");
+			summarySheet.addCell(label);
+
+			rw++;
+			for(int nfile=1;nfile<nFiles;nfile++){
+	/*			String title="";
+				if(nfile==1) title=tip[nfile]+" against "+tip[0];
+				else title=tip[nfile]+" against "+tip[1];*/
+				
+				number=new Number(clm+1,rw,errorMax[nfile]);
+				summarySheet.addCell(number);
+				
+				int index=avialableOutputGroupIndex[nfile][errorMaxCoord[nfile][0]];
+				label=new Label(clm+3,rw,"in: "+outputTitles[index]);
+				summarySheet.addCell(label);
+				
+				label=new Label(clm+5,rw,"step: ");
+				summarySheet.addCell(label);
+				number=new Number(clm+6,rw,errorMaxCoord[nfile][1]);
+				summarySheet.addCell(number);
+
+				
+				rw++;
+				
+							
+			}
+			
+
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+			
+			label=new Label(clm,rw," Number of ements:");
+			summarySheet.addCell(label);
+		
+			rw++;
+			
+			for(int nfile=0;nfile<nFiles;nfile++){
+
+				label=new Label(clm,rw,tip[nfile]+" : "+nodeEl[nfile][1]);
+				summarySheet.addCell(label);
+				 rw++;
+			
+						
+			}
+			
+			rw++;
+			
+			
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+			
+			label=new Label(clm,rw," Number of nodes:");
+			summarySheet.addCell(label);
+		
+			rw++;
+			
+			for(int nfile=0;nfile<nFiles;nfile++){
+
+				label=new Label(clm,rw,tip[nfile]+" : "+nodeEl[nfile][0]);
+				summarySheet.addCell(label);
+				 rw++;
+			
+						
+			}
+			
+			
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+			
+			
+			label=new Label(clm,rw,"Number of iterations:");
+			summarySheet.addCell(label);
+		
+			rw++;
+			
+			for(int nfile=0;nfile<nFiles;nfile++){
+
+				label=new Label(clm,rw,tip[nfile]+":");
+				summarySheet.addCell(label);
+				 rw++;
+				 rw++;
+				label=new Label(clm+1,rw,"Total ICCG:");
+				summarySheet.addCell(label);
+				
+				number=new Number(clm+3,rw,iterationNumber[nfile][0]);
+				summarySheet.addCell(number);
+				 rw++;
+				 
+					label=new Label(clm+1,rw,"Total Nonlinear:");
+					summarySheet.addCell(label);
+					
+					number=new Number(clm+3,rw,iterationNumber[nfile][1]);
+					summarySheet.addCell(number);
+					 rw++;
+			
+						
+			}
+			
+		
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+
+			label=new Label(clm,rw,"Total computation time:");
+			summarySheet.addCell(label);
+		
+			rw++;
+			
+			for(int nfile=0;nfile<nFiles;nfile++){
+				label=new Label(clm,rw,tip[nfile]+":");
+				summarySheet.addCell(label);
+				
+				String[] sp=this.splitToStrings(computationTimeAndDate[nfile][1],regex2);
+
+				number=new Number(clm+2,rw,Double.parseDouble(sp[sp.length-3]));
+				summarySheet.addCell(number);
+				 rw++;		
+						
+			}
+			
+			rw++;
+			
 			WritableSheet[] sheet=new WritableSheet[nOutputGroups];
 
+			int fRef=0;
 
 			int index=0;
-			int nfile=0;
 			
 			for(int i=0;i<nOutputGroups;i++){
 				index=avialableOutputGroupIndex[0][i];
-			 sheet[i] = workbook.createSheet(outputTitles[index],i);
+			 sheet[i] = workbook.createSheet(outputTitles[index],i+1);
 			 
 			
 			 int L=0;
+			 for(int nfile=0;nfile<nFiles;nfile++)
 			 for(int j=1;j<outputItemId[i].length;j++){
 				 L+=(outputString[nfile][i][j].length-1);
 			 }
 			 
+		
+			 
+			 int Lerr=0;
+			 for(int nfile=1;nfile<nFiles;nfile++)
+			 for(int j=1;j<outputItemId[i].length;j++){
+				 Lerr+=(outputString[nfile][i][j].length-1);
+			 }
+			 
+			 
+			 
 			 String[][] table=new String[nT[0]][L];
-			 String[][] titles=new String[2][L];
+			 String[][] titles=new String[3][L];
+			 
+			 double[][] errTable=new double[nT[0]][Lerr];
+			 String[][] errTitles=new String[3][Lerr];
+			
 
 			
 			 int col;
 	
 				 col=0;
-				 for(int j=1;j<outputItemId[i].length;j++)
-					 for(int p=1;p<outputString[nfile][i][0].length;p++){
-					 titles[0][col++]=outputItemId[i][j];
-					 }
+
+				 
+				
+					 for(int j=1;j<outputString[fRef][i].length;j++)
+						 for(int p=1;p<outputString[fRef][i][j].length;p++){
+							 for(int nfile=0;nfile<nFiles;nfile++)
+							 titles[0][col++]=outputItemId[i][j];
+						 }
 				 
 				 col=0;
-				 for(int j=1;j<outputItemId[i].length;j++)
-					 for(int p=1;p<outputString[nfile][i][0].length;p++){
-					 titles[1][col++]=outputString[nfile][i][0][p][0];
-					 }
-		
+				 
+					 for(int j=1;j<outputString[fRef][i].length;j++)
+						 for(int p=1;p<outputString[fRef][i][j].length;p++){
+							 for(int nfile=0;nfile<nFiles;nfile++)
+							 if(outputString[nfile][i][0][p][0].equals("Amplitude(Current)"))
+								titles[1][col++]="Current";
+							 else
+							    titles[1][col++]=outputString[nfile][i][0][p][0];
+							 
+						 }
+				 col=0;
+				
+					 for(int j=1;j<outputString[fRef][i].length;j++)
+						 for(int p=1;p<outputString[fRef][i][j].length;p++){
+							 for(int nfile=0;nfile<nFiles;nfile++)
+							 titles[2][col++]=tip[nfile];
+						 }
+
 		
 
 			 for(int k=0;k<table.length;k++)
 			 {
 				 col=0;
-				 for(int j=1;j<outputString[nfile][i].length;j++)
-					 for(int p=1;p<outputString[nfile][i][j].length;p++){
+				
+				 for(int j=1;j<outputString[fRef][i].length;j++)
+					 for(int p=1;p<outputString[fRef][i][j].length;p++){
+						 for(int nfile=0;nfile<nFiles;nfile++)
 				 		 table[k][col++]=outputString[nfile][i][j][p][k];
 					 }
 			 }
+			 
 
+				 col=0;
+				 for(int nfile=1;nfile<nFiles;nfile++)
+				 for(int j=1;j<outputString[nfile][i].length;j++)
+					 for(int p=1;p<outputString[nfile][i][j].length;p++){
+				 		 errTitles[0][col++]=outputItemId[i][j];
+					 }
+				 
+				 col=0;
+			
+				 for(int nfile=1;nfile<nFiles;nfile++)
+				 for(int j=1;j<outputString[nfile][i].length;j++)
+					 for(int p=1;p<outputString[nfile][i][j].length;p++){
+						 if(outputString[nfile][i][0][p][0].equals("Amplitude(Current)"))
+							 errTitles[1][col++]="Current";
+						 else
+							 errTitles[1][col++]=outputString[nfile][i][0][p][0];
+						 
+						
+					 }
+
+				 col=0;
+			
+				 for(int j=1;j<outputString[fRef][i].length;j++)
+					 for(int p=1;p<outputString[fRef][i][j].length;p++){
+						 for(int nfile=1;nfile<nFiles;nfile++)
+						 if(nfile==1)
+							 errTitles[2][col++]=tip[nfile]+"/"+tip[0];
+						 else
+							 errTitles[2][col++]=tip[nfile]+"/"+tip[1];
+					 }
+	
 			 
 			 for(int k=0;k<table.length;k++)
 			 {
-			 for(int j=0;j<table[0].length;j++)
-					 util.hshow(table[k]);
-			 }
-			 util.pr("--------------");
-			 
-	/*		 for(int k=0;k<titles.length;k++)
-			 {
-			 for(int j=0;j<titles[0].length;j++)
-					 util.hshow(titles[j]);
-			 }*/
-			
-
-	/*		 for(int k=0;k<titles.length;k++)
-			 {
 				 col=0;
-				 for(int j=1;j<outputString[nfile][i].length;j++)
-					 for(int p=1;p<outputString[nfile][i][j].length;p++){
-						 titles[k][col++]=outputString[nfile][i][j][p][k];
+				
+				 for(int j=1;j<outputString[fRef][i].length;j++)
+					 for(int p=1;p<outputString[fRef][i][j].length;p++){
+						 for(int nfile=1;nfile<nFiles;nfile++)
+				 		 errTable[k][col++]=errorTable[nfile][i][j][p][k];
 					 }
-			 }*/
+			 }
 
-			//this.fillSheet(sheet[i],i,String[]);
-			fillSheet(sheet[i],stepNumbs[nfile],time[nfile], titles,table,new double[nT[nfile]][L]) ;
+			 
+	/*		 for(int k=0;k<table.length;k++)
+			 {
+
+					 util.hshow(errTable[k]);
+			 }*/
+		//	 util.pr("--------------");
+			 
+
+			fillSheet(sheet[i],stepNumbs[fRef],time[fRef], titles,table,errTable,errTitles) ;
 			
 
 			}
@@ -322,7 +609,7 @@ public class LargeScaleTest {
 
 
 		try{	
-			FileReader fr=new FileReader("input");
+			FileReader fr=new FileReader("path");
 			BufferedReader br = new BufferedReader(fr);
 			String line;
 
@@ -349,8 +636,18 @@ public class LargeScaleTest {
 					tip[i]=line;
 
 			}
+			
+			
+			moduleVersion=new String[nFiles];
+			
+			for(int i=0;i<nFiles;i++){
+				line=getNextDataLine(br);
+				if(line!=null)
+					moduleVersion[i]=line;
 
+			}
 
+/*
 			String[] lines=new String[100];
 
 			int ix=0;
@@ -466,12 +763,13 @@ public class LargeScaleTest {
 			iterationNumber[nfile]=dex.getIterNumb(file[nfile]);
 			computationTimeAndDate[nfile]=dex.getComputationTimesAndDate(file[nfile]);
 
+			nodeEl[nfile]=dex.getNodeElNumbs(file[nfile]);
 
 			if(nfile>0)
 				nRefine[nfile]=dex.getRefine(file[nfile]);
 
 			for(int i=0;i<nKeys;i++){
-				String[][] data=dex.loadDataString(file[nfile],key[i],nVariableIDsMax,nTmax,stderr);
+				String[][] data=dex.loadDataString(file[nfile],key[i],nLineAfter[i],nVariableIDsMax,nTmax,stderr);
 
 				if(data==null) continue;
 
@@ -507,7 +805,6 @@ public class LargeScaleTest {
 
 		for(int nfile=0;nfile<nFiles;nfile++){
 
-
 			time[nfile]=	dex.loadTimesSteps(stepNumbs[nfile], file[nfile],stderr);
 
 
@@ -528,8 +825,11 @@ public class LargeScaleTest {
 
 			for(int i=0;i<nOutputGroups;i++){
 
+	
+				int index=avialableOutputGroupIndex[nfile][i];
+						
 
-				String[][] data=dex.loadDataString(file[nfile],key[avialableOutputGroupIndex[nfile][i]],nVariableIDsMax,nTmax,stderr);
+				String[][] data=dex.loadDataString(file[nfile],key[index],nLineAfter[index],nVariableIDsMax,nTmax,stderr);
 				
 				if(data==null) continue;
 			
@@ -625,10 +925,10 @@ public class LargeScaleTest {
 
 		double[] errorSum=new double[nFiles];
 
-		double[] errorMax=new double[nFiles];
-		int[][] errorMaxCoord=new int[nFiles][3];
+	errorMax=new double[nFiles];
+		 errorMaxCoord=new int[nFiles][3];
 
-		boolean[] formatErr=new boolean[nFiles];
+		formatErr=new boolean[nFiles];
 
 		////---------------
 		for(int i=0;i<nOutputGroups;i++){
@@ -686,6 +986,7 @@ public class LargeScaleTest {
 									double err=0;
 									if(Math.abs(data0)>1e-10){
 										err=Math.abs(data-data0)/Math.abs(data0)*100;
+					
 									}
 									else{
 
@@ -726,29 +1027,19 @@ public class LargeScaleTest {
 
 	}
 
-/*	public void fillSheet(WritableSheet sheet,int[] stetNumb,Vect time, String[] title1, String[] title2,String[][] table,double[][] table2) 
-			throws RowsExceededException, WriteException, IOException{*/
 		
-		public void fillSheet(WritableSheet sheet,int[] stepNumbs,Vect time, String[][] titles,String[][] table,double[][] error) 
+		public void fillSheet(WritableSheet sheet,int[] stepNumbs,Vect time, String[][] titles,String[][] table,double[][] error,String[][] errTitles) 
 				throws RowsExceededException, WriteException, IOException{
-/*			public void fillSheet(WritableSheet sheet,int is) 
-					throws RowsExceededException, WriteException, IOException{*/
-				
-		
-
-
-	
-
 		
 		int clm=0;
 		
 		int rw=1;
+
 		
-		clm=0;
 		
 		Number number=null;
-
 		Label label;
+	
 		
 		label=new Label(clm,rw,"step");
 		sheet.addCell(label);
@@ -761,14 +1052,16 @@ public class LargeScaleTest {
 		
 		int nCol=0;
 		for(int i=0;i<table[0].length;i++){
-			if(table[i][0]!=null && !table[i][0].equals("null"))
+			if(table[0][i]!=null && !table[0][i].equals("null"))
 				nCol++;
+
 		}
 	
 
 		for(int q=0;q<titles[0].length;q++){
-			label=new Label(clm+2+q*(nCol-1),rw,"mat."+titles[0][q]);
+			label=new Label(clm+2+q,rw,"ID-"+titles[0][q]);
 			sheet.addCell(label);
+
 		}
 		
 		rw++;
@@ -779,11 +1072,19 @@ public class LargeScaleTest {
 		label=new Label(clm+1,rw,"sec.");
 		sheet.addCell(label);
 		
-		
+	
 		for(int q=0;q<titles[0].length;q++){
 			label=new Label(q+clm+2,rw,titles[1][q]);
 			sheet.addCell(label);
-		}
+			}
+		
+		rw++;
+		
+		for(int q=0;q<titles[0].length;q++){
+			label=new Label(q+clm+2,rw,titles[2][q]);
+			sheet.addCell(label);
+			}
+		
 		
 	
 
@@ -795,6 +1096,7 @@ public class LargeScaleTest {
 			sheet.addCell(number);
 			number= new Number(clm+1,p+rw,time.el[p]);
 			sheet.addCell(number);
+	
 			
 		}
 		
@@ -813,6 +1115,7 @@ public class LargeScaleTest {
 
 					number= new Number(q+clm,p+rw,Double.parseDouble(table[p][q]));
 					sheet.addCell(number);
+
 				}
 				catch(NumberFormatException e){
 					label=new Label(clm+q,p+rw,table[p][q]);
@@ -823,11 +1126,106 @@ public class LargeScaleTest {
 
 		}
 		
+		clm+=nCol;
+		
+	
+		
+		rw=1;
+		
+		for(int q=0;q<errTitles[0].length;q++){
+			label=new Label(clm+q,rw,"% err:ID-"+errTitles[0][q]);
+			sheet.addCell(label);
+
+		}
+		
+		rw++;
+		
+	
+		for(int q=0;q<errTitles[0].length;q++){
+			label=new Label(q+clm,rw,errTitles[1][q]);
+			sheet.addCell(label);
+			}
+		
+		rw++;
+		
+		for(int q=0;q<errTitles[0].length;q++){
+			label=new Label(q+clm,rw,errTitles[2][q]);
+			sheet.addCell(label);
+			}
+		
+		rw++;
+		
+		for(int p=0;p<error.length;p++){
+			
+			for(int q=0;q<error[0].length;q++){
+
+				if(error[p][q]==-1){
+
+						label= new Label(q+clm,rw,"NA");
+						sheet.addCell(label);
+			
+				}
+				else{
+				number= new Number(q+clm,rw,error[p][q]);
+					sheet.addCell(number);
+				}
+
+				
+			}
+			
+			rw++;
+
+		}
+		
+	
+		rw++;
 
 		
-			
-			
+		double[] errMax=new double[error[0].length];
+		int[] errStep=new int[error[0].length];
+	
+			for(int q=0;q<error[0].length;q++){
+
+				for(int p=0;p<error.length;p++){
+					if(error[p][q]==-1){
+						errMax[q]=-1;
+						errStep[q]=q;
+					}
+					else{
+				if(error[p][q]>errMax[q]) {
+					errMax[q]=error[p][q];
+					errStep[q]=q;
+				}
+					}
+				
+				
+			}
+
+		}
 		
+		
+
+
+
+		for(int q=0;q<error[0].length;q++){
+
+			label=new Label(clm+q,rw,"Max(%):");
+			sheet.addCell(label);
+			
+			if(errMax[q]==-1){
+				label= new Label(q+clm,rw+1,"NA");
+				sheet.addCell(label);
+				
+			}
+			else{
+			number= new Number(q+clm,rw+1,errMax[q]);
+			sheet.addCell(number);
+			}
+
+			
+		}
+
+
 
 	}
 
