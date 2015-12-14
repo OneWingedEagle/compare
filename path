@@ -1,7 +1,18 @@
-2
-C:\Users\Hassan Ebrahimi\JavaWorks\Compare\outputrel
-C:\Users\Hassan Ebrahimi\JavaWorks\Compare\outputp1
+3
+\\192.168.12.103\Users\hassan\Documents\Large Scale Test\FieldSources\results\Kameari_develop20151209\tests\results\SPM\no_periodic\transient_linear_magnet_only\release\output
+\\192.168.12.103\Users\hassan\Documents\Large Scale Test\FieldSources\results\Kameari_develop20151209\tests\results\SPM\no_periodic\transient_linear_magnet_only\MPI para 1\output
+\\192.168.12.103\Users\hassan\Documents\Large Scale Test\FieldSources\results\Kameari_develop20151209\tests\results\SPM\no_periodic\transient_linear_magnet_only\MPI para 8\output
 release
-Para_1
+para_1
+para_8
 r11.2.5/20151106
-r4.2.2/Ahagon
+r4.2.2/Kameari_develop20151209
+r4.2.2/Kameari_develop20151209
+r4.2.2/Kameari_develop20151209
+
+C:\Users\hassan\Documents\Large Scale Test\FieldSources\results\Kameari_develop20151209\tests\results\SPM\no_periodic\static_nonlinear\MPI para 1
+
+C:\Users\hassan\Documents\Large Scale Test\FieldSources\results\Yuuk20151211\periodic\sdef_coil\MPI para 1
+
+
+C:\Users\hassan\Documents\Large Scale Test\FieldSources\results\Kameari_develop20151209\tests\results\SPM\no_periodic\AC\MPI para 1

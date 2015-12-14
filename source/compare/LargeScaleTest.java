@@ -68,8 +68,12 @@ public class LargeScaleTest {
 	int[][] iterationNumber;
 	String[][] computationTimeAndDate;
 	
+	
+	double[][] errorMaxOfGroups;
 	double[] errorMax;
 	int[][] errorMaxCoord;
+	String[][] errorMaxID;
+	String[][] errorMaxData;
 
 	boolean[] formatErr;
 	
@@ -177,6 +181,115 @@ public class LargeScaleTest {
 			int rw=1;
 			int clm=0;
 			
+			label=new Label(clm,rw,"Max errors (%):");
+			summarySheet.addCell(label);
+
+			rw++;
+			for(int nfile=1;nfile<nFiles;nfile++){
+	/*			String title="";
+				if(nfile==1) title=tip[nfile]+" against "+tip[0];
+				else title=tip[nfile]+" against "+tip[1];*/
+				if(nfile==1)
+				label=new Label(clm,rw,tip[1]+"/"+tip[0]+" :");
+				else
+					label=new Label(clm,rw,tip[nfile]+"/"+tip[1]+" :");
+				
+				summarySheet.addCell(label);
+				rw++;
+				
+				number=new Number(clm+1,rw,errorMax[nfile]);
+				summarySheet.addCell(number);
+				
+				int index=avialableOutputGroupIndex[nfile][errorMaxCoord[nfile][0]];
+				label=new Label(clm+3,rw,"in: "+outputTitles[index]);
+				summarySheet.addCell(label);
+				label=new Label(clm+5,rw,"ID No.: "+errorMaxID[nfile][0]);
+				summarySheet.addCell(label);
+				label=new Label(clm+7,rw,"quantity: "+errorMaxID[nfile][1]);
+				summarySheet.addCell(label);
+				
+				
+				label=new Label(clm+10,rw,"step: ");
+				summarySheet.addCell(label);
+				number=new Number(clm+11,rw,errorMaxCoord[nfile][2]);
+				summarySheet.addCell(number);
+				
+				label=new Label(clm+13,rw," compared data : ");
+				summarySheet.addCell(label);
+				label=new Label(clm+15,rw,errorMaxData[nfile][0]);
+				summarySheet.addCell(label);
+
+				rw++;
+				
+							
+			}
+			
+			label=new Label(0,rw,"____________________________________________________________________________");
+			summarySheet.addCell(label);
+			rw++;
+			
+			label=new Label(clm,rw,"Max errors of output groups (%):");
+			summarySheet.addCell(label);
+
+			rw++;
+			
+			for(int nfile=1;nfile<nFiles;nfile++){
+				if(nfile==1)
+					label=new Label(clm+3*nfile,rw,tip[1]+"/"+tip[0]+" :");
+					else
+						label=new Label(clm+3*nfile,rw,tip[nfile]+"/"+tip[1]+" :");
+					
+					summarySheet.addCell(label);
+				
+			}
+			
+
+			for(int i=0;i<nOutputGroups;i++){
+
+		
+				rw++;
+				
+				label=new Label(clm+1,rw,outputTitles[avialableOutputGroupIndex[0][i]]+" : ");
+				
+				summarySheet.addCell(label);
+				
+				for(int nfile=1;nfile<nFiles;nfile++){
+					number=new Number(clm+3*nfile,rw,errorMaxOfGroups[nfile][i]);
+					summarySheet.addCell(number);
+				
+			
+				}
+			//	
+				
+				
+				
+			/*	int index=avialableOutputGroupIndex[i][errorMaxCoord[i][0]];
+				label=new Label(clm+3,rw,"in: "+outputTitles[index]);
+				summarySheet.addCell(label);
+				label=new Label(clm+5,rw,"ID No.: "+errorMaxID[i][0]);
+				summarySheet.addCell(label);
+				label=new Label(clm+7,rw,"quantity: "+errorMaxID[i][1]);
+				summarySheet.addCell(label);
+				
+				
+				label=new Label(clm+10,rw,"step: ");
+				summarySheet.addCell(label);
+				number=new Number(clm+11,rw,errorMaxCoord[i][2]);
+				summarySheet.addCell(number);
+				
+				label=new Label(clm+13,rw," compared data : ");
+				summarySheet.addCell(label);
+				label=new Label(clm+15,rw,errorMaxData[i][0]);
+				summarySheet.addCell(label);
+*/
+			
+				
+							
+			}
+			rw++;
+			
+			
+			
 			label=new Label(0,rw,"____________________________________________________________________________");
 			summarySheet.addCell(label);
 			rw++;
@@ -186,7 +299,9 @@ public class LargeScaleTest {
 			rw++;
 			for(int nfile=0;nfile<nFiles;nfile++){
 
-				label=new Label(clm,rw,tip[nfile]+":\t"+file[nfile]);
+				label=new Label(clm,rw,tip[nfile]+":");
+				summarySheet.addCell(label);
+				label=new Label(clm+2,rw,file[nfile]);
 				summarySheet.addCell(label);
 				
 				rw++;
@@ -276,33 +391,7 @@ public class LargeScaleTest {
 			summarySheet.addCell(label);
 			rw++;
 			
-			label=new Label(clm,rw,"Max errors (%):");
-			summarySheet.addCell(label);
-
-			rw++;
-			for(int nfile=1;nfile<nFiles;nfile++){
-	/*			String title="";
-				if(nfile==1) title=tip[nfile]+" against "+tip[0];
-				else title=tip[nfile]+" against "+tip[1];*/
-				
-				number=new Number(clm+1,rw,errorMax[nfile]);
-				summarySheet.addCell(number);
-				
-				int index=avialableOutputGroupIndex[nfile][errorMaxCoord[nfile][0]];
-				label=new Label(clm+3,rw,"in: "+outputTitles[index]);
-				summarySheet.addCell(label);
-				
-				label=new Label(clm+5,rw,"step: ");
-				summarySheet.addCell(label);
-				number=new Number(clm+6,rw,errorMaxCoord[nfile][1]);
-				summarySheet.addCell(number);
-
-				
-				rw++;
-				
-							
-			}
-			
+		
 
 			label=new Label(0,rw,"____________________________________________________________________________");
 			summarySheet.addCell(label);
@@ -401,16 +490,17 @@ public class LargeScaleTest {
 			
 			rw++;
 			
-			WritableSheet[] sheet=new WritableSheet[nOutputGroups];
+			WritableSheet[] sheet=new WritableSheet[nOutputGroups*10];
 
 			int fRef=0;
 
 			int index=0;
 			
+			int isheet=0;
+			
 			for(int i=0;i<nOutputGroups;i++){
 				index=avialableOutputGroupIndex[0][i];
-			 sheet[i] = workbook.createSheet(outputTitles[index],i+1);
-			 
+		
 			
 			 int L=0;
 			 for(int nfile=0;nfile<nFiles;nfile++)
@@ -489,18 +579,17 @@ public class LargeScaleTest {
 					 }
 				 
 				 col=0;
-			
-				 for(int nfile=1;nfile<nFiles;nfile++)
-				 for(int j=1;j<outputString[nfile][i].length;j++)
-					 for(int p=1;p<outputString[nfile][i][j].length;p++){
+				 
+				 for(int j=1;j<outputString[fRef][i].length;j++)
+					 for(int p=1;p<outputString[fRef][i][j].length;p++){
+						 for(int nfile=1;nfile<nFiles;nfile++)
 						 if(outputString[nfile][i][0][p][0].equals("Amplitude(Current)"))
 							 errTitles[1][col++]="Current";
 						 else
 							 errTitles[1][col++]=outputString[nfile][i][0][p][0];
 						 
-						
 					 }
-
+				 
 				 col=0;
 			
 				 for(int j=1;j<outputString[fRef][i].length;j++)
@@ -524,16 +613,49 @@ public class LargeScaleTest {
 					 }
 			 }
 
-			 
-	/*		 for(int k=0;k<table.length;k++)
-			 {
 
-					 util.hshow(errTable[k]);
-			 }*/
-		//	 util.pr("--------------");
+			 int nTableParts=1+(int)(table[0].length/150);
 			 
-
-			fillSheet(sheet[i],stepNumbs[fRef],time[fRef], titles,table,errTable,errTitles) ;
+			 
+			 String[][][] subTitle=new  String[nTableParts][][];
+			 String[][][] subTable=new  String[nTableParts][][];
+			 double[][][] subErr=new  double[nTableParts][][];
+			 String[][][] subErrTitle=new  String[nTableParts][][];
+			 
+			 
+			for(int k=0;k<nTableParts;k++){
+				
+				subTitle[k]=new String[titles.length][titles[0].length/nTableParts];
+				for(int j=0;j<subTitle[k].length;j++)
+					for(int p=0;p<subTitle[k][0].length;p++)
+						subTitle[k][j][p]=titles[j][p+k*subTitle[k][0].length];
+				
+				subTable[k]=new String[table.length][table[0].length/nTableParts];
+				for(int j=0;j<subTable[k].length;j++)
+					for(int p=0;p<subTable[k][0].length;p++)
+						subTable[k][j][p]=table[j][p+k*subTable[k][0].length];
+				
+				subErr[k]=new double[errTable.length][errTable[0].length/nTableParts];
+				for(int j=0;j<subErr[k].length;j++)
+					for(int p=0;p<subErr[k][0].length;p++)
+						subErr[k][j][p]=errTable[j][p+k*subErr[k][0].length];
+					
+				
+				subErrTitle[k]=new String[errTitles.length][errTitles[0].length/nTableParts];
+				for(int j=0;j<subErrTitle[k].length;j++)
+					for(int p=0;p<subErrTitle[k][0].length;p++)
+						subErrTitle[k][j][p]=errTitles[j][p+k*subErrTitle[k][0].length];
+			
+				if(nTableParts==1)
+					sheet[isheet] = workbook.createSheet(outputTitles[index],isheet+1);
+				else
+					sheet[isheet] = workbook.createSheet(outputTitles[index]+"-"+(k+1),isheet+1);
+				
+			
+			fillSheet(sheet[isheet++],stepNumbs[fRef],time[fRef], subTitle[k],subTable[k],subErr[k],subErrTitle[k]) ;
+				 
+			//fillSheet(sheet[isheet++],stepNumbs[fRef],time[fRef], titles,table,errTable,errTitles) ;
+			}
 			
 
 			}
@@ -923,16 +1045,23 @@ public class LargeScaleTest {
 
 		int fRef1=0,fRef2=1;
 
-		double[] errorSum=new double[nFiles];
+		//double[] errorSum=new double[nFiles];
+		
+		errorMaxOfGroups=new double[nFiles][nOutputGroups];
 
 	errorMax=new double[nFiles];
 		 errorMaxCoord=new int[nFiles][3];
 
+		 errorMaxID=new String[nFiles][2];
+		 
+		 errorMaxData=new String[nFiles][2];
+		 
 		formatErr=new boolean[nFiles];
 
 		////---------------
 		for(int i=0;i<nOutputGroups;i++){
 			//if(outputString[fRef][i][0].length<3) continue;
+
 
 
 			for(int j=0;j<outputString[fRef][i].length;j++)
@@ -988,29 +1117,44 @@ public class LargeScaleTest {
 										err=Math.abs(data-data0)/Math.abs(data0)*100;
 					
 									}
-									else{
+									else if(Math.abs(data-data0)<1e-10){
 
-										if(Math.abs(data-data0)<1e-10)
+										
 											err=0;
+										
 									}
 
-
-
-									err=Math.floor(err*1e6)/1e6;
+								
+									//	err=Math.floor(err*1e6)/1e6;
 
 									errorTable[nfile][i][j][p][k]=err;
 
 									if(err>errorMax[nfile]){
 										errorMax[nfile]=err;
 										errorMaxCoord[nfile][0]=i;
-										errorMaxCoord[nfile][1]=stepNumbs[fRef][j];
-										errorMaxCoord[nfile][2]=k;
+										errorMaxCoord[nfile][2]=stepNumbs[fRef][k];;
+
+										
+										errorMaxID[nfile][0]=outputItemId[i][j];
+										
+										errorMaxID[nfile][1]=outputString[fRef][i][0][1][0];  
+										
+
+										errorMaxData[nfile][0]=outputString[fRef][i][j][p][k]+" <> "+outputString[nfile][i][j][p][k];
+
+
 
 									}
+									
+									if(err>errorMaxOfGroups[nfile][i]){
+										errorMaxOfGroups[nfile][i]=err;
 
-									errorSum[nfile]+=err;
+										
+									}
 
-									errorSum[nfile]=Math.floor(errorSum[nfile]*10000)/10000;
+								//	errorSum[nfile]+=err;
+
+								//	errorSum[nfile]=Math.floor(errorSum[nfile]*10000)/10000;
 
 								}
 
@@ -1084,9 +1228,7 @@ public class LargeScaleTest {
 			label=new Label(q+clm+2,rw,titles[2][q]);
 			sheet.addCell(label);
 			}
-		
-		
-	
+
 
 		
 		rw++;
@@ -1103,7 +1245,7 @@ public class LargeScaleTest {
 		clm+=2;
 
 
-
+	
 
 		
 		for(int p=0;p<nRow;p++){
@@ -1131,7 +1273,7 @@ public class LargeScaleTest {
 	
 		
 		rw=1;
-		
+
 		for(int q=0;q<errTitles[0].length;q++){
 			label=new Label(clm+q,rw,"% err:ID-"+errTitles[0][q]);
 			sheet.addCell(label);
@@ -1140,7 +1282,7 @@ public class LargeScaleTest {
 		
 		rw++;
 		
-	
+		
 		for(int q=0;q<errTitles[0].length;q++){
 			label=new Label(q+clm,rw,errTitles[1][q]);
 			sheet.addCell(label);
@@ -1261,7 +1403,7 @@ public class LargeScaleTest {
 		    
 		    try {
 				Thread.currentThread();
-				Thread.sleep(100);
+				Thread.sleep(1000);
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
