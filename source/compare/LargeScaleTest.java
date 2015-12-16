@@ -480,10 +480,19 @@ public class LargeScaleTest {
 				label=new Label(clm,rw,tip[nfile]+":");
 				summarySheet.addCell(label);
 				
-				String[] sp=this.splitToStrings(computationTimeAndDate[nfile][1],regex2);
+				String[] sp;
+				if(computationTimeAndDate[nfile][1]!=null){
+				sp=this.splitToStrings(computationTimeAndDate[nfile][1],regex2);
 
 				number=new Number(clm+2,rw,Double.parseDouble(sp[sp.length-3]));
 				summarySheet.addCell(number);
+			}
+				else
+				{
+					label=new Label(clm+2,rw,"null");
+					summarySheet.addCell(label);
+				}
+			
 				 rw++;		
 						
 			}

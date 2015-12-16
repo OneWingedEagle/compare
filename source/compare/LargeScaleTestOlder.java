@@ -757,9 +757,16 @@ Vect v=loadFlux(file,1);
 
 					compWriter[nfile].print("Total time:\t"); 
 
+					if(tt[nfile][1]!=null){
 					String[] sp=tt[nfile][1].split(regex);
 
 					compWriter[nfile].println(Double.parseDouble(sp[2]));
+				}
+					
+					else{
+
+						compWriter[nfile].println("null");
+					}
 
 					compWriter[nfile].println();
 
@@ -1148,9 +1155,27 @@ Vect v=loadFlux(file,1);
 			for(int nfile=0;nfile<nFiles;nfile++){
 				// sumWriter.print(tip[nfile]+"\t"+Double.parseDouble(tt[nfile][3]));
 				//sumWriter.println(tt[nfile][1]);
-				String[] sp=tt[nfile][1].split(regex);
+				
+				
+				if(tt[nfile][1]!=null){
+					
+					
+					
+					
+					String[] sp=tt[nfile][1].split(regex);
+					
 
-				sumWriter.println(tip[nfile]+":\t"+Double.parseDouble(sp[2]));
+					sumWriter.println(tip[nfile]+":\t"+Double.parseDouble(sp[2]));
+					
+				
+				}
+					
+					else{
+
+						sumWriter.println("null");
+					}
+
+		
 			}
 			sumWriter.println();
 
