@@ -1,0 +1,44 @@
+ number of Processes = 8
+ process_ID = 0,   machine_name = Compaqi7
+ process_ID = 1,   machine_name = Compaqi7
+ process_ID = 2,   machine_name = Compaqi7
+ process_ID = 3,   machine_name = Compaqi7
+ process_ID = 4,   machine_name = Compaqi7
+ process_ID = 5,   machine_name = Compaqi7
+ process_ID = 6,   machine_name = Compaqi7
+ process_ID = 7,   machine_name = Compaqi7
+ run_directory = C:\Users\hassan\Documents\Large Scale Test\FieldSources\LoopTest\domain
+ run_directory = C:\Users\hassan\Documents\Large Scale Test\FieldSources\LoopTest\domain1
+ run_directory = C:\Users\hassan\Documents\Large Scale Test\FieldSources\LoopTest\domain2
+ run_directory = C:\Users\hassan\Documents\Large Scale Test\FieldSources\LoopTest\domain3
+ run_directory = C:\Users\hassan\Documents\Large Scale Test\FieldSources\LoopTest\domain4
+ run_directory = C:\Users\hassan\Documents\Large Scale Test\FieldSources\LoopTest\domain5
+ run_directory = C:\Users\hassan\Documents\Large Scale Test\FieldSources\LoopTest\domain6
+ run_directory = C:\Users\hassan\Documents\Large Scale Test\FieldSources\LoopTest\domain7
+Version: 8.1
+******************************************************************************
+METIS 5.0 Copyright 1998-13, Regents of the University of Minnesota
+ (HEAD: metis-5.1.0, Built on: Dec 17 2015, 13:58:19)
+ size of idx_t: zubits, real_t: zubits, idx_t *: zubits
+
+Mesh Information ------------------------------------------------------------
+ Name: C:\Users\hassan\Documents\Large Scale Test\FieldSources\LoopTest\domain\graphfile.0, #Elements: 3312, #Nodes: 3933, #Parts: 8
+
+Options ---------------------------------------------------------------------
+ ptype=kway, objtype=cut, ctype=shem, rtype=greedy, iptype=metisrb
+ dbglvl=0, ufactor=1.030, minconn=NO, contig=NO, nooutput=NO
+ seed=-1, niter=10, ncuts=1
+ gtype=dual, ncommon=1, niter=10, ncuts=1
+
+Direct k-way Partitioning ---------------------------------------------------
+ - Edgecut: 6016.
+
+
+Timing Information ----------------------------------------------------------
+  I/O:          		   0.011 sec
+  Partitioning: 		   0.069 sec   (METIS time)
+  Reporting:    		   0.000 sec
+
+Memory Information ----------------------------------------------------------
+  Max memory used:		   1.325 MB
+******************************************************************************

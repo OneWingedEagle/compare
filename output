@@ -1,0 +1,427 @@
+
+
+ Last Coding 2015/03/02 enable A-phi for Windows and Linux
+
+    *EM Solution EM Solution EM Solution EM Solution EM Solution EM Solution EM Solution * 
+    **                                                                                  ** 
+    **          EEEEEEEEEE   MMMM       MMMM     SSSSSSSSS      OOOOOOOO     LL         ** 
+    **          EEEEEEEEEE   MMMM       MMMM    SSSSSSSSSSS    OOOOOOOOOOO   LL         ** 
+    **         EE           MM MM     MM MM    SS       SS    OO       OO   LL          ** 
+    **         EE           MM MM     MM MM    SS             OO       OO   LL          ** 
+    **        EEEEEEEEEE   MM  MM   MM  MM     SSSSSSS       OO       OO   LL           ** 
+    **        EEEEEEEEEE   MM  MM   MM  MM       SSSSSSS     OO       OO   LL           ** 
+    **       EE           MM   MM MM   MM             SS    OO       OO   LL            ** 
+    **       EE           MM   MM MM   MM    SS       SS    OO       OO   LL            ** 
+    **      EEEEEEEEEE   MM    MMM    MM    SSSSSSSSSSS    OOOOOOOOOOO   LLLLLLLLLL     ** 
+    **      EEEEEEEEEE   MM    MMM    MM     SSSSSSSSS      OOOOOOOOO    LLLLLLLLLL     ** 
+    **                                                                                  ** 
+    *EM Solution EM Solution EM Solution EM Solution EM Solution EM Solution EM Solution * 
+    **                                                                                  ** 
+    **      EM Solution is newly developed electro-magnetic analysis system,            ** 
+    **                       Science Solutions International Laboratory Inc.             ** 
+    **                            2-21-7 Naka-cho, Meguro-ku, Tokyo Japan 153           ** 
+    **                                  TEL: +81-3-3711-8908, FAX: +81-3-3711-8910      ** 
+    **                                  EMail: emsolution@ssil.co.jp                         ** 
+    ************************************************************************************** 
+                                                                                           
+                        EMSOL r4.2.2 DOUBLE  June 12, 2014                                           
+  EMSOL has started at Thu Dec 17 22:36:07 2015
+ 
+
+ **** Minimum node distance =    4.21330e-003 *****
+
+ **** EM_MeshCriteria::minimumDistance was reset to    1.00000e-005 *****
+
+*************************************************************************************************
+*                     Material properties           no_mat_propertie =     6                    *
+*************************************************************************************************
+  No.:   1   ID:   1:  Potential Region No.:0      Magnetic Permeability (H/m):1.25664e-003
+-------------------------------------------------------------------------------------------------
+  No.:   2   ID:  21:  Potential Region No.:1      Magnetic Permeability (H/m):1.25664e-006
+-------------------------------------------------------------------------------------------------
+  No.:   3   ID:  22:  Potential Region No.:0      Magnetic Permeability (H/m):1.25664e-006
+-------------------------------------------------------------------------------------------------
+  No.:   4   ID:  23:  Potential Region No.:0      Magnetic Permeability (H/m):1.25664e-006
+-------------------------------------------------------------------------------------------------
+  No.:   5   ID:  24:  Potential Region No.:0      Magnetic Permeability (H/m):1.25664e-006
+-------------------------------------------------------------------------------------------------
+  No.:   6   ID:   4:  Potential Region No.:0      Magnetic Permeability (H/m):1.25664e-006
+-------------------------------------------------------------------------------------------------
+
+
+
+
+
+*************************************** Global Mesh ***************************************** 
+
+                      *****************  Summary of mesh  ***************** 
+
+                         total number of nodes                   =    795
+                         total number of volume elements         =    422
+                         total number of potential interface elements=      0
+                         total number of edges                   =   1975
+                         total number of facets                  =   1453
+
+
+                      **********************  Nodes  ********************** 
+
+                         on Bn = 0 planes                        =     59
+                         on Ht = 0 planes                        =      0
+                         on far boundaries                       =     74
+                         on periodic boundaries                  =      0
+                         on counductors                          =      0
+                         on inter mesh boundary                  =    325
+                         on inter mesh periodic boundary         =      0
+
+
+                      *****************  Volume elements  ***************** 
+
+                         HEXA_N8E12                              =    396
+                         PRISM_N6E9                              =     26
+                         in conductors                           =      0
+                         in magnetic regions                     =      0
+                         in non_linear magnetic regions          =      0
+                         in air regions                          =    422
+                         in total potential regions              =    422
+                         in reduced potential regions            =      0
+
+
+
+
+                      **********************  Edges  ********************** 
+
+                         on Bn = 0 planes                        =    101
+                         on far boundaries                       =    131
+                         on periodic boundaries                  =      0
+                         on counductors                          =      0
+                         on interface of potential regions       =      0
+                         number of tree edges                    =      0
+                         on inter mesh boundary                  =    623
+                         on inter mesh periodic boundary         =      0
+
+
+                      **********************  Facets  ********************** 
+
+                         on Bn = 0 planes                        =     43
+                         on Ht = 0 planes                        =      0
+                         on far boundaries                       =     58
+                         on periodic boundaries                  =      0
+                         on interface of potential regions       =      0
+                         on inter mesh boundary                  =    299
+                         on inter mesh periodic boundary         =      0
+
+
+*** ICCG iteration ***
+       No.       Error
+         0  1.00000e+000
+*** ICCG converges ***
+        17  5.80359e-007
+
+*** ICCG iteration ***
+       No.       Error
+         0  1.00000e+000
+*** ICCG converges ***
+        22  3.83086e-009
+
+*** ICCG iteration ***
+       No.       Error
+         0  1.00000e+000
+        50  9.72664e-003
+       100  9.72668e-003
+       150  9.72669e-003
+       200  9.72670e-003
+       250  9.72670e-003
+       300  9.72670e-003
+       350  9.72670e-003
+       400  9.72670e-003
+*** ICCG doesn't converge ***
+        14  9.71381e-003
+
+*** ICCG iteration ***
+       No.       Error
+         0  1.00000e+000
+*** ICCG converges ***
+        24  9.22992e-009
+
+
+ ************ Inductance between COIL series ***************************
+      Series No. 1 -- No. 1 :    1.55233e-001 (H) ***
+
+               *****************  System matrix    ***************** 
+                    Domain   Number of unknowns       non_zero elements
+                     0 (0,0)          868              11275
+                     0 (1,0)          570               4536
+                     0 (1,1)          570               4033
+                          total                         150120
+*************************************************************************************************
+
+
+----- Time step     1  Time  1.00000e+000 ------- 
+*** ICCG iteration ***
+       No.       Error
+         0  1.00000e+000
+        50  1.64491e-006
+*** ICCG converges ***
+        52  5.91753e-007
+
+----- Time step     2  Time  2.00000e+000 ------- 
+*** ICCG iteration ***
+       No.       Error
+         0  5.00000e-001
+        50  8.22452e-007
+*** ICCG converges ***
+        50  8.22452e-007
+
+----- Time step     3  Time  3.00000e+000 ------- 
+*** ICCG iteration ***
+       No.       Error
+         0  3.33333e-001
+*** ICCG converges ***
+        49  8.90310e-007
+
+----- Time step     4  Time  4.00000e+000 ------- 
+*** ICCG iteration ***
+       No.       Error
+         0  2.50000e-001
+*** ICCG converges ***
+        49  6.67737e-007
+
+**** Total number of ICCG interations:      200 *********
+
+********************************************************************************************************
+*                            Step No.     1    Time  1.0000000000e+000 sec                             *
+********************************************************************************************************
+
+***  Sources   *********************************************************
+       ID No.      Amplitude(Current)    Voltage              Flux 
+           1        2.22222e+000       1.00000e+002       4.96266e+000
+           2        2.34156e+000       1.00000e+002       9.65745e+000
+           3        8.60869e+000       1.00000e+002       5.14696e+000
+           4        8.46933e+000       1.00000e+002       5.07504e+000
+***  Power Sources   ***************************************************
+       ID No.         Current            Voltage  
+           1        2.22222e+000       1.00000e+002
+           2        2.34156e+000       1.00000e+002
+           3        8.60869e+000       1.00000e+002
+           4        8.46933e+000       1.00000e+002
+
+
+*************************************************************************************************
+*                                                                                               *
+*            Magnetic fluxes of flux loops                                                      *
+*                                                                                               *
+*************************************************************************************************
+
+          Loop No         Magnetic flux (Wb)            
+              1  :        1.58405e-003
+
+
+*** Total magnetic energy in regions  **********************
+        MAT No.       energy           co_energy        BH/2
+            1      2.6408e-002      2.6408e-002      2.6408e-002
+           22      3.6058e-002      3.6058e-002      3.6058e-002
+           23      8.5762e-002      8.5762e-002      8.5762e-002
+           24      2.5771e-001      2.5771e-001      2.5771e-001
+            4      6.5601e+000      6.5601e+000      6.5601e+000
+        Total     6.9661e+000      6.9661e+000      6.9661e+000
+
+********************************************************************************************************
+*                            Step No.     2    Time  2.0000000000e+000 sec                             *
+********************************************************************************************************
+
+***  Sources   *********************************************************
+       ID No.      Amplitude(Current)    Voltage              Flux 
+           1        4.44444e+000       2.00000e+002       9.92532e+000
+           2        4.68313e+000       2.00000e+002       1.93149e+001
+           3        1.72174e+001       2.00000e+002       1.02939e+001
+           4        1.69387e+001       2.00000e+002       1.01501e+001
+***  Power Sources   ***************************************************
+       ID No.         Current            Voltage  
+           1        4.44444e+000       2.00000e+002
+           2        4.68313e+000       2.00000e+002
+           3        1.72174e+001       2.00000e+002
+           4        1.69387e+001       2.00000e+002
+
+
+*************************************************************************************************
+*                                                                                               *
+*            Magnetic fluxes of flux loops                                                      *
+*                                                                                               *
+*************************************************************************************************
+
+          Loop No         Magnetic flux (Wb)            
+              1  :        3.16810e-003
+
+
+*** Total magnetic energy in regions  **********************
+        MAT No.       energy           co_energy        BH/2
+            1      1.0563e-001      1.0563e-001      1.0563e-001
+           22      1.4423e-001      1.4423e-001      1.4423e-001
+           23      3.4305e-001      3.4305e-001      3.4305e-001
+           24      1.0308e+000      1.0308e+000      1.0308e+000
+            4      2.6240e+001      2.6240e+001      2.6240e+001
+        Total     2.7864e+001      2.7864e+001      2.7864e+001
+
+********************************************************************************************************
+*                            Step No.     3    Time  3.0000000000e+000 sec                             *
+********************************************************************************************************
+
+***  Sources   *********************************************************
+       ID No.      Amplitude(Current)    Voltage              Flux 
+           1        6.66667e+000       3.00000e+002       1.48880e+001
+           2        7.02469e+000       3.00000e+002       2.89723e+001
+           3        2.58261e+001       3.00000e+002       1.54409e+001
+           4        2.54080e+001       3.00000e+002       1.52251e+001
+***  Power Sources   ***************************************************
+       ID No.         Current            Voltage  
+           1        6.66667e+000       3.00000e+002
+           2        7.02469e+000       3.00000e+002
+           3        2.58261e+001       3.00000e+002
+           4        2.54080e+001       3.00000e+002
+
+
+*************************************************************************************************
+*                                                                                               *
+*            Magnetic fluxes of flux loops                                                      *
+*                                                                                               *
+*************************************************************************************************
+
+          Loop No         Magnetic flux (Wb)            
+              1  :        4.75215e-003
+
+
+*** Total magnetic energy in regions  **********************
+        MAT No.       energy           co_energy        BH/2
+            1      2.3767e-001      2.3767e-001      2.3767e-001
+           22      3.2452e-001      3.2452e-001      3.2452e-001
+           23      7.7186e-001      7.7186e-001      7.7186e-001
+           24      2.3194e+000      2.3194e+000      2.3194e+000
+            4      5.9041e+001      5.9041e+001      5.9041e+001
+        Total     6.2694e+001      6.2694e+001      6.2694e+001
+
+********************************************************************************************************
+*                            Step No.     4    Time  4.0000000000e+000 sec                             *
+********************************************************************************************************
+
+***  Sources   *********************************************************
+       ID No.      Amplitude(Current)    Voltage              Flux 
+           1        8.88889e+000       4.00000e+002       1.98506e+001
+           2        9.36625e+000       4.00000e+002       3.86298e+001
+           3        3.44348e+001       4.00000e+002       2.05878e+001
+           4        3.38773e+001       4.00000e+002       2.03001e+001
+***  Power Sources   ***************************************************
+       ID No.         Current            Voltage  
+           1        8.88889e+000       4.00000e+002
+           2        9.36625e+000       4.00000e+002
+           3        3.44348e+001       4.00000e+002
+           4        3.38773e+001       4.00000e+002
+
+
+*************************************************************************************************
+*                                                                                               *
+*            Magnetic fluxes of flux loops                                                      *
+*                                                                                               *
+*************************************************************************************************
+
+          Loop No         Magnetic flux (Wb)            
+              1  :        6.33620e-003
+
+
+*** Total magnetic energy in regions  **********************
+        MAT No.       energy           co_energy        BH/2
+            1      4.2253e-001      4.2253e-001      4.2253e-001
+           22      5.7693e-001      5.7693e-001      5.7693e-001
+           23      1.3722e+000      1.3722e+000      1.3722e+000
+           24      4.1234e+000      4.1234e+000      4.1234e+000
+            4      1.0496e+002      1.0496e+002      1.0496e+002
+        Total     1.1146e+002      1.1146e+002      1.1146e+002
+
+
+****  time step 4 cannot be read from file_solutions ****
+
+********** Time performances *************
+**********  0  Mesh_Generation           : 1 :          1.42000e-001       (sec)
+**********  1  *Mesh_Genarate_1          : 1 :          0.00000e+000       (sec)
+**********  2   *Mesh_Genarate_2          : 1 :          0.00000e+000       (sec)
+**********  3  *Mesh_Define_1            : 1 :          3.00000e-003       (sec)
+**********  4  *Faces_1                  : 2 :          1.00000e-003       (sec)
+**********  5  *Faces_2                  : 1 :          0.00000e+000       (sec)
+**********  6  *Mesh_Define_2            : 1 :          0.00000e+000       (sec)
+**********  7  R/W_Mesh_Data             : 2 :          1.40000e-002       (sec)
+**********  8  Output_Geom               : 1 :          3.40000e-002       (sec)
+**********  9  Total_Preprocessing       : 1 :          2.40000e-001       (sec)
+**********  10  ポテンシャルの設定        : 9 :          1.00000e-003       (sec)
+**********  11  ポテンシャルの設定全体    : 9 :          1.50000e-002       (sec)
+**********  12  *Matrix_Profile           : 5 :          2.10000e-002       (sec)
+**********  13  *Matrix_Assembly          : 1 :          1.30000e-002       (sec)
+**********  14  MakeSystemMatrices全部    : 1 :          1.67000e-001       (sec)
+**********  15  スケーリング              : 1 :          0.00000e+000       (sec)
+**********  16  *Decomposition_1          : 5 :          4.00000e-003       (sec)
+**********  17  前処理                    : 5 :          4.00000e-003       (sec)
+**********  18  行列ベクトル積            : 701 :          1.70000e-002       (sec)
+**********  19  行列ベクトル積MPI転送時間 : 701 :          1.00000e-002       (sec)
+**********  20  行列ベクトル積全部        : 701 :          2.70000e-002       (sec)
+**********  21  前進後退代入              : 694 :          1.50000e-002       (sec)
+**********  22  ---                       : 0 :          0.00000e+000       (sec)
+**********  23  ---                       : 0 :          0.00000e+000       (sec)
+**********  24  ---                       : 0 :          0.00000e+000       (sec)
+**********  25  前進後退代入全部          : 694 :          2.90000e-002       (sec)
+**********  26  CG法                      : 8 :          1.57000e-001       (sec)
+**********  27  *Nonlin._Mat._Assembly    : 0 :          0.00000e+000       (sec)
+**********  28  Total_Solver              : 4 :          1.11000e-001       (sec)
+**********  29  Total_Step_Initial        : 1 :          6.00000e-003       (sec)
+**********  30  Total_Step                : 0 :          0.00000e+000       (sec)
+**********  31  Total_Step_Final          : 1 :          2.00000e-003       (sec)
+**********  32  EM_CG_Solver<T>_行列ベクトル積 : 693 :          2.70000e-002       (sec)
+**********  33  EM_CG_Solver<T>_反復ループ内内積計算 : 1387 :          7.10000e-002       (sec)
+**********  34  EM_CG_Solver<T>_AXPY : 1379 :          1.00000e-003       (sec)
+**********  35  EM_CG_Solver<T>_Convergence : 693 :          2.70000e-002       (sec)
+**********  36  EM_CG_Solver<T>_前進後退代入 : 694 :          2.90000e-002       (sec)
+**********  37  ---                       : 686 :          3.40000e-002       (sec)
+**********  38  SetMatrix                 : 0 :          0.00000e+000       (sec)
+**********  39  Element_Matrix            : 0 :          0.00000e+000       (sec)
+**********  40  Element_Matrix_others     : 0 :          0.00000e+000       (sec)
+**********  41  Jacobian_Cal.             : 0 :          0.00000e+000       (sec)
+**********  42  Jacobian_Cal._others      : 0 :          0.00000e+000       (sec)
+**********  43  BH_cal                    : 0 :          0.00000e+000       (sec)
+**********  44  AXPY                      : 1390 :          0.00000e+000       (sec)
+**********  45  AXPYMPI転送               : 0 :          0.00000e+000       (sec)
+**********  46  内積                      : 1404 :          6.00000e-002       (sec)
+**********  47  内積MPI転送               : 0 :          0.00000e+000       (sec)
+**********  48  前進後退代入MPI転送       : 694 :          1.40000e-002       (sec)
+**********  49  前進後退代入etc           : 694 :          0.00000e+000       (sec)
+**********  50  Put,Add                   : 816 :          1.00000e-003       (sec)
+**********  51  Sendrecv                  : 408 :          3.30000e-002       (sec)
+**********  52  EM_CG_Solver<T>_AXPY(狭義) : 693 :          0.00000e+000       (sec)
+**********  53  TimeStep:Write            : 4 :          0.00000e+000       (sec)
+**********  54  SetMatrixProfile(connections)  : 2 :          3.00000e-003       (sec)
+**********  55  prof->SetIndex(&connections)  : 2 :          1.00000e-003       (sec)
+**********  56  TimeStep:SetMatrix  : 4 :          0.00000e+000       (sec)
+**********  57  TimeStep:SetRHS_Vector  : 4 :          0.00000e+000       (sec)
+**********  58  EM_Mesh::GetEdges() : 1 :          1.00000e-003       (sec)
+**********  59  EM_MeshRefiner(mesh).Refine() : 1 :          0.00000e+000       (sec)
+**********  60  EM_A_SourceMeshSetPotentials::AssembleLoadVector : 1 :          3.00000e-002       (sec)
+
+
+*************************************************************************************************
+*                      Used region                               664216 byte :                     *
+*                                                                                               *
+*************************************************************************************************
+*                                                                                               *
+*                     CPU Times                               second                            *
+*                      TOTAL                                   0.6 :        0.0                 *
+*                      Input, Pre-processing                   0.3 :       -0.0                 *
+*                      Matrix making                           0.2 :       -0.0                 *
+*                      Pre-conditioning                        0.0 :        0.0                 *
+*                      Equation solving                        0.1 :       -0.0                 *
+*                      Post-processing                         0.1 :       -0.0                 *
+*                                                                                               *
+*************************************************************************************************
+
+                               **********  Start Time  **********
+
+                                   Thu Dec 17 22:36:07 2015
+
+                               **********  End  Time  **********
+
+                                   Thu Dec 17 22:36:07 2015

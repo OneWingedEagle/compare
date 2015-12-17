@@ -1,0 +1,310 @@
+A             12680832                   96 cg_iteration
+A             12685104                   64 non_linear_iteration
+A              3246096                   12 multi_output_steps.steps
+A             12679008                   40 flux_loops.loops
+A              3257552                    8 flux_loops.fluxes
+A              3257600                    8 data      
+A             12709616                   88 EM_COIL:: elements
+F              3257600                      field_sources.data
+A             12690112                   16 field_sources.data
+F             12690112                      field_sources.data
+A             12690144                   24 field_sources.data
+F             12690144                      field_sources.data
+A             12679920                   32 field_sources.data
+A             12716976                   28 layers->base_material_IDs
+A              3224704                  152 layers->z_coordinates
+A             12719568                  144 layers->material_IDs
+A              3257664                    8 layers->surface_base_mat_nos
+A              3257680                    8 layers->surface_mat_nos
+A              3257696                    8 layers->surface_layer_mat_nos
+A             12717024                   28  *(layers->material_IDs +i)
+A             12717072                   28  *(layers->material_IDs +i)
+A             12717120                   28  *(layers->material_IDs +i)
+A             12717168                   28  *(layers->material_IDs +i)
+A             12717216                   28  *(layers->material_IDs +i)
+A             12717264                   28  *(layers->material_IDs +i)
+A             12717312                   28  *(layers->material_IDs +i)
+A             12717360                   28  *(layers->material_IDs +i)
+A             12717408                   28  *(layers->material_IDs +i)
+A             12717456                   28  *(layers->material_IDs +i)
+A             12717504                   28  *(layers->material_IDs +i)
+A             12717552                   28  *(layers->material_IDs +i)
+A             12717600                   28  *(layers->material_IDs +i)
+A             12717648                   28  *(layers->material_IDs +i)
+A             12717696                   28  *(layers->material_IDs +i)
+A             12717744                   28  *(layers->material_IDs +i)
+A             12717792                   28  *(layers->material_IDs +i)
+A             12717840                   28  *(layers->material_IDs +i)
+F              3256160                      ffile     
+A             97858848                23008 EM_PotentialConnection::lists
+A             94912384               640016 ANY_block 
+F             97858848                      EM_PotentialConnection::lists
+F             94912384                      ANY_block 
+A             97926992                 3472 EM_SymmetricMatrixProfile::Renumber::index
+A             97770240                10416 EM_SymmetricMatrixProfile::Renumber::work
+F             97770240                      EM_SymmetricMatrixProfile::Renumber::work
+F             97926992                      EM_SymmetricMatrixProfile::Renumber::index
+A             97858848                23008 EM_PotentialConnection::lists
+A             97926992               640016 ANY_block 
+F             97858848                      EM_PotentialConnection::lists
+F             97926992                      ANY_block 
+A             95075472                 9120 EM_PotentialConnection::lists
+A             97926992               640016 ANY_block 
+F             95075472                      EM_PotentialConnection::lists
+F             97926992                      ANY_block 
+A             95075472                 9120 EM_PotentialConnection::lists
+A             97926992               640016 ANY_block 
+F             95075472                      EM_PotentialConnection::lists
+F             97926992                      ANY_block 
+A             95130048                 9120 EM_PotentialConnection::lists
+A             97926992               640016 ANY_block 
+F             95130048                      EM_PotentialConnection::lists
+F             97926992                      ANY_block 
+A             95163200                 9120 EM_PotentialConnection::lists
+A             97926992               640016 ANY_block 
+F             95163200                      EM_PotentialConnection::lists
+F             97926992                      ANY_block 
+A             95201504                 9120 EM_PotentialConnection::lists
+A             97926992               640016 ANY_block 
+F             95201504                      EM_PotentialConnection::lists
+F             97926992                      ANY_block 
+A             95226368                 9120 EM_PotentialConnection::lists
+A             97926992               640016 ANY_block 
+F             95226368                      EM_PotentialConnection::lists
+F             97926992                      ANY_block 
+A             95271984                 9120 EM_PotentialConnection::lists
+A             97926992               640016 ANY_block 
+F             95271984                      EM_PotentialConnection::lists
+F             97926992                      ANY_block 
+A             96387088                   16 EM_PotentialConnection::lists
+F             96387088                      EM_PotentialConnection::lists
+A             96048624                   96 cg_for_regularization
+A             95357008                   32 EM_DenseVector::v
+A             95357104                   32 EM_DenseVector::v
+F             95357008                      EM_DenseVector::v
+F             95357104                      EM_DenseVector::v
+A             95356912                   32 EM_DenseVector::v
+F             95356912                      EM_DenseVector::v
+A             96048736                   96 EM_DenseVector::v
+F             96048736                      EM_DenseVector::v
+A             95356144                   64 EM_DenseVector::v
+F             95356144                      EM_DenseVector::v
+A             95364400                   16 EM_PotentialConnection::lists
+F             95364400                      EM_PotentialConnection::lists
+A             95368368                   96 EM_DenseVector::v
+F             95368368                      EM_DenseVector::v
+A             95378400                   64 EM_DenseVector::v
+F             95378400                      EM_DenseVector::v
+A             95366128                   16 EM_PotentialConnection::lists
+F             95366128                      EM_PotentialConnection::lists
+A             95368928                   96 EM_DenseVector::v
+F             95368928                      EM_DenseVector::v
+A             95391824                   16 EM_PotentialConnection::lists
+F             95391824                      EM_PotentialConnection::lists
+A             95369264                   96 EM_DenseVector::v
+F             95369264                      EM_DenseVector::v
+F             96048624                      cg_for_regularization
+F             12688864                      StopWatch 
+A             95411024                 6944 EM_DenseVector::v
+A             95417984                 4560 EM_DenseVector::v
+F             95411024                      EM_DenseVector::v
+F             95417984                      EM_DenseVector::v
+A             95411024                90200 EM_SparseMatrix<T>::A
+A             95501232                36288 EM_SparseMatrix<T>::A
+A             97926992                32264 EM_SparseMatrix<T>::A
+F             95411024                      EM_SparseMatrix<T>::A
+F             95501232                      EM_SparseMatrix<T>::A
+F             97926992                      EM_SparseMatrix<T>::A
+A             97926992                90200 EM_SparseMatrix<T>::A
+A             95506560                36288 EM_SparseMatrix<T>::A
+A             98017200                32264 EM_SparseMatrix<T>::A
+A             98106240                 6944 EM_DenseVector::v
+A             98113200                 4560 EM_DenseVector::v
+A             98117776                 6944 EM_DenseVector::v
+A             98124736                 4560 EM_DenseVector::v
+A             98129312                 6944 EM_DenseVector::v
+A             98136272                 4560 EM_DenseVector::v
+A             98140848                 6944 EM_DenseVector::v
+A             98147808                 4560 EM_DenseVector::v
+A             98152384                 6944 EM_DenseVector::v
+A             98159392                 4560 EM_DenseVector::v
+A             98290416                 6944 EM_DiagonalScaler::D
+A             98164016                 4560 EM_DiagonalScaler::D
+A             98297376                90200 EM_SparseMatrix<T>::A
+A             98387584                36288 EM_SparseMatrix<T>::A
+A             98423888                32264 EM_SparseMatrix<T>::A
+A             98456160                 6944 EM_DenseVector::v
+A             98168640                 4560 EM_DenseVector::v
+A             98465168                 6944 EM_DenseVector::v
+A             98173264                 4560 EM_DenseVector::v
+A             98472128                 6944 EM_DenseVector::v
+A             98177888                 4560 EM_DenseVector::v
+A             13166320                  128 voltage_given_resistance
+A             98463696                   32 voltage   
+A             95545952                   16 work in current_in_static_case
+A             95545984                   16 work in current_in_static_case
+F             95545952                      work1     
+F             95545984                      work2     
+A             98479088                32264 EM_SparseMatrix<T>::A
+A             98511360                32264 EM_SparseMatrix<T>::A
+F             98511360                      EM_SparseMatrix<T>::A
+F             98479088                      EM_SparseMatrix<T>::A
+F             98297376                      EM_SparseMatrix<T>::A
+F             98387584                      EM_SparseMatrix<T>::A
+F             98423888                      EM_SparseMatrix<T>::A
+F             98456160                      EM_DenseVector::v
+F             98168640                      EM_DenseVector::v
+F             98465168                      EM_DenseVector::v
+F             98173264                      EM_DenseVector::v
+F             98472128                      EM_DenseVector::v
+F             98177888                      EM_DenseVector::v
+F             98290416                      EM_DiagonalScaler::D
+F             98164016                      EM_DiagonalScaler::D
+F             98106240                      EM_DenseVector::v
+F             98113200                      EM_DenseVector::v
+F             98117776                      EM_DenseVector::v
+F             98124736                      EM_DenseVector::v
+F             98129312                      EM_DenseVector::v
+F             98136272                      EM_DenseVector::v
+F             98140848                      EM_DenseVector::v
+F             98147808                      EM_DenseVector::v
+F             98152384                      EM_DenseVector::v
+F             98159392                      EM_DenseVector::v
+F             97926992                      EM_SparseMatrix<T>::A
+F             95506560                      EM_SparseMatrix<T>::A
+F             98017200                      EM_SparseMatrix<T>::A
+A              3256288                   48 energy_in_regions
+A              3255584                   48 co_energy_in_regions
+A             95506560                 6944 EM_DenseVector::v
+A             98159392                 4560 EM_DenseVector::v
+A             95513520                 6944 EM_DenseVector::v
+A             98164016                 4560 EM_DenseVector::v
+A             95520480                 6944 EM_DenseVector::v
+A             98177888                 4560 EM_DenseVector::v
+A             95527440                 6944 EM_DenseVector::v
+A             98173264                 4560 EM_DenseVector::v
+A             95534400                 6360 B_at_nodes
+A             98106240                 6360 B_at_nodes
+A             98112608                 6360 B_at_nodes
+A             98118976                 3180 no_summations
+F             95534400                      B_at_nodes[ixyz]
+F             98106240                      B_at_nodes[ixyz]
+F             98112608                      B_at_nodes[ixyz]
+F             98118976                      no_summations
+A             95534400                 6360 J_at_nodes
+A             98106240                 6360 J_at_nodes
+A             98112608                 6360 J_at_nodes
+A             98142672                 6360 Q_at_nodes
+A             98118976                 3180 no_summations
+F             95534400                      J_at_nodes[ixyz]
+F             98106240                      J_at_nodes[ixyz]
+F             98112608                      J_at_nodes[ixyz]
+F             98142672                      Q_at_nodes
+F             98118976                      no_summations
+F             95520480                      EM_DenseVector::v
+F             98177888                      EM_DenseVector::v
+A             95520480                 6944 EM_DenseVector::v
+A             98177888                 4560 EM_DenseVector::v
+A             95534400                 6360 B_at_nodes
+A             98106240                 6360 B_at_nodes
+A             98112608                 6360 B_at_nodes
+A             98118976                 3180 no_summations
+F             95534400                      B_at_nodes[ixyz]
+F             98106240                      B_at_nodes[ixyz]
+F             98112608                      B_at_nodes[ixyz]
+F             98118976                      no_summations
+A             95534400                 6360 J_at_nodes
+A             98106240                 6360 J_at_nodes
+A             98112608                 6360 J_at_nodes
+A             98142672                 6360 Q_at_nodes
+A             98118976                 3180 no_summations
+F             95534400                      J_at_nodes[ixyz]
+F             98106240                      J_at_nodes[ixyz]
+F             98112608                      J_at_nodes[ixyz]
+F             98142672                      Q_at_nodes
+F             98118976                      no_summations
+F             95520480                      EM_DenseVector::v
+F             98177888                      EM_DenseVector::v
+A             95520480                 6944 EM_DenseVector::v
+A             98177888                 4560 EM_DenseVector::v
+A             95534400                 6360 B_at_nodes
+A             98106240                 6360 B_at_nodes
+A             98112608                 6360 B_at_nodes
+A             98118976                 3180 no_summations
+F             95534400                      B_at_nodes[ixyz]
+F             98106240                      B_at_nodes[ixyz]
+F             98112608                      B_at_nodes[ixyz]
+F             98118976                      no_summations
+A             95534400                 6360 J_at_nodes
+A             98106240                 6360 J_at_nodes
+A             98112608                 6360 J_at_nodes
+A             98142672                 6360 Q_at_nodes
+A             98118976                 3180 no_summations
+F             95534400                      J_at_nodes[ixyz]
+F             98106240                      J_at_nodes[ixyz]
+F             98112608                      J_at_nodes[ixyz]
+F             98142672                      Q_at_nodes
+F             98118976                      no_summations
+F             95520480                      EM_DenseVector::v
+F             98177888                      EM_DenseVector::v
+A             95520480                 6944 EM_DenseVector::v
+A             98177888                 4560 EM_DenseVector::v
+A             95534400                 6360 B_at_nodes
+A             98106240                 6360 B_at_nodes
+A             98112608                 6360 B_at_nodes
+A             98118976                 3180 no_summations
+F             95534400                      B_at_nodes[ixyz]
+F             98106240                      B_at_nodes[ixyz]
+F             98112608                      B_at_nodes[ixyz]
+F             98118976                      no_summations
+A             95534400                 6360 J_at_nodes
+A             98106240                 6360 J_at_nodes
+A             98112608                 6360 J_at_nodes
+A             98142672                 6360 Q_at_nodes
+A             98118976                 3180 no_summations
+F             95534400                      J_at_nodes[ixyz]
+F             98106240                      J_at_nodes[ixyz]
+F             98112608                      J_at_nodes[ixyz]
+F             98142672                      Q_at_nodes
+F             98118976                      no_summations
+F             95520480                      EM_DenseVector::v
+F             98177888                      EM_DenseVector::v
+F             95513520                      EM_DenseVector::v
+F             98164016                      EM_DenseVector::v
+F             95506560                      EM_DenseVector::v
+F             98159392                      EM_DenseVector::v
+F              3253792                      ffile     
+F              3253728                      ffile     
+F              3256288                      energy_in_regions
+F              3255584                      co_energy_in_regions
+F             12679632                      EM_COIL::circuit_parm
+F             12709616                      EM_COIL:: elements
+F             12679680                      EM_ELMCUR::circuit_parm
+F             12679776                      EM_SDEFCOIL::circuit_parm
+F             12679872                      EM_PHICOIL::circuit_parm
+F             12679920                      EM_FieldSources::data
+F             95527440                      EM_DenseVector::v
+F             98173264                      EM_DenseVector::v
+F              3253472                      ffile_check
+F              3253536                      ffile_mesh_gen
+F             12678288                      ffile_mesh_data
+F             12678336                      ffile_element_c_matrice
+F             12678384                      ffile_element_e_matrice
+F             12678432                      ffile_system_matrices
+F             12678480                      ffile_r_matrix
+F             12678528                      ffile_t_matrix
+F             12678576                      ffile_solutions
+F             12678624                      ffile_old_solutions
+F              3253600                      ffile_print_out
+F              3253664                      ffile_post_geom
+F              3254048                      ffile_post_torque_to_nodes
+F             12678672                      ffile_potentials
+F             12678720                      ffile_load_vector
+F              3254112                      ffile_tmp 
+F              3254176                      ffile_history
+F              3254240                      ffile_fcheck
+F              3254368                      ffile_s_def_coil
+F              3254432                      ffile_element
+F              3254752                      ffile_motion
+F             12678768                      ffile_cyclic_source
+F              3254880                      ffile_PSIM
