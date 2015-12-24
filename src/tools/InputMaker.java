@@ -9,9 +9,10 @@ import java.util.regex.Pattern;
 public class InputMaker {
 
 	
-	String[] comment=new String[1000];
+	String[] comment=new String[10000];
+	String[] rawLines=new String[10000];
 	
-	String[][][] inputData=new String[1000][50][2];
+	String[][][] inputData=new String[10000][2][50];
 
 	
 	
@@ -91,7 +92,7 @@ public class InputMaker {
 	
 	public InputMaker(){
 		
-		int ix=-1;
+/*		int ix=-1;
 		
 		comment[++ix]="* RLS_NO *";
 		inputData[ix][1][0]="11.0";
@@ -156,7 +157,7 @@ public class InputMaker {
 		comment[++ix]="* RLS_NO *";
 		inputData[ix][1][0]="11.0";
 		inputData[ix][1][1]="RLS_NO";
-
+*/
 
 
 
@@ -167,8 +168,10 @@ public class InputMaker {
 
 		InputMaker im=new InputMaker();
 
-		String file="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/latest_tests2015.12.16/slide_test/simple-test_mag/sequential2mesh/check";
-		im.readInput(file);
+		String file="check";
+		im.readInputFromCheck(file);
+		
+		im.writeInput("inputHassan");
 
 		
 
@@ -176,26 +179,37 @@ public class InputMaker {
 
 	}
 	
-	
-	
-	public void makeInput(String folder){
+	public void writeInput(String file){
 		
-		int ix=0;
+		int nx=0;
+		while(inputData[nx++][0][0]!=null){}
+		
+		String[] lines=new String[nx*2];
 
-/*		
-		util.pr(comment[ix++]);
-		util.pr(RLS_NO);
-		for(int)
-		util.pr(PRE_PROCESSING * MAKE_SYSTEM_MATRICES );
-		util.pr(RLS_NO);*/
-	
+		for(int i=0;i<nx;i++){
+			
+			String comment="* ";
+			for(int j=0;j<inputData[i][1].length;j++)
+				if(inputData[i][1][j]!=null && !inputData[i][1][j].equals(""))
+						comment=comment+inputData[i][1][j]+" * ";
+		//	util.pr(comment);
+			lines[2*i]=comment;
+			
+			comment="   ";
+			for(int j=0;j<inputData[i][0].length;j++)
+				if(inputData[i][0][j]!=null && !inputData[i][0][j].equals(""))
+					comment=comment+inputData[i][0][j]+"\t";
+			lines[2*i+1]=comment;
+			
+		}
 		
-		
+		util.write(file,lines);
 		
 	}
+
 	
 	
-	public void readInput(String file){
+	public void readInputFromCheck(String file){
 		
 		int ix=0;
 		
@@ -207,40 +221,103 @@ public class InputMaker {
 			String line1,line2;
 
 			line1="";
+
+			while(line1!=null){
+
+				line1=br.readLine();
+
+				if(line1.startsWith("* File input end")) break;
+	
+				rawLines[ix]=line1;
+
+				
+			ix++;
+
+			}
 			
+			
+			
+			br.close();
+
+	fr.close();
+		
+		
+		
+	}	catch(IOException e){System.err.println("Failed in reading input file.");
+	}
+
+
+		
+	}
+	
+	public void readInputFromCheckbb(String file){
+		
+		int ix=0;
+		
+	
+
+		try{	
+			FileReader fr=new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			String line1,line2;
+
+			line1="";
+			while(!line1.startsWith("**** Execution module")){line1=br.readLine();}
 	
 			while(line1!=null){
-			
+
 				line1=util.getNextCommentLine(br);
-				//util.pr(line1);
+				
+				if(line1.startsWith("* File input end")) break;
+				comment[ix]=line1;
+
 				if(line1==null) break;
 		
 			line2=util.getNextDataLine(br);
 			if(line2==null) break;
 		//	util.pr(line2);
 			//util.pr("comment[ix++]="+"\""+line+"\";");
-				if(ix>1 && ix<55) {
+				if(ix>-1 && ix<5500) {
 					String [] sp1=line1.split("[:;,\\* \\t]+");
 					
-					int ib1=0; if(sp1[0].equals("")) ib1=1;
+					int ib1=0; //if(sp1[0].equals("")) ib1=1;
+			
 					
 					String [] sp2=line2.split("[:;, \\t]+");
-					
+			//		util.pr(line1);
+			//		util.pr(line2);
 					String comment="";
 					for(int j=0;j<sp1.length;j++)
 						comment=comment+sp1[j]+"* ";
 					
-					int ib2=0; if(sp2[0].equals("")) ib2=1;
-					util.pr("comment[++ix]=\""+comment+"\";");
-					for(int j=ib2;j<sp2.length;j++){
+					int ib2=0;// if(sp2[0].equals("")) ib2=1;
+				//	util.pr("comment[++ix]=\""+comment+"\";");
+					
+					int L=Math.max(sp1.length-ib1, sp2.length-ib2);
+					
+					inputData[ix]=new String[2][L];
+		
+					for(int j=0;j<L;j++){
+						
+
+						if(j<sp2.length)
+							inputData[ix][0][j]=sp2[j];
+						
+						if(j<sp1.length)
+							inputData[ix][1][j]=sp1[j];
+					
+					/*	
 						util.pr("inputData[ix]["+(j-ib2)+"][0]=\""+sp2[j]+"\";");
 						if(j<sp1.length)
 						util.pr("inputData[ix]["+(j-ib2)+"][1]=\""+sp1[j]+"\";");
 						else
-							util.pr("inputData[ix]["+(j-ib2)+"][1]=\""+""+"\";");
+							util.pr("inputData[ix]["+(j-ib2)+"][1]=\""+""+"\";");*/
 					}
 					
-					util.pr("");
+					
+					//util.hshow(inputData[ix][0]);
+				//	util.hshow(inputData[ix][1]);
+					util.pr("-------------------------");
 					//util.pr("ix++;");
 /*			//	util.pr(sp2[1]);
 					for(int j=ib2;j<sp2.length;j++){

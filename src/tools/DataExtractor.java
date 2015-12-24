@@ -22,7 +22,6 @@ public class DataExtractor {
 	
 	public String[][] loadDataString(String file, String key, int nLinesAfter,int nDataMax,int nTmax,PrintWriter stderr){
 
-	
 		
 		String[][] data1=new String[nDataMax][nTmax];
 
@@ -35,9 +34,13 @@ public class DataExtractor {
 			int ix=0;
 			int sourceIndex=0;
 			while((line=br.readLine())!=null){
+				
+	
 			while((line=br.readLine())!=null && !line.startsWith(key)){}
 		
 			if(line==null) {break;}
+			
+
 			
 			for(int i=0;i<nLinesAfter;i++){
 	

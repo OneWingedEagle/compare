@@ -12,12 +12,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.JFileChooser;
@@ -432,6 +436,26 @@ public static void plot(double[][] XY){
 
 
 		}
+
+
+		 public static void removeDir(final File folder) {
+		      // check if folder file is a real folder
+		      if (folder.isDirectory()) {
+		          File[] list = folder.listFiles();
+		          if (list != null) {
+		              for (int i = 0; i < list.length; i++) {
+		                  File tmpF = list[i];
+		                  if (tmpF.isDirectory()) {
+		                      removeDir(tmpF);
+		                  }
+		                  tmpF.delete();
+		              }
+		          }
+		          if (!folder.delete()) {
+		            System.out.println("can't delete folder : " + folder);
+		          }
+		      }
+		  }
 	
 		
 	public static void plot(String name, Color c,double[][] XY){
@@ -621,6 +645,20 @@ public static void plot(double[][] XY){
 			return sp[b];
 		}
 		
+	 
+	 
+	 public static String dropLeadingSpaces(String line){
+			
+		 int L=line.length();
+		 
+		 int ix=0;
+		 
+		 while(line.charAt(ix++)==' ') {};
+		 
+		 String line2=String.copyValueOf(line.toCharArray(), ix-1, L-ix+1);
+		
+			return line2;
+		}
 
 
 	   public static File copyFileFromWeb(String address, String filePath){
@@ -670,6 +708,8 @@ public static void plot(double[][] XY){
 		   }
 
 		   public static void copyFile(File source, File dest) throws IOException {
+			   
+			 
 			    InputStream is = null;
 			    OutputStream os = null;
 			    try {
@@ -717,4 +757,147 @@ public static void plot(double[][] XY){
 			   
 			   return line;
 		   }
+		   
+		   
+		   public static void write(String file, String[] lines){
+			   
+				try{
+
+
+					FileWriter fw=new FileWriter(file);
+					PrintWriter pw = new PrintWriter(fw);
+
+					for (int i=0;i<lines.length;i++){
+					
+						if(lines[i]!=null)
+
+						pw.println(lines[i]);
+
+
+					}
+
+					fw.close();
+
+					pw.close();
+
+					util.pr("string array was written to: "+file);
+	
+				}
+
+				catch(IOException e2){e2.printStackTrace();}
+				
+				
+		   }
+
+		   public static String[] read(String file){
+			   
+			   int nmax=10000;
+			   String[] lines1=new String[nmax];
+			   
+			   int ix=0;
+				try{
+
+
+					FileReader fr=new FileReader(file);
+					BufferedReader br = new BufferedReader(fr);
+
+					String line;
+	
+			
+					while((line=br.readLine())!=null){
+
+						lines1[ix++]=br.readLine();
+
+
+					}
+
+					fr.close();
+
+					br.close();
+
+					util.pr("string array read from "+file);
+					
+				//	String[] lines=new String[ix];
+					String[] lines=Arrays.copyOf(lines1, ix);
+					
+					return lines;
+					
+	
+				}
+
+				catch(IOException e2){e2.printStackTrace();
+				return null;
+				}
+				
+				
+		   }
+		   
+		   public static double[][] loadArrays(int n, int m,String arrayPath){
+
+				try{
+					FileReader fr=new FileReader(arrayPath);
+					BufferedReader br = new BufferedReader(fr);
+					String line;
+					String s;
+					String[] sp;
+
+				
+					
+					double[][] A=new double[n][m];
+					
+					for(int i=0;i<n;i++){
+						line=br.readLine();
+						if(line==null) continue;
+						double[] x=getCSV(line);
+						for(int j=0;j<m;j++)
+							A[i][j]=x[j];
+				
+						
+						
+					}
+
+					
+						return A;
+						
+				}
+				catch(IOException e){
+					e.printStackTrace();//System.err.println("Error in loading model file.");
+				}
+
+
+				return null;
+			}
+		   
+		   public static double[] getCSV(String line){
+				
+				String[] sp=line.split(regex);	
+
+				int p0=0;
+				if(sp[0].equals(""))
+				{
+					p0=1;
+				}
+				int L=sp.length-p0;
+
+				double[] v=new double[L];
+
+				for( int p=0;p<L;p++){
+
+					v[p]=Double.parseDouble(sp[p+p0]);
+				}
+
+				return v;
+			}
+
+			public static int[] getCSInt(String line){
+				String[] sp=line.split(regex);	
+				int L=sp.length;
+				int[] v=new int[L];
+				for( int p=0;p<L;p++)
+							v[p]=Integer.parseInt(sp[p]);
+
+				return v;
+			}
+
+		   
 }

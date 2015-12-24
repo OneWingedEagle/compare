@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 
 import jxl.Workbook;
 import jxl.write.Label;
@@ -56,6 +57,7 @@ public class LargeScaleTest {
 	String[][][][][] outputString;
 
 	double[][][][][] errorTable;
+	double[][][][] errorReference;
 
 	int[][] stepNumbs;
 	int[] nT;
@@ -80,6 +82,8 @@ public class LargeScaleTest {
 	int[] wantedOutputId;
 	String[][] wantedOutputItemId;
 	int  nWantedOutputGroups;
+	
+	double errorThreashold=1e-6;
 
 
 	int nKeys;
@@ -90,9 +94,46 @@ public class LargeScaleTest {
 
 		LargeScaleTest x=new LargeScaleTest();
 
-		x.loadOutputs();
-		x.writeOutputs();
+		x.compare();
+	
 
+	}
+	
+	public  void compare() throws WriteException{
+
+
+		this.loadOutputs();
+		
+		String folder=System.getProperty("user.dir");
+		this.writeOutputs(folder);
+
+	}
+	
+	public  double[] compare(String[] files1, String[] tip1, String[] versions1, String resultFolder) throws WriteException{
+
+		
+		nFiles=files1.length;
+
+
+		moduleVersion=new String[nFiles];
+
+		file=new String[nFiles];
+		tip=new String[nFiles];
+
+
+		for(int nfile=0;nfile<nFiles;nfile++){
+			file[nfile]=files1[nfile];
+			tip[nfile]=tip1[nfile];
+			moduleVersion[nfile]=versions1[nfile];
+			
+
+		}
+			
+
+		this.loadOutputs(0);
+		this.writeOutputs(resultFolder);
+		
+		return errorMax;
 	}
 
 
@@ -141,12 +182,8 @@ public class LargeScaleTest {
 
 	}
 
-
-	private void loadOutputs(){
-
-		nFiles=0;
-
-		this.readInput();
+	
+	private void loadOutputs(int k){
 
 
 		this.readOuputStrings();
@@ -157,11 +194,29 @@ public class LargeScaleTest {
 
 	}
 
+	private void loadOutputs(){
+
+		nFiles=0;
+
+		this.readInput();
+
+		
+
+		this.readOuputStrings();
 
 
-	private void writeOutputs() throws  WriteException{
+		this.getErrorTable();
+	
 
+	}
+
+
+	private void writeOutputs(String folder) throws  WriteException{
+
+		
 		String path="camparison"+".xls";
+		
+		if(folder!=null) path=folder+"/"+path;
 		
 		setWriteable(path);
 
@@ -770,92 +825,6 @@ public class LargeScaleTest {
 
 			}
 
-/*
-			String[] lines=new String[100];
-
-			int ix=0;
-
-			String line1="";
-			while(line1!=null){
-				line1=util.getNextDataLine(br);
-
-				lines[ix]=line1;
-
-				ix++;
-			}
-
-			int numbLines=ix;
-			for(int i=0;i<numbLines;i++)
-				if(lines[i].equalsIgnoreCase("version")) {
-					moduleVersion=new String[nFiles];
-					for(int j=0;j<nFiles;j++){
-						moduleVersion[j]=lines[i+j+1];
-
-					}
-
-					break;
-				}
-
-
-			for(int i=0;i<numbLines;i++){
-				if(lines[i]==null) break;
-				if(lines[i].equalsIgnoreCase("outputs")) {
-
-					wantedOutputId=getCSInt(lines[i+1]);
-					nWantedOutputGroups=wantedOutputId.length;
-					ix++;
-					break;
-				}
-			}
-
-
-			wantedOutputItemId=new String[nWantedOutputGroups][];
-			boolean ended=false;
-			for(int i=0;i<numbLines;i++){
-				if(lines[i]==null) break;
-				if(lines[i].equalsIgnoreCase("IDs")) {
-					for(int j=0;j<nWantedOutputGroups;j++){
-						String line2=lines[i+1+j];
-						if(line2==null || line2.equals("")){
-							break;
-						}
-						String[] item=splitToStrings(line2);
-
-						util.pr("-"+item[0]+"-");
-
-						int idi=Integer.parseInt(item[0])-1;
-						wantedOutputItemId[idi]=new String[wantedOutputItemId.length-1];
-
-						for(int k=0;k<wantedOutputItemId[idi].length;k++)
-						{
-							wantedOutputItemId[idi][j]=item[j];
-						}
-
-
-					}
-					if(ended) break;
-				}
-			 }
-
-
-			///=== all
-
-			/*			outputId=new int[1];
-			outputItemId=new String[1][];
-
-			for(int j=0;j<1;j++){
-				outputId[j]=j+1;
-
-			}
-
-			outputId[0]=1;
-			outputItemId[0]=new String[1];
-			outputItemId[0][0]="1";
-		nOutputGroups=outputId.length;
-			 */
-
-
-			//=========
 
 			br.close();
 
@@ -928,17 +897,28 @@ fr.close();
 
 		for(int nfile=0;nfile<nFiles;nfile++){
 
+		
 			time[nfile]=	dex.loadTimesSteps(stepNumbs[nfile], file[nfile],stderr);
 
+		
+			
 
 			if(time[nfile]==null)
 			{
+				
+				time[nfile]=time[0].deepCopy();
+				
+				stepNumbs[nfile]=Arrays.copyOf(stepNumbs[0], time[nfile].length);
+				
+
+					formatErr[nfile]=true;
+				
 				stderr.println();
 				stderr.println("Failed in reading timesteps from file "+file[nfile]);
 				stderr.println("Please check the file.");
 				stderr.close();
 
-				System.exit(1);
+			//	System.exit(1);
 
 
 			}
@@ -1030,27 +1010,114 @@ fr.close();
 
 	private void getErrorTable(){
 
-		int fRef=0;
+		int nRef=0;
+		
+		for(int nfile=1;nfile<nFiles;nfile++){
+		
+			for(int i=0;i<nOutputGroups;i++){
+			if(outputString[nfile][i]==null){
+			outputString[nfile][i]=new String[outputString[nRef][i].length][][];
+			
+			for(int j=0;j<outputString[nfile][i].length;j++){
+				outputString[nfile][i][j]=new String[outputString[nRef][i][j].length][nT[nRef]];
+				
+				for(int k=0;k<outputString[nfile][i][j].length;k++)
+					for(int p=0;p<outputString[nfile][i][j][0].length;p++)
+				outputString[nfile][i][j][k][p]="null";
+			}
+			}
+		}
+		}
 
 		errorTable=new double[nFiles][nOutputGroups][][][];
+		
+		
 		for(int nfile=0;nfile<nFiles;nfile++){
 
 			for(int i=0;i<nOutputGroups;i++){
 				errorTable[nfile][i]=new double[outputString[nfile][i].length][][];
 				for(int j=0;j<outputString[nfile][i].length;j++){
-					errorTable[nfile][i][j]=new double[outputString[nfile][i][j].length][nT[fRef]];
+					errorTable[nfile][i][j]=new double[outputString[nfile][i][j].length][nT[nRef]];
+					
+							
 				}
 			}
 		}
 
 
-		int fRef1=0,fRef2=1;
+		int[] nfRef=new int[2];
+		nfRef[0]=0;
+		nfRef[1]=1;
+		
+
+		errorReference=new double[2][nOutputGroups][][];
+
+		
+		
+		
+		for(int i=0;i<nOutputGroups;i++){
+			
+			errorReference[0][i]=new double[outputString[nfRef[0]][i].length][];
+			
+			for(int j=0;j<outputString[nfRef[0]][i].length;j++){
+				errorReference[0][i][j]=new double[outputString[nfRef[0]][i][j].length];
+				
+				for(int k=0;k<errorReference[0][i][j].length;k++){
+					errorReference[0][i][j][k]=0;
+					for(int t=0;t<outputString[nfRef[0]][i][j][k].length;t++){
+						double abs=0;
+						if(util.isNumeric(outputString[nfRef[0]][i][j][k][t]))
+								abs=Math.abs(Double.parseDouble(outputString[nfRef[0]][i][j][k][t]));
+						if(abs>errorReference[0][i][j][k]){
+							errorReference[0][i][j][k]=abs;
+						}
+					}
+					
+				}
+				
+					
+			}
+		}
+		
+
+		
+		
+		for(int i=0;i<nOutputGroups;i++){
+			
+			errorReference[1][i]=new double[outputString[nfRef[1]][i].length][];
+			
+			for(int j=0;j<outputString[nfRef[1]][i].length;j++){
+				errorReference[1][i][j]=new double[outputString[nfRef[1]][i][j].length];
+				
+				for(int k=0;k<errorReference[0][i][j].length;k++){
+					errorReference[1][i][j][k]=0;
+					for(int t=0;t<outputString[nfRef[1]][i][j][k].length;t++){
+						double abs=0;
+						if(util.isNumeric(outputString[nfRef[1]][i][j][k][t]))
+								abs=Math.abs(Double.parseDouble(outputString[nfRef[1]][i][j][k][t]));
+						if(abs>errorReference[1][i][j][k]){
+							errorReference[1][i][j][k]=abs;
+						}
+					}
+					
+				}
+				
+					
+			}
+		}
+		
+		
+		
+		int nfRefIndex=0;
+		
 
 		//double[] errorSum=new double[nFiles];
 		
 		errorMaxOfGroups=new double[nFiles][nOutputGroups];
 
 	errorMax=new double[nFiles];
+	
+	
 		 errorMaxCoord=new int[nFiles][3];
 
 		 errorMaxID=new String[nFiles][2];
@@ -1065,36 +1132,35 @@ fr.close();
 
 
 
-			for(int j=0;j<outputString[fRef][i].length;j++)
+			for(int j=0;j<outputString[nfRef[nfRefIndex]][i].length;j++)
 
-				for(int p=0;p<outputString[fRef][i][j].length;p++){
+				for(int p=0;p<outputString[nfRef[nfRefIndex]][i][j].length;p++){
 
 
 					double data=0,data0=0;
 
-					boolean empty=(outputString[fRef][i][j][p][0]==null); 
+					boolean empty=(outputString[nfRef[nfRefIndex]][i][j][p][0]==null); 
 
 					if(empty){
-						for(int k=0;k<outputString[fRef][i][j][p].length;k++)
+						for(int k=0;k<outputString[nfRef[nfRefIndex]][i][j][p].length;k++)
 							for(int nfile=1;nfile<nFiles;nfile++)
-								errorTable[nfile][i][j][p][k]=-1;
+								errorTable[nfile][i][j][p][k]=-1e10;
 
 					}else
-						for(int k=0;k<outputString[fRef][i][j][p].length;k++){
+						for(int k=0;k<outputString[nfRef[nfRefIndex]][i][j][p].length;k++){
 
 							for(int nfile=1;nfile<nFiles;nfile++){
 
-								if(nfile==1) fRef=fRef1;
-								else  fRef=fRef2;
+								if(nfile==1) nfRefIndex=0;
+								else  nfRefIndex=1;
 
 
 
-								boolean numb0=util.isNumeric(outputString[fRef][i][j][p][k]);  
+								boolean numb0=util.isNumeric(outputString[nfRef[nfRefIndex]][i][j][p][k]);  
 
 
 								if(numb0)
-									data0=Double.parseDouble(outputString[fRef][i][j][p][k]);  
-
+									data0=Double.parseDouble(outputString[nfRef[nfRefIndex]][i][j][p][k]);  
 
 
 								boolean numb=util.isNumeric(outputString[nfile][i][j][p][k]);  
@@ -1104,21 +1170,18 @@ fr.close();
 									data=Double.parseDouble(outputString[nfile][i][j][p][k]);  
 
 
-								if(!numb0 || !numb){
-
-									errorTable[nfile][i][j][p][k]=-1;
-
-									if(!formatErr[nfile])
-										formatErr[nfile]=true;
-								}
-								else{
+								if(numb0 && numb){
 
 									double err=0;
-									if(Math.abs(data0)>1e-10){
-										err=Math.abs(data-data0)/Math.abs(data0)*100;
+									if(Math.abs(data0)>this.errorThreashold){
+										err=(data-data0)/errorReference[nfRef[nfRefIndex]][i][j][p];
+										//err=(data-data0)/Math.abs(data0);
+										
+										err=Math.floor(100*err*1e8)/1e8;
+								
 					
 									}
-									else if(Math.abs(data-data0)<1e-10){
+									else if(Math.abs(data-data0)<this.errorThreashold){
 
 										
 											err=0;
@@ -1126,36 +1189,34 @@ fr.close();
 									}
 
 								
+								
 									//	err=Math.floor(err*1e6)/1e6;
 
 									errorTable[nfile][i][j][p][k]=err;
 
-									if(err>errorMax[nfile]){
+									if(Math.abs(err)>Math.abs(errorMax[nfile])){
 										errorMax[nfile]=err;
 										errorMaxCoord[nfile][0]=i;
-										errorMaxCoord[nfile][2]=stepNumbs[fRef][k];;
+										errorMaxCoord[nfile][2]=stepNumbs[nfRef[nfRefIndex]][k];;
 
 										
 										errorMaxID[nfile][0]=outputItemId[i][j];
 										
-										errorMaxID[nfile][1]=outputString[fRef][i][0][1][0];  
+										errorMaxID[nfile][1]=outputString[nfRef[nfRefIndex]][i][0][1][0];  
 										
 
-										errorMaxData[nfile][0]=outputString[fRef][i][j][p][k]+" <> "+outputString[nfile][i][j][p][k];
+										errorMaxData[nfile][0]=outputString[nfRef[nfRefIndex]][i][j][p][k]+" <---> "+outputString[nfile][i][j][p][k];
 
 
 
 									}
 									
-									if(err>errorMaxOfGroups[nfile][i]){
+									if(Math.abs(err)>Math.abs(errorMaxOfGroups[nfile][i])){
 										errorMaxOfGroups[nfile][i]=err;
 
 										
 									}
-
-								//	errorSum[nfile]+=err;
-
-								//	errorSum[nfile]=Math.floor(errorSum[nfile]*10000)/10000;
+								
 
 								}
 
@@ -1167,6 +1228,9 @@ fr.close();
 
 
 		}
+		
+		for(int i=0;i<nFiles;i++)
+			if(formatErr[i]) errorMax[i]=-100;
 
 
 
@@ -1302,16 +1366,16 @@ fr.close();
 			
 			for(int q=0;q<error[0].length;q++){
 
-				if(error[p][q]==-1){
+		/*		if(error[p][q]==-1){
 
 						label= new Label(q+clm,rw,"NA");
 						sheet.addCell(label);
 			
 				}
-				else{
+				else{*/
 				number= new Number(q+clm,rw,error[p][q]);
 					sheet.addCell(number);
-				}
+			//	}
 
 				
 			}
@@ -1411,6 +1475,15 @@ fr.close();
 			}
 		
 	}
+	
+	public void setErrorThreshold(double thr){
+		this.errorThreashold=thr;
+	}
+	
+	public double getErrorThreshold(){
+		return this.errorThreashold;
+	}
+
 
 
 }
