@@ -1,15 +1,16 @@
 package tools;
 
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-
-
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
-
+import java.io.Writer;
 
 //import math.Vect;
 
@@ -18,14 +19,26 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Iterator;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+
+import jxl.Cell;
+import jxl.CellType;
+import jxl.NumberCell;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.Number;
+import jxl.write.NumberFormat;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+
 
 
 
@@ -562,11 +575,13 @@ public class LargeScaleTest {
 			
 			int isheet=0;
 			
+			int L=0;
+			
 			for(int i=0;i<nOutputGroups;i++){
 				index=avialableOutputGroupIndex[0][i];
 		
 			
-			 int L=0;
+			 L=0;
 			 for(int nfile=0;nfile<nFiles;nfile++)
 			 for(int j=1;j<outputItemId[i].length;j++){
 				 L+=(outputString[nfile][i][j].length-1);
@@ -636,9 +651,10 @@ public class LargeScaleTest {
 			 
 
 				 col=0;
-				 for(int nfile=1;nfile<nFiles;nfile++)
-				 for(int j=1;j<outputString[nfile][i].length;j++)
-					 for(int p=1;p<outputString[nfile][i][j].length;p++){
+				 for(int j=1;j<outputString[fRef][i].length;j++)
+					 for(int p=1;p<outputString[fRef][i][j].length;p++)
+						 for(int nfile=1;nfile<nFiles;nfile++)
+						 {
 				 		 errTitles[0][col++]=outputItemId[i][j];
 					 }
 				 
@@ -664,7 +680,7 @@ public class LargeScaleTest {
 						 else
 							 errTitles[2][col++]=tip[nfile]+"/"+tip[1];
 					 }
-	
+
 			 
 			 for(int k=0;k<table.length;k++)
 			 {
@@ -685,14 +701,17 @@ public class LargeScaleTest {
 			 String[][][] subTable=new  String[nTableParts][][];
 			 double[][][] subErr=new  double[nTableParts][][];
 			 String[][][] subErrTitle=new  String[nTableParts][][];
+			// String[][] lines=new  String[nTableParts][10000];
 			 
+			 int ix=0;
 			 
 			for(int k=0;k<nTableParts;k++){
 				
 				subTitle[k]=new String[titles.length][titles[0].length/nTableParts];
 				for(int j=0;j<subTitle[k].length;j++)
-					for(int p=0;p<subTitle[k][0].length;p++)
+					for(int p=0;p<subTitle[k][0].length;p++){
 						subTitle[k][j][p]=titles[j][p+k*subTitle[k][0].length];
+					}
 				
 				subTable[k]=new String[table.length][table[0].length/nTableParts];
 				for(int j=0;j<subTable[k].length;j++)
@@ -709,6 +728,7 @@ public class LargeScaleTest {
 				for(int j=0;j<subErrTitle[k].length;j++)
 					for(int p=0;p<subErrTitle[k][0].length;p++)
 						subErrTitle[k][j][p]=errTitles[j][p+k*subErrTitle[k][0].length];
+				
 			
 				if(nTableParts==1)
 					sheet[isheet] = workbook.createSheet(outputTitles[index],isheet+1);
@@ -717,6 +737,8 @@ public class LargeScaleTest {
 				
 			
 			fillSheet(sheet[isheet++],stepNumbs[fRef],time[fRef], subTitle[k],subTable[k],subErr[k],subErrTitle[k]) ;
+			
+			
 				 
 			//fillSheet(sheet[isheet++],stepNumbs[fRef],time[fRef], titles,table,errTable,errTitles) ;
 			}
@@ -726,10 +748,74 @@ public class LargeScaleTest {
 
 
 			workbook.write();
+			
+			String content=null;
+			
+			String[] lines=new String[100000];
+			int ix=0;
+			for(int i=0;i<workbook.getNumberOfSheets();i++){
+				
+				lines[ix]=""; ix++;
+						
+				lines[ix]=workbook.getSheet(i).getName();  ix++;
+				
+				lines[ix]="";
+				for(int k=0;k<workbook.getSheet(i).getRow(1).length;k++)
+					lines[ix]=lines[ix]+"---------------";
+				ix++;
+			
+			for(int j=0;j<workbook.getSheet(i).getRows();j++){
+			
+			
+				if(i>0 && j==4){
+									lines[ix]="";
+					for(int p=0;p<workbook.getSheet(i).getRow(j).length;p++)
+						lines[ix]=lines[ix]+"---------------";
+					ix++;
+				
+				}
+				
+				lines[ix]="";
+				for(int k=0;k<workbook.getSheet(i).getRow(j).length;k++){
+					
+								
+					Cell c=workbook.getSheet(i).getRow(j)[k];
+					if (k>0 && c.getType() == CellType.NUMBER)
+									
+					{
+					  NumberCell nc = (NumberCell) c;
+					  double numb = nc.getValue();
+					  content=new DecimalFormat("#.000000").format(numb);
+					} 
+					else{
+						content=c.getContents();	
+					}
+				
+					
+				lines[ix]=lines[ix]+String.format("%15s",content);
+				}
+			
+				ix++;
+			}
+
+				
+			}
 
 
 			workbook.close();
-
+			
+	
+			
+			String[] lines2=Arrays.copyOf(lines, ix-1);
+			
+			
+			util.write("comparison", lines2);
+			
+/*			
+			String txtPath=folder+"/comparison.txt";
+			
+			this.xlsToTxt(path, txtPath);
+*/
 
 
 		} catch (IOException e) {
@@ -901,6 +987,7 @@ fr.close();
 			time[nfile]=	dex.loadTimesSteps(stepNumbs[nfile], file[nfile],stderr);
 
 		
+		
 			
 
 			if(time[nfile]==null)
@@ -918,17 +1005,18 @@ fr.close();
 				stderr.println("Please check the file.");
 				stderr.close();
 
-			//	System.exit(1);
+				System.exit(1);
 
 
 			}
 
 			nT[nfile]=time[nfile].length;
-
+	
 
 			for(int i=0;i<nOutputGroups;i++){
 
 	
+				
 				int index=avialableOutputGroupIndex[nfile][i];
 						
 
@@ -952,8 +1040,10 @@ fr.close();
 
 				String[] dataSplitted=new String[1];
 				for(int j=0;j<data.length;j++){
+				//	util.pr(j+"  "+data[j][0]);
 					dataSplitted=this.splitToStrings(data[j][0],"  +");
 					
+				
 					outputString[nfile][i][j]=new String[dataSplitted.length][nT[nfile]];
 
 				
@@ -981,7 +1071,8 @@ fr.close();
 			
 
 					for(int k=0;k<nT[nfile];k++){
-
+						
+						
 						dataSplitted=this.splitToStrings(data[outputItemIndex[i][j]][k],"  +");
 			
 						for(int p=0;p<dataSplitted.length;p++){
@@ -1013,7 +1104,6 @@ fr.close();
 		int nRef=0;
 		
 		for(int nfile=1;nfile<nFiles;nfile++){
-		
 			for(int i=0;i<nOutputGroups;i++){
 			if(outputString[nfile][i]==null){
 			outputString[nfile][i]=new String[outputString[nRef][i].length][][];
@@ -1048,6 +1138,7 @@ fr.close();
 		int[] nfRef=new int[2];
 		nfRef[0]=0;
 		nfRef[1]=1;
+		if(nFiles<3) nfRef[1]=nfRef[0];
 		
 
 		errorReference=new double[2][nOutputGroups][][];
@@ -1066,7 +1157,7 @@ fr.close();
 					errorReference[0][i][j][k]=0;
 					for(int t=0;t<outputString[nfRef[0]][i][j][k].length;t++){
 						double abs=0;
-						if(util.isNumeric(outputString[nfRef[0]][i][j][k][t]))
+						if(outputString[nfRef[0]][i][j][k][t]!=null && util.isNumeric(outputString[nfRef[0]][i][j][k][t]))
 								abs=Math.abs(Double.parseDouble(outputString[nfRef[0]][i][j][k][t]));
 						if(abs>errorReference[0][i][j][k]){
 							errorReference[0][i][j][k]=abs;
@@ -1081,9 +1172,8 @@ fr.close();
 		
 
 		
-		
 		for(int i=0;i<nOutputGroups;i++){
-			
+
 			errorReference[1][i]=new double[outputString[nfRef[1]][i].length][];
 			
 			for(int j=0;j<outputString[nfRef[1]][i].length;j++){
@@ -1164,10 +1254,13 @@ fr.close();
 
 
 								boolean numb=util.isNumeric(outputString[nfile][i][j][p][k]);  
+								
 
 
 								if(numb)
 									data=Double.parseDouble(outputString[nfile][i][j][p][k]);  
+								
+								if(avialableOutputGroupIndex[nfile][i]==4 && (data0<0 ||outputItemId[i][j].startsWith("Total") ) ) data=data0;
 
 
 								if(numb0 && numb){
@@ -1187,6 +1280,8 @@ fr.close();
 											err=0;
 										
 									}
+									
+								
 
 								
 								
@@ -1244,15 +1339,17 @@ fr.close();
 		
 		int rw=1;
 
+
 		
 		
 		Number number=null;
 		Label label;
-	
+
 		
 		label=new Label(clm,rw,"step");
 		sheet.addCell(label);
-		
+	
+
 		label=new Label(clm+1,rw,"time");
 		sheet.addCell(label);
 		
@@ -1483,6 +1580,67 @@ fr.close();
 	public double getErrorThreshold(){
 		return this.errorThreashold;
 	}
+	
+	
+	
+	
+/*	 public  void xlsToTxt(String xlsFile, String textFile) {
+		     Writer writer = null;
+		        try {
+		
+		             InputStream input = new BufferedInputStream(
+		                        new FileInputStream(xlsFile));
+		            POIFSFileSystem fs = new POIFSFileSystem( input );
+		            HSSFWorkbook wb = new HSSFWorkbook(fs);
+		            HSSFSheet sheet = wb.getSheetAt(1); //sheet of excel
+		         
+		            File file = new File(textFile);  
+		            writer = new BufferedWriter(new FileWriter(file));
+		            Iterator rows = sheet.rowIterator();
+		            while( rows.hasNext() ) {  
+		                HSSFRow row = (HSSFRow) rows.next();
+		                System.out.println("\n");
+		                Iterator cells = row.cellIterator();
+		               
+		                  writer.write("insert into Emp values(");
+		                while( cells.hasNext() ) {
+		                     
+		                    HSSFCell cell = (HSSFCell) cells.next();
+		                    if(HSSFCell.CELL_TYPE_NUMERIC==cell.getCellType()) {
+		                    System.out.print( cell.getNumericCellValue()+"     "+cell.getColumnIndex() );
+		                    if(cell.getColumnIndex()==3)
+		                  writer.write(String.valueOf(cell.getNumericCellValue()));
+		                    else
+		                     writer.write(String.valueOf(cell.getNumericCellValue()+","));
+		                    }
+		                    else
+		                    if(HSSFCell.CELL_TYPE_STRING==cell.getCellType()) {
+		                        System.out.print( cell.getStringCellValue()+"     " );
+		                        writer.write("'"+cell.getStringCellValue()+"',");
+		                    }
+		                    else
+		                        if(HSSFCell.CELL_TYPE_BOOLEAN==cell.getCellType()) {
+		                        System.out.print( cell.getBooleanCellValue()+"     " );
+		                       writer.write("'"+String.valueOf(cell.getBooleanCellValue()+"',"));
+		                        }
+		                        else
+		                            if(HSSFCell.CELL_TYPE_BLANK==cell.getCellType())
+		                                System.out.print( "BLANK     " );
+		                                else
+		                            System.out.print("Unknown cell type");
+		             
+		                   
+		                }
+		                 
+		                writer.write(");"+"\n");
+		            }
+		           
+		             
+		        } catch ( IOException ex ) {
+		            ex.printStackTrace();
+		        } finally {             try {                 if (writer != null) {                     writer.close();                 }             } catch (IOException e) {                 e.printStackTrace();             }         }
+		    }*/
+	
 
 
 

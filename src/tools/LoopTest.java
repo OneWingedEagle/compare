@@ -44,6 +44,11 @@ public class LoopTest {
 
 	boolean[] success;
 	
+	boolean inputsReady=false;
+	int refine=0;
+	String[][] inputMesh=new String[2][2];
+	int geom=0;
+
 
 	
 
@@ -54,6 +59,13 @@ public class LoopTest {
 		this.execDir=exDir;
 
 		caseFolder=rr;
+		
+		inputMesh[1][0]="pre_geom2D.neu";
+		inputMesh[0][0]="pre_geom.neu";
+		
+		inputMesh[1][1]="rotor_mesh2D.neu";
+		inputMesh[0][1]="rotor_mesh.neu";
+
 
 	};
 
@@ -68,7 +80,9 @@ public class LoopTest {
 		String rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/latest_tests2015.12.16/fourcoilsAll/refine0";
 
 
-		rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp0";
+		rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/refine0";
+
+		rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM_tetra/refine0";
 
 	
 		 
@@ -77,21 +91,20 @@ public class LoopTest {
 
 		//x.deleteData();
 		
-		//x.doLoopTest(29,128,8,true,false,false);
+	
 		
-		x.doLoopTest(1,8 ,8,true,true,true);
-		
-	//	x.doLoopTest(1,7,4,true,true,true);
+ x.doLoopTest(1,1,2,false,true,true);
 
-	//	x.doLoopTest(1,2,2,true,true,true);
 
-	//x.doLoopTestCRelease(1,8,false,true,true);
+		//doLoopTest(3,3,2,true,true,false);
 
-	//	x.doLoopTestSeq(1,1,4,false,true,true);
+	//x.doLoopTestCRelease(1,1,true,true,true);
+
+	//	x.doLoopTestSeq(1,9,2,false,true,true);
 
 		//x.distributeData();
 
-	//	x.doLoopCompare();
+//x.doLoopCompare(5,5);
 
 	}
 
@@ -195,11 +208,11 @@ public class LoopTest {
 		}
 
 		if(nDomains==0)
-			util.write("states_CRelease", runSucess);
+			util.write(execDir+"/states_CRelease", runSucess);
 		else if(!Seq)
-			util.write("states_MPI_para"+nDomains, runSucess);
+			util.write(execDir+"/tates_MPI_para"+nDomains, runSucess);
 		else
-			util.write("states_Sequential"+nDomains, runSucess);
+			util.write(execDir+"/states_Sequential"+nDomains, runSucess);
 
 		//x.test();
 
@@ -214,21 +227,29 @@ public class LoopTest {
 	public  boolean runMPI(int nDomains, String sourceFolder, String destFolder,boolean periodic,boolean slide){
 
 		boolean success=false;
+		
+	
+		
+		String sourceFolderX=new String(sourceFolder);
+		
+		if(inputsReady){
+			sourceFolderX=new String(destFolder);
+		}
 
-		File source1=new File(sourceFolder+"/input");
+		File source1=new File(sourceFolderX+"/input");
 		File dest1=new File(execDir+"/domain/input");
 
 		if(!source1.exists()) {
-			System.err.println(" no input file in "+sourceFolder);
+			System.err.println(" no input file in "+sourceFolderX);
 
 			return success;
 		}
 
 
-		File source2=new File(sourceFolder+"/pre_geom2D.neu");
-		File dest2=new File(execDir+"/domain/pre_geom2D.neu");
+		File source2=new File(sourceFolderX+"/"+inputMesh[geom][0]);
+		File dest2=new File(execDir+"/domain/"+inputMesh[geom][0]);
 
-		File source3=new File(sourceFolder+"/2D_to_3D");
+		File source3=new File(sourceFolderX+"/2D_to_3D");
 		File dest3=new File(execDir+"/domain/2D_to_3D");
 
 		File source4=new File(execDir+"/domain/check");
@@ -244,8 +265,8 @@ public class LoopTest {
 		File dest7=new File(destFolder+"/exec_log.txt");
 
 
-		File source8=new File(sourceFolder+"/rotor_mesh2D.neu");
-		File dest8=new File(execDir+"/domain/rotor_mesh2D.neu");
+		File source8=new File(sourceFolderX+"/"+inputMesh[geom][1]);
+		File dest8=new File(execDir+"/domain/"+inputMesh[geom][1]);
 
 
 
@@ -264,12 +285,27 @@ public class LoopTest {
 			if(dest8.exists()) dest8.delete();
 
 
-
 		try {
 			
+			if(inputsReady){
 
+				util.copyFile(source1, dest1);
+				
+				util.copyFile(source2, dest2);
+				
+				if(source3.exists())
+				util.copyFile(source3, dest3);
+
+				if(source8.exists())
+					util.copyFile(source8, dest8);
+				
+			}
+
+			else{
+			
 			
 			util.copyFile(source1, dest1);
+		
 			
 			File tmp=new File(execDir+"/domain/input1");
 			
@@ -283,7 +319,8 @@ public class LoopTest {
 			
 
 			if(!slide){
-				String replacement1="         5            0          "+nDomains+"        0        1      0";
+				String replacement1="         5            0          "+nDomains+"        0        1      "+refine;
+			
 				this.setNO_Mesh(dest1, tmp,replacement1);
 				util.copyFile(tmp, dest1);
 			}
@@ -292,9 +329,9 @@ public class LoopTest {
 				
 				String replacement1=null;
 				if(nDomains>2)
-						replacement1="         5            0          "+2+"        0        1      0";
+						replacement1="         5            0          "+2+"        0        1      "+refine;
 				else
-					replacement1="         5            0          "+2+"        0        0      0";
+					replacement1="         5            0          "+2+"        0        0      "+refine;
 
 				this.setNO_Mesh(dest1, tmp,replacement1);
 				
@@ -310,6 +347,8 @@ public class LoopTest {
 			
 			
 		
+			
+
 			util.copyFile(source2, dest2);
 			
 			if(source3.exists())
@@ -317,6 +356,8 @@ public class LoopTest {
 
 			if(source8.exists())
 				util.copyFile(source8, dest8);
+			
+			}
 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -330,16 +371,19 @@ public class LoopTest {
 		for(int j=1;j<nDomains;j++){
 
 			String domainx=execDir+"/domain"+j;
+			
+			File df=new File(domainx);
+			if(!df.exists()) df.mkdirs();
 
 			dest1=new File(domainx+"/input");
 
 
-			dest2=new File(domainx+"/pre_geom2D.neu");
+			dest2=new File(domainx+"/"+inputMesh[geom][0]);
 
 			dest3=new File(domainx+"/2D_to_3D");
 
 			if(source8.exists())
-				dest8=new File(domainx+"/rotor_mesh2D.neu");
+				dest8=new File(domainx+"/"+inputMesh[geom][1]);
 
 
 
@@ -370,9 +414,6 @@ public class LoopTest {
 
 
 		File logFile=new File(execDir+"/domain/exec_log.txt");
-
-
-
 
 
 
@@ -425,36 +466,45 @@ public class LoopTest {
 
 
 
-		source1=new File(execDir+"/domain/input");
-		dest1=new File(destFolder+"/input");
-
-		source2=new File(execDir+"/domain/pre_geom2D.neu");
-		dest2=new File(destFolder+"/pre_geom2D.neu");
-
-		source3=new File(execDir+"/domain/2D_to_3D");
-		dest3=new File(destFolder+"/2D_to_3D");
-		
-		if(source8.exists())
-			dest8=new File(destFolder+"/rotor_mesh2D.neu");
 
 
 
 
 
 		try {
-
-			util.copyFile(source1, dest1);
-			util.copyFile(source2, dest2);
 			
-			if(source3.exists())
-			util.copyFile(source3, dest3);
+			if(!inputsReady){
+
+				source1=new File(execDir+"/domain/input");
+				dest1=new File(destFolder+"/input");
+
+				source2=new File(execDir+"/domain/"+inputMesh[geom][0]);
+				dest2=new File(destFolder+"/"+inputMesh[geom][0]);
+
+				source3=new File(execDir+"/domain/2D_to_3D");
+				dest3=new File(destFolder+"/2D_to_3D");
+				
+				if(source8.exists())
+					dest8=new File(destFolder+"/"+inputMesh[geom][1]);
+				
+				util.copyFile(source1, dest1);
+				
+				//util.pr(dest1.getPath());
+				util.copyFile(source2, dest2);
+				
+				if(source3.exists())
+				util.copyFile(source3, dest3);
+				
+				if(source8.exists())
+					util.copyFile(source8, dest8);
+				}
+
+			
 			util.copyFile(source4, dest4);
 			util.copyFile(source5, dest5);
 			util.copyFile(source6, dest6);
 			util.copyFile(source7, dest7);
-			
-			if(source8.exists())
-				util.copyFile(source8, dest8);
+					
 				
 
 			String[] timeDate=dex.getComputationTimesAndDate(execDir+"/domain/output");
@@ -500,14 +550,14 @@ public class LoopTest {
 			return success;
 		}
 
-		File source2=new File(sourceFolder+"/pre_geom2D.neu");
-		File dest2=new File(execDir+"/domain/pre_geom2D.neu");
+		File source2=new File(sourceFolder+"/"+inputMesh[geom][0]);
+		File dest2=new File(execDir+"/domain/"+inputMesh[geom][0]);
 
 		File source3=new File(sourceFolder+"/2D_to_3D");
 		File dest3=new File(execDir+"/domain/2D_to_3D");
 
-		File source8=new File(sourceFolder+"/rotor_mesh2D.neu");
-		File dest8=new File(execDir+"/domain/rotor_mesh2D.neu");
+		File source8=new File(sourceFolder+"/"+inputMesh[geom][1]);
+		File dest8=new File(execDir+"/domain/"+inputMesh[geom][1]);
 
 
 
@@ -535,6 +585,8 @@ public class LoopTest {
 		builder.command("EMSolution_x64_r11.2.5_20151106.exe","-b","-m","-f","input");
 		
 		builder.directory(new File(execDir+"/domain"));
+
+		
 
 
 		Process pp = null;
@@ -605,31 +657,55 @@ public class LoopTest {
 
 		boolean success=false;
 
-		//sourceFolder=caseFolder+"/"+names[ifold]+"/release";
+		//sourceFolderX=caseFolder+"/"+names[ifold]+"/release";
+		String sourceFolderX=new String(sourceFolder);
+		
+		if(inputsReady){
+			sourceFolderX=new String(destFolder);
+		}
+		
 
-		File source1=new File(sourceFolder+"/input");
+		File source1=new File(sourceFolderX+"/input");
 		File dest1=new File(execDir+"/domain/input");
 
 		if(!source1.exists()) {
-			System.err.println(" no input file in "+sourceFolder);
+			System.err.println(" no input file in "+sourceFolderX);
 
 			return success;
 		}
 
-		File source2=new File(sourceFolder+"/pre_geom2D.neu");
-		File dest2=new File(execDir+"/domain/pre_geom2D.neu");
+		File source2=new File(sourceFolderX+"/"+inputMesh[geom][0]);
+		File dest2=new File(execDir+"/domain/"+inputMesh[geom][0]);
 
-		File source3=new File(sourceFolder+"/2D_to_3D");
+		File source3=new File(sourceFolderX+"/2D_to_3D");
 		File dest3=new File(execDir+"/domain/2D_to_3D");
 
-		File source8=new File(sourceFolder+"/rotor_mesh2D.neu");
-		File dest8=new File(execDir+"/domain/rotor_mesh2D.neu");
+		File source8=new File(sourceFolderX+"/"+inputMesh[geom][1]);
+		File dest8=new File(execDir+"/domain/"+inputMesh[geom][1]);
 
 
 
 		try {
 			
-	util.copyFile(source1, dest1);
+			
+			if(inputsReady){
+
+				util.copyFile(source1, dest1);
+				
+				util.copyFile(source2, dest2);
+				
+				if(source3.exists())
+				util.copyFile(source3, dest3);
+
+				if(source8.exists())
+					util.copyFile(source8, dest8);
+				
+			}
+
+			else{
+			
+			
+			util.copyFile(source1, dest1);
 			
 			File tmp=new File(execDir+"/domain/input1");
 			
@@ -638,8 +714,6 @@ public class LoopTest {
 			this.removeSepAng(dest1, tmp);
 			util.copyFile(tmp, dest1);
 			}
-			
-		
 			
 
 			if(!slide){
@@ -669,9 +743,13 @@ public class LoopTest {
 			}
 			
 			util.copyFile(source2, dest2);
+			
+			if(source3.exists())
 			util.copyFile(source3, dest3);
 			if(source8.exists())
 				util.copyFile(source8, dest8);
+			
+			}
 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -710,8 +788,8 @@ public class LoopTest {
 		source1=new File(execDir+"/domain/input");
 		dest1=new File(destFolder+"/input");
 
-		source2=new File(execDir+"/domain/pre_geom2D.neu");
-		dest2=new File(destFolder+"/pre_geom2D.neu");
+		source2=new File(execDir+"/domain/"+inputMesh[geom][0]);
+		dest2= new File(destFolder+"/"+inputMesh[geom][0]);
 
 		source3=new File(execDir+"/domain/2D_to_3D");
 		dest3=new File(destFolder+"/2D_to_3D");
@@ -729,8 +807,8 @@ public class LoopTest {
 		File source6=new File(execDir+"/domain/stderr");
 		File dest6=new File(destFolder+"/stderr");
 		
-		source8=new File(execDir+"/domain/rotor_mesh2D.neu");
-		dest8=new File(destFolder+"/rotor_mesh2D.neu");
+		source8=new File(execDir+"/domain/"+inputMesh[geom][1]);
+		dest8=new File(destFolder+"/"+inputMesh[geom][1]);
 		
 		
 
@@ -785,7 +863,7 @@ public class LoopTest {
 		String[] names = caseFolderFodler.list();
 
 
-		//String[] states=util.read("states");
+		//String[] states=util.read(execDir+"\states");
 
 		double[][] HB=util.loadArrays(24, 2, "BH");
 		double[][][] BHs=new double[1][][];
@@ -889,8 +967,8 @@ public class LoopTest {
 
 			if(distrbuteModel){
 
-				fsource=new File(sourceFolder+"/pre_geom2D.neu");
-				fdest=new File(destFolder+"/pre_geom2D.neu");
+				fsource=new File(sourceFolder+"/"+inputMesh[geom][0]);
+				fdest=new File(destFolder+"/"+inputMesh[geom][0]);
 				util.copyFile(fsource, fdest);
 
 				fsource=new File(sourceFolder+"/2D_to_3D");
@@ -1655,7 +1733,7 @@ public class LoopTest {
 	}
 
 
-	public  void doLoopCompare() throws IOException{
+	public  void doLoopCompare(int nBegin, int nEnd ) throws IOException{
 
 
 
@@ -1669,21 +1747,21 @@ public class LoopTest {
 		LargeScaleTest ls=new LargeScaleTest();
 
 
-		int nFiles=2;
+		int nFiles=5;
 
 		String[] files1=new String[nFiles];
 		String[] tips1=new String[nFiles];
 		String[] versions1=new String[nFiles];
 
 		versions1[0]="r.11.6";
-/*		versions1[1]="r.4.2.2 (20151217)";
-		versions1[2]="r.4.2.2 (20151217)";
-		versions1[1]="r.4.2.2 (20151217)";*/
-		versions1[1]="r.4.2.2 (20151217)";
+		for(int k=1;k<nFiles;k++)
+			versions1[k]="r.4.2.2 (20151225)";
 
 		tips1[0]="release";
-		tips1[1]="seq2";
-		//tips1[2]="para_8";
+		tips1[1]="para_2";
+		tips1[2]="para_4";
+		tips1[3]="para_8";
+		tips1[4]="para_16";
 
 
 		String[][] messages=new String[nFiles][2];
@@ -1692,19 +1770,27 @@ public class LoopTest {
 
 		int kx=0;
 
-		for(int ifold=1;ifold<=128;ifold++){
+		for(int ifold1=nBegin;ifold1<=nEnd;ifold1++){
 
-			String sourceFolder=caseFolder+"/"+names[ifold]+"/release";
 
+			int ifold=ifold1-1;
 
 			boolean[] completed=new boolean[nFiles];
 
 			String comparecaseFolder=caseFolder+"/"+names[ifold];
+			
+			//comparecaseFolder="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/3D_FGCE_periodic_symm0_nonlinear_transient_indep_Igiven_refine0_REG1";
 
+			
 			files1[0]=comparecaseFolder+"/release/output";
-			files1[1]=comparecaseFolder+"/MPI para 1/output";
-			files1[2]=comparecaseFolder+"/MPI para 8/output";
+			files1[1]=comparecaseFolder+"/MPI para 2/output";
+			
+			
+			files1[2]=comparecaseFolder+"/MPI para 4/output";
+			files1[3]=comparecaseFolder+"/MPI para 8/output";
 
+			files1[4]=comparecaseFolder+"/MPI para 16/output";
+			
 			int nx=0;
 			for(int i=0;i<nFiles;i++){
 				File ff=new File(files1[i]);
@@ -1739,6 +1825,7 @@ public class LoopTest {
 
 			try {
 
+			
 
 				//errs=ls.compare(files1, tips1, versions1,comparecaseFolder);
 				errs=ls.compare(files2, tips2, versions2,comparecaseFolder);
@@ -1773,7 +1860,7 @@ public class LoopTest {
 		}
 
 
-		util.write("compare_log.txt", lines);
+		util.write(execDir+"/compare_log.txt", lines);
 
 
 	}

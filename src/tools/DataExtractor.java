@@ -34,9 +34,12 @@ public class DataExtractor {
 			int ix=0;
 			int sourceIndex=0;
 			while((line=br.readLine())!=null){
+
+
 				
 	
 			while((line=br.readLine())!=null && !line.startsWith(key)){}
+
 		
 			if(line==null) {break;}
 			
@@ -49,6 +52,7 @@ public class DataExtractor {
 			if(line==null) {break;}
 			
 
+	
 			
 			sourceIndex=0;
 
@@ -57,14 +61,16 @@ public class DataExtractor {
 			line=br.readLine();
 
 			while(line!=null && !line.startsWith("*")){
-				sp=line.split(regex);
+		
+				sp=line.split("  +");
+			
 				if(sp.length>1 && nLinesAfter==4){
 					line="";
 					for(int k=1;k<sp.length;k++)
 						line=line+sp[k]+"  ";
 
 				}
-				if(sp.length<2) break;
+				if(sp.length<3) break;
 				data1[sourceIndex][ix]=line;
 
 			sourceIndex++;
