@@ -47,7 +47,7 @@ public class LoopTest {
 	boolean inputsReady=false;
 	int refine=0;
 	String[][] inputMesh=new String[2][2];
-	int geom=0;
+	int geom=1;
 
 
 	
@@ -74,15 +74,15 @@ public class LoopTest {
 		
 		
 	
-		String execDir="C:/Users/hassan/Documents/Large Scale Test/FieldSources";
+		String execDir="C:/Users/hassan/Documents/Large Scale Test/FieldSources/domain";
 		
 
 		String rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/latest_tests2015.12.16/fourcoilsAll/refine0";
 
 
-		rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/refine0";
+		//rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/refine0";
 
-		rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM_tetra/refine0";
+		//rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM_tetra/refine0";
 
 	
 		 
@@ -93,14 +93,14 @@ public class LoopTest {
 		
 	
 		
- x.doLoopTest(1,1,2,false,true,true);
+x.doLoopTest(3,3,1,true,false,false);
 
 
 		//doLoopTest(3,3,2,true,true,false);
 
 	//x.doLoopTestCRelease(1,1,true,true,true);
 
-	//	x.doLoopTestSeq(1,9,2,false,true,true);
+		//x.doLoopTestSeq(3,3,2,false,true,true);
 
 		//x.distributeData();
 
@@ -219,11 +219,6 @@ public class LoopTest {
 	}
 
 
-
-
-
-
-
 	public  boolean runMPI(int nDomains, String sourceFolder, String destFolder,boolean periodic,boolean slide){
 
 		boolean success=false;
@@ -237,7 +232,7 @@ public class LoopTest {
 		}
 
 		File source1=new File(sourceFolderX+"/input");
-		File dest1=new File(execDir+"/domain/input");
+		File dest1=new File(execDir+"/input");
 
 		if(!source1.exists()) {
 			System.err.println(" no input file in "+sourceFolderX);
@@ -247,26 +242,26 @@ public class LoopTest {
 
 
 		File source2=new File(sourceFolderX+"/"+inputMesh[geom][0]);
-		File dest2=new File(execDir+"/domain/"+inputMesh[geom][0]);
+		File dest2=new File(execDir+"/"+inputMesh[geom][0]);
 
 		File source3=new File(sourceFolderX+"/2D_to_3D");
-		File dest3=new File(execDir+"/domain/2D_to_3D");
+		File dest3=new File(execDir+"/2D_to_3D");
 
-		File source4=new File(execDir+"/domain/check");
+		File source4=new File(execDir+"/check");
 		File dest4=new File(destFolder+"/check");
 
-		File source5=new File(execDir+"/domain/output");
+		File source5=new File(execDir+"/output");
 		File dest5=new File(destFolder+"/output");
 
-		File source6=new File(execDir+"/domain/stderr");
+		File source6=new File(execDir+"/stderr");
 		File dest6=new File(destFolder+"/stderr");
 
-		File source7=new File(execDir+"/domain/exec_log.txt");
+		File source7=new File(execDir+"/exec_log.txt");
 		File dest7=new File(destFolder+"/exec_log.txt");
 
 
 		File source8=new File(sourceFolderX+"/"+inputMesh[geom][1]);
-		File dest8=new File(execDir+"/domain/"+inputMesh[geom][1]);
+		File dest8=new File(execDir+"/"+inputMesh[geom][1]);
 
 
 
@@ -304,10 +299,18 @@ public class LoopTest {
 			else{
 			
 			
-			util.copyFile(source1, dest1);
+				util.copyFile(source1, dest1);
+				
+				util.copyFile(source2, dest2);
+				
+				if(source3.exists())
+				util.copyFile(source3, dest3);
+
+				if(source8.exists())
+					util.copyFile(source8, dest8);
 		
 			
-			File tmp=new File(execDir+"/domain/input1");
+			File tmp=new File(execDir+"/input1");
 			
 			if(periodic){
 	
@@ -370,7 +373,7 @@ public class LoopTest {
 
 		for(int j=1;j<nDomains;j++){
 
-			String domainx=execDir+"/domain"+j;
+			String domainx=new File(execDir).getParent()+"/domain"+j;
 			
 			File df=new File(domainx);
 			if(!df.exists()) df.mkdirs();
@@ -390,7 +393,7 @@ public class LoopTest {
 
 			try {
 
-				util.copyFile(new File(execDir+"/domain/input"), dest1);
+				util.copyFile(new File(execDir+"/input"), dest1);
 
 				util.copyFile(source2, dest2);
 				
@@ -413,18 +416,18 @@ public class LoopTest {
 
 
 
-		File logFile=new File(execDir+"/domain/exec_log.txt");
+		File logFile=new File(execDir+"/exec_log.txt");
 
 
 
-		String[] cmdAndArgs = {"cmd.exe","/C","mpiexec.exe", "-n",Integer.toString(nDomains),"EMSolBatch_MPI.exe","-f","input"};
+		String[] cmdAndArgs = {"cmd.exe","/C","mpiexec.exe", "-n",Integer.toString(nDomains),execDir+"/EMSolBatch_MPI.exe","-f","input"};
 
 
 		//String[] cmdAndArgs = {"cmd.exe","/C","popd","run-mpi1.bat"};
 
 		ProcessBuilder builder = new ProcessBuilder(cmdAndArgs);
 
-		builder.directory(new File(execDir+"/domain"));
+		builder.directory(new File(execDir));
 
 
 
@@ -475,13 +478,13 @@ public class LoopTest {
 			
 			if(!inputsReady){
 
-				source1=new File(execDir+"/domain/input");
+				source1=new File(execDir+"/input");
 				dest1=new File(destFolder+"/input");
 
-				source2=new File(execDir+"/domain/"+inputMesh[geom][0]);
+				source2=new File(execDir+"/"+inputMesh[geom][0]);
 				dest2=new File(destFolder+"/"+inputMesh[geom][0]);
 
-				source3=new File(execDir+"/domain/2D_to_3D");
+				source3=new File(execDir+"/2D_to_3D");
 				dest3=new File(destFolder+"/2D_to_3D");
 				
 				if(source8.exists())
@@ -507,7 +510,7 @@ public class LoopTest {
 					
 				
 
-			String[] timeDate=dex.getComputationTimesAndDate(execDir+"/domain/output");
+			String[] timeDate=dex.getComputationTimesAndDate(execDir+"/output");
 
 			if(timeDate[11]!=null){
 
@@ -542,7 +545,7 @@ public class LoopTest {
 		//sourceFolder=caseFolder+"/"+names[ifold]+"/release";
 
 		File source1=new File(sourceFolder+"/input");
-		File dest1=new File(execDir+"/domain/input");
+		File dest1=new File(execDir+"/input");
 
 		if(!source1.exists()) {
 			System.err.println(" no input file in "+sourceFolder);
@@ -551,13 +554,13 @@ public class LoopTest {
 		}
 
 		File source2=new File(sourceFolder+"/"+inputMesh[geom][0]);
-		File dest2=new File(execDir+"/domain/"+inputMesh[geom][0]);
+		File dest2=new File(execDir+"/"+inputMesh[geom][0]);
 
 		File source3=new File(sourceFolder+"/2D_to_3D");
-		File dest3=new File(execDir+"/domain/2D_to_3D");
+		File dest3=new File(execDir+"/2D_to_3D");
 
 		File source8=new File(sourceFolder+"/"+inputMesh[geom][1]);
-		File dest8=new File(execDir+"/domain/"+inputMesh[geom][1]);
+		File dest8=new File(execDir+"/"+inputMesh[geom][1]);
 
 
 
@@ -582,9 +585,9 @@ public class LoopTest {
 		ProcessBuilder builder = new ProcessBuilder();
 
 		//builder.command("EMSolBatchCversion_x64.exe","input");
-		builder.command("EMSolution_x64_r11.2.5_20151106.exe","-b","-m","-f","input");
+		builder.command(execDir+"/EMSolution_x64_r11.2.5_20151106.exe","-b","-m","-f","input");
 		
-		builder.directory(new File(execDir+"/domain"));
+		builder.directory(new File(execDir));
 
 		
 
@@ -611,13 +614,13 @@ public class LoopTest {
 
 		pp.destroy();
 
-		File source4=new File(execDir+"/domain/check");
+		File source4=new File(execDir+"/check");
 		File dest4=new File(sourceFolder+"/check");
 
-		File source5=new File(execDir+"/domain/output");
+		File source5=new File(execDir+"/output");
 		File dest5=new File(sourceFolder+"/output");
 
-		File source6=new File(execDir+"/domain/stderr");
+		File source6=new File(execDir+"/stderr");
 		File dest6=new File(sourceFolder+"/stderr");
 
 
@@ -666,7 +669,7 @@ public class LoopTest {
 		
 
 		File source1=new File(sourceFolderX+"/input");
-		File dest1=new File(execDir+"/domain/input");
+		File dest1=new File(execDir+"/input");
 
 		if(!source1.exists()) {
 			System.err.println(" no input file in "+sourceFolderX);
@@ -675,13 +678,13 @@ public class LoopTest {
 		}
 
 		File source2=new File(sourceFolderX+"/"+inputMesh[geom][0]);
-		File dest2=new File(execDir+"/domain/"+inputMesh[geom][0]);
+		File dest2=new File(execDir+"/"+inputMesh[geom][0]);
 
 		File source3=new File(sourceFolderX+"/2D_to_3D");
-		File dest3=new File(execDir+"/domain/2D_to_3D");
+		File dest3=new File(execDir+"/2D_to_3D");
 
 		File source8=new File(sourceFolderX+"/"+inputMesh[geom][1]);
-		File dest8=new File(execDir+"/domain/"+inputMesh[geom][1]);
+		File dest8=new File(execDir+"/"+inputMesh[geom][1]);
 
 
 
@@ -707,7 +710,7 @@ public class LoopTest {
 			
 			util.copyFile(source1, dest1);
 			
-			File tmp=new File(execDir+"/domain/input1");
+			File tmp=new File(execDir+"/input1");
 			
 			if(periodic){
 	
@@ -759,9 +762,9 @@ public class LoopTest {
 
 		ProcessBuilder builder = new ProcessBuilder();
 
-		builder.command("EMSolWin.exe","-b","-m","-f","input");
+		builder.command(execDir+"/EMSolWin.exe","-b","-m","-f","input");
 		
-		builder.directory(new File(execDir+"/domain"));
+		builder.directory(new File(execDir));
 
 		Process pp = null;
 		try {
@@ -785,29 +788,29 @@ public class LoopTest {
 
 		pp.destroy();
 		
-		source1=new File(execDir+"/domain/input");
+		source1=new File(execDir+"/input");
 		dest1=new File(destFolder+"/input");
 
-		source2=new File(execDir+"/domain/"+inputMesh[geom][0]);
+		source2=new File(execDir+"/"+inputMesh[geom][0]);
 		dest2= new File(destFolder+"/"+inputMesh[geom][0]);
 
-		source3=new File(execDir+"/domain/2D_to_3D");
+		source3=new File(execDir+"/2D_to_3D");
 		dest3=new File(destFolder+"/2D_to_3D");
 		
 
 
 
-		File source4=new File(execDir+"/domain/check");
+		File source4=new File(execDir+"/check");
 		File dest4=new File(destFolder+"/check");
 
 
-		File source5=new File(execDir+"/domain/output");
+		File source5=new File(execDir+"/output");
 		File dest5=new File(destFolder+"/output");
 
-		File source6=new File(execDir+"/domain/stderr");
+		File source6=new File(execDir+"/stderr");
 		File dest6=new File(destFolder+"/stderr");
 		
-		source8=new File(execDir+"/domain/"+inputMesh[geom][1]);
+		source8=new File(execDir+"/"+inputMesh[geom][1]);
 		dest8=new File(destFolder+"/"+inputMesh[geom][1]);
 		
 		
@@ -884,7 +887,7 @@ public class LoopTest {
 			String destFolder=caseFolder+"/"+names[ifold+LL]+"/release";
 
 			File fsource=new File(sourceFolder+"/input");
-			File ftemp=new File(execDir+"/domain/inputTemp1");
+			File ftemp=new File(execDir+"/inputTemp1");
 
 			File fdest=new File(destFolder+"/input");
 
@@ -902,7 +905,7 @@ public class LoopTest {
 				this.setToNolinPart1(fsource, ftemp, 1, 1);
 
 				fsource=new File(ftemp.getPath());
-				ftemp=new File(execDir+"/domain/inputTemp2");
+				ftemp=new File(execDir+"/inputTemp2");
 
 				this.setToNolinPart2(fsource, ftemp, 1, 1);
 
@@ -911,7 +914,7 @@ public class LoopTest {
 
 				fsource=new File(ftemp.getPath());
 
-				ftemp=new File(execDir+"/domain/inputTemp3");
+				ftemp=new File(execDir+"/inputTemp3");
 
 				this.setTimeEvolution(fsource, ftemp, 1, 10);
 
@@ -954,7 +957,7 @@ public class LoopTest {
 				"24         3        5             150        50000000"};
 
 
-				ftemp=new File(execDir+"/domain/inputTemp1");
+				ftemp=new File(execDir+"/inputTemp1");
 				fsource=new File( sourceFolder=caseFolder+"/"+names[ifold]+"/MPI para 1/input");
 				this.replacePHICOILwithELMCUR(fsource,fdest,elcur);
 
