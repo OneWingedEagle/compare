@@ -73,38 +73,110 @@ public class LoopTest {
 	public static void main(String[] args) throws IOException{
 		
 		
+		boolean controlFile=false;
+		
 	
 		String execDir="C:/Users/hassan/Documents/Large Scale Test/FieldSources/domain";
 		
 
-		String rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/latest_tests2015.12.16/fourcoilsAll/refine0";
-
-
-		//rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/refine0";
+		String caseFolder="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/refine0";
 
 		//rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM_tetra/refine0";
+		
+		if(controlFile){
+			
+			 execDir=System.getProperty("user.dir");
+			
+			boolean overWrite=false,meshReady=false, inputReady=false;
+			int nDomains=1,nBegin=1,nEnd=1;
+			
 
-	
+			try{	
+				FileReader fr=new FileReader("control");
+				BufferedReader br = new BufferedReader(fr);
+				String line;
+
+				line=util.getNextDataLine(br);
+				
+				caseFolder=new String(line);
+				
+			
+				line=util.getNextDataLine(br);
+				
+				int[] numbs=util.getCSInt(line);
+				
+			
+
+			
+			if(numbs.length>0){
+
+					nDomains=numbs[0];
+			}
+			
+			if(numbs.length>1)
+				nBegin=numbs[1];
+			
+			if(numbs.length>2)
+				nEnd=numbs[2];
+		
+				
+				line=util.getNextDataLine(br);
+				
+				 numbs=util.getCSInt(line);
+				
+			
+			if(numbs.length>0){
+				if(numbs[0]==1)
+
+					overWrite=true;
+			}
+			
+			if(numbs.length>1){
+				if(numbs[1]==1)
+					meshReady=true;
+				
+				}
+			
+			if(numbs.length>2){
+				if(numbs[2]==1)
+					inputReady=true;
+				}
+
+			
+			if(nDomains==0)
+				inputReady=true;
+
+				
+				br.close();
+
+	fr.close();
+
+		
+			}
+
+			catch(IOException e){System.err.println("Failed in reading control file.");		}
+			
+			
+			
+			
+			LoopTest x=new LoopTest(execDir,caseFolder);
+			x.doLoopTest(nBegin,nEnd,nDomains,overWrite,meshReady,inputReady);
+			
+		}
+
+		else{
 		 
 
-		LoopTest x=new LoopTest(execDir,rr);
+		LoopTest x=new LoopTest(execDir,caseFolder);
 
 		//x.deleteData();
 		
-	
+		x.doLoopTest(11,11,2,false,true,true);
 		
-x.doLoopTest(3,3,1,true,false,false);
+		//x.doLoopCompare(11, 11);
+		}
 
 
-		//doLoopTest(3,3,2,true,true,false);
-
-	//x.doLoopTestCRelease(1,1,true,true,true);
-
-		//x.doLoopTestSeq(3,3,2,false,true,true);
-
-		//x.distributeData();
-
-//x.doLoopCompare(5,5);
 
 	}
 
@@ -208,11 +280,11 @@ x.doLoopTest(3,3,1,true,false,false);
 		}
 
 		if(nDomains==0)
-			util.write(execDir+"/states_CRelease", runSucess);
+			util.write(execDir+"\\states_CRelease", runSucess);
 		else if(!Seq)
-			util.write(execDir+"/tates_MPI_para"+nDomains, runSucess);
+			util.write(execDir+"\\states_MPI_para"+nDomains, runSucess);
 		else
-			util.write(execDir+"/states_Sequential"+nDomains, runSucess);
+			util.write(execDir+"\\states_Sequential"+nDomains, runSucess);
 
 		//x.test();
 
@@ -315,6 +387,7 @@ x.doLoopTest(3,3,1,true,false,false);
 			if(periodic){
 	
 			this.removeSepAng(dest1, tmp);
+		
 			util.copyFile(tmp, dest1);
 			}
 			
@@ -532,7 +605,173 @@ x.doLoopTest(3,3,1,true,false,false);
 
 		return success;
 
+	}
+	
+	
+	
+	public  boolean runMPItt(int nDomains, String sourceFolder, String destFolder, boolean inputReady){
+
+		boolean success=false;
+
+		String sourceFolderX=new String(sourceFolder);
+		
+		if(inputReady){
+			sourceFolderX=new String(destFolder);
+			
+		}
+		
+
+		File source1=new File(sourceFolderX+"/input");
+
+		File dest1=new File(execDir+"/input");
+
+		if(!source1.exists()) {
+			System.err.println(" no input file in "+sourceFolderX);
+
+			return success;
+		}
+
+
+		File source2=new File(sourceFolderX+"/"+inputMesh[geom][0]);
+		File dest2=new File(execDir+"/"+inputMesh[geom][0]);
+
+		File source3=new File(sourceFolderX+"/2D_to_3D");
+		File dest3=new File(execDir+"/2D_to_3D");
+
+
+		File dest4=new File(destFolder+"/check");
+
+
+		File dest5=new File(destFolder+"/output");
+
+
+	
+		File dest7=new File(destFolder+"/exec_log.txt");
+
+
+		File source8=new File(sourceFolderX+"/"+inputMesh[geom][1]);
+		File dest8=new File(execDir+"/"+inputMesh[geom][1]);
+
+
+
+		if(dest1.exists()) dest1.delete();
+		if(dest2.exists()) dest2.delete();
+
+		if(dest3.exists()) dest3.delete();
+
+		if(dest4.exists()) dest4.delete();
+		if(dest5.exists()) dest5.delete();
+
+	
+		if(dest7.exists()) dest7.delete();
+
+		if(source8.exists())
+			if(dest8.exists()) dest8.delete();
+		
+
+
+		try{
+		util.copyFile(source1, dest1);
+		
+		util.copyFile(source2, dest2);
+		
+		if(source3.exists())
+		util.copyFile(source3, dest3);
+
+		if(source8.exists())
+			util.copyFile(source8, dest8);
+		
+	} catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+
+
+		
+		RunMPI rmpi=new RunMPI(execDir, caseFolder);
+		
+
+		try {
+			
+			success=rmpi.runMPI(nDomains,inputReady );
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+
+		File fdestFolder2=new File(destFolder);
+		if(!fdestFolder2.exists()) fdestFolder2.mkdirs();
+
+
+
+		try {
+			
+			if(!inputReady){
+
+				source1=new File(execDir+"/input");
+				dest1=new File(destFolder+"/input");
+				
+
+				util.copyFile(source1, dest1);
+	
+				source2=new File(execDir+"/"+inputMesh[geom][0]);
+				dest2=new File(destFolder+"/"+inputMesh[geom][0]);
+
+				source3=new File(execDir+"/2D_to_3D");
+				dest3=new File(destFolder+"/2D_to_3D");
+				
+				if(source8.exists())
+					dest8=new File(destFolder+"/"+inputMesh[geom][1]);
+				
+		
+				
+				//util.pr(dest1.getPath());
+				util.copyFile(source2, dest2);
+				
+				if(source3.exists())
+				util.copyFile(source3, dest3);
+				
+				if(source8.exists())
+					util.copyFile(source8, dest8);
+				}
+		
+
+			File source4=new File(execDir+"/check");
+			 dest4=new File(destFolder+"/check");
+
+			File source5=new File(execDir+"/output");
+			 dest5=new File(destFolder+"/output");
+			 
+				File source6=new File(execDir+"/stderr");
+				File dest6=new File(sourceFolder+"/stderr");
+
+			File source7=new File(execDir+"/exec_log.txt");
+			 dest7=new File(destFolder+"/exec_log.txt");
+
+			
+			util.copyFile(source4, dest4);
+			util.copyFile(source5, dest5);
+			
+			util.copyFile(source6, dest6);
+			util.copyFile(source7, dest7);
+					
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+
+
+
+		return success;
+
 	}	
+
 
 
 
@@ -1520,7 +1759,7 @@ x.doLoopTest(3,3,1,true,false,false);
 				pw.println(line);
 
 
-				if(line.startsWith("*  CYCLIC  *  SYMMETRY")){
+				if(line.contains("CYCLIC")){
 					manip=true;
 				}
 
@@ -1577,7 +1816,7 @@ x.doLoopTest(3,3,1,true,false,false);
 				pw.println(line);
 
 
-				if(line.startsWith("* SEPERATE_ANGLE(deg)")){
+				if(line.contains("SEPARATE")){
 				
 					manip=true;
 				}
@@ -1736,137 +1975,6 @@ x.doLoopTest(3,3,1,true,false,false);
 	}
 
 
-	public  void doLoopCompare(int nBegin, int nEnd ) throws IOException{
-
-
-
-
-		File caseFolderFodler=new File(caseFolder);
-		String[] names = caseFolderFodler.list();
-
-
-		double[] errs=null;
-
-		LargeScaleTest ls=new LargeScaleTest();
-
-
-		int nFiles=5;
-
-		String[] files1=new String[nFiles];
-		String[] tips1=new String[nFiles];
-		String[] versions1=new String[nFiles];
-
-		versions1[0]="r.11.6";
-		for(int k=1;k<nFiles;k++)
-			versions1[k]="r.4.2.2 (20151225)";
-
-		tips1[0]="release";
-		tips1[1]="para_2";
-		tips1[2]="para_4";
-		tips1[3]="para_8";
-		tips1[4]="para_16";
-
-
-		String[][] messages=new String[nFiles][2];
-
-		String[] lines=new String[1000];
-
-		int kx=0;
-
-		for(int ifold1=nBegin;ifold1<=nEnd;ifold1++){
-
-
-			int ifold=ifold1-1;
-
-			boolean[] completed=new boolean[nFiles];
-
-			String comparecaseFolder=caseFolder+"/"+names[ifold];
-			
-			//comparecaseFolder="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/3D_FGCE_periodic_symm0_nonlinear_transient_indep_Igiven_refine0_REG1";
-
-			
-			files1[0]=comparecaseFolder+"/release/output";
-			files1[1]=comparecaseFolder+"/MPI para 2/output";
-			
-			
-			files1[2]=comparecaseFolder+"/MPI para 4/output";
-			files1[3]=comparecaseFolder+"/MPI para 8/output";
-
-			files1[4]=comparecaseFolder+"/MPI para 16/output";
-			
-			int nx=0;
-			for(int i=0;i<nFiles;i++){
-				File ff=new File(files1[i]);
-
-				completed[i]=false;
-
-				if(ff.exists()){
-
-					String[] timeDate=dex.getComputationTimesAndDate(files1[i]);
-					if(timeDate[11]!=null){
-						completed[i]=true;
-						nx++;
-					}
-				}
-			}
-
-			String[] files2=new String[nx];
-			String[] tips2=new String[nx];
-			String[] versions2=new String[nx];
-
-			int ix=0;
-			for(int i=0;i<nFiles;i++)
-				if(completed[i]) {
-					files2[ix]=files1[i];
-					tips2[ix]=tips1[i];
-					versions2[ix]=versions1[i];
-
-					ix++;
-
-				}
-
-
-			try {
-
-			
-
-				//errs=ls.compare(files1, tips1, versions1,comparecaseFolder);
-				errs=ls.compare(files2, tips2, versions2,comparecaseFolder);
-			} catch (WriteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			messages[0][0]=String.format("%75s", names[ifold]+": ");
-			//getClass().fs1.format(names[ifold]);
-			lines[kx]=messages[0][0];
-
-			for(int ie=1;ie<errs.length;ie++){
-
-				if(ie==1)
-					messages[ie][0]=String.format("%30s",tips2[ie]+"/"+tips2[0]+":  ");
-				else
-					messages[ie][0]=String.format("%30s",tips2[ie]+"/"+tips2[1]+":  ");
-
-				messages[ie][1]=String.format("%f",errs[ie]);
-
-
-				lines[kx]=lines[kx]+messages[ie][0]+messages[ie][1];
-
-
-			}
-
-			util.pr(lines[kx]);
-
-			kx++;
-
-		}
-
-
-		util.write(execDir+"/compare_log.txt", lines);
-
-
-	}
 
 
 	public  void deleteData() throws IOException{
@@ -1877,6 +1985,7 @@ x.doLoopTest(3,3,1,true,false,false);
 
 		File caseFolderFodler=new File(caseFolder);
 		String[] names = caseFolderFodler.list();
+		Arrays.sort(names);
 
 
 

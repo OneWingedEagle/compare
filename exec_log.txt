@@ -1,0 +1,2 @@
+launch failed: CreateProcess(C:\Users\hassan\JavaWorks\LoopTest/EMSolBatch_MPI.exe -f input) on 'Compaqi7' failed, error 2 - 指定されたファイルが見つかりません。
+

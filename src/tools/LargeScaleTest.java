@@ -97,8 +97,8 @@ public class LargeScaleTest {
 	int nKeys;
 
 	PrintWriter stderr;
-
-	public static void main(String[] args) throws WriteException{
+	
+	public static void main2(String[] args) throws WriteException{
 
 		LargeScaleTest x=new LargeScaleTest();
 
@@ -209,7 +209,6 @@ public class LargeScaleTest {
 		this.readInput();
 
 		
-
 		this.readOuputStrings();
 
 
@@ -222,10 +221,10 @@ public class LargeScaleTest {
 	private void writeOutputs(String folder) throws  WriteException{
 
 		
-		String path="camparison"+".xls";
+		String path="/camparison.xlsx";
 		
 		if(folder!=null) path=folder+"/"+path;
-		
+
 		setWriteable(path);
 
 
@@ -616,11 +615,12 @@ public class LargeScaleTest {
 				 
 					 for(int j=1;j<outputString[fRef][i].length;j++)
 						 for(int p=1;p<outputString[fRef][i][j].length;p++){
-							 for(int nfile=0;nfile<nFiles;nfile++)
-							 if(outputString[nfile][i][0][p][0].equals("Amplitude(Current)"))
+							 for(int nfile=0;nfile<nFiles;nfile++){
+								 if(outputString[nfile][i][0][p][0].equals("Amplitude(Current)"))
 								titles[1][col++]="Current";
 							 else
 							    titles[1][col++]=outputString[nfile][i][0][p][0];
+							 }
 							 
 						 }
 				 col=0;
@@ -982,7 +982,7 @@ fr.close();
 			time[nfile]=	dex.loadTimesSteps(stepNumbs[nfile], file[nfile],stderr);
 
 		
-		
+			//util.pr(file[nfile]);
 			
 
 			if(time[nfile]==null)
@@ -1017,6 +1017,9 @@ fr.close();
 
 				String[][] data=dex.loadDataString(file[nfile],key[index],nLineAfter[index],nVariableIDsMax,nTmax,stderr);
 				
+			//	util.pr(nfile);
+				//util.hshow(data[0]);
+				
 				if(data==null) continue;
 			
 
@@ -1027,7 +1030,6 @@ fr.close();
 				*/
 
 					outputItemId[i]=new String[data.length];
-
 			
 				outputItemIndex[i]=new int[data.length];
 
@@ -1041,7 +1043,7 @@ fr.close();
 				
 					outputString[nfile][i][j]=new String[dataSplitted.length][nT[nfile]];
 
-				
+
 				
 					outputItemId[i][j]=dataSplitted[0];
 					
@@ -1491,7 +1493,7 @@ fr.close();
 						errStep[q]=q;
 					}
 					else{
-				if(error[p][q]>errMax[q]) {
+				if(Math.abs(error[p][q])>errMax[q]) {
 					errMax[q]=error[p][q];
 					errStep[q]=q;
 				}

@@ -1,0 +1,192 @@
+*RLS_NO
+r11.1
+* PRE_PROCESSING * MAKE_SYSTEM_MATRICES  *
+         1                    1
+* SOLVE_EQUATION * POST_PROCESSING *
+         1          1
+* M-STATIC * STEP * AC * TRANSIENT * DISPLACEMENT * NON_LINEAR * TEMP_DEPEND * STEADY_CURRENT*
+      0       0     0          1         2            1           0            0
+* POTENTIAL * NODAL_FORCE_METHOD * PHI_OPTION * FIXED_COORDINATE *
+    0                0                   0                0
+* TREE_GAUGE * REGULARIZATION * RENUMBERING * SCALING * LINE_SEARCH *
+   -1              1               -1          0               1
+* NODE_ORDER * EDGE_ORDER *  METRIC_MOD * QUAD_TRI * CALC_IND *  THIN_ELEM * PARALLEL_NO * PARALLEL_OPTION *
+         1         1         0         0         0         0         2         0
+* ICCG_CONV * ACCEL_FACTOR * DIV_FACTOR * DIV_ITER * SOLVER * THETA * THETA_NETWORK * THETA_MOTION *
+    1e-006       1.02            20          100         0    1        1        1
+* NON_LINERAR_CONV * RELAXATION * NO_ITERATIONS * INIT_OPTION * ICCG_CONV_RATIO *  CHECK_B *
+     0.0001                  1           20          0           0.01                0.01
+* POINTS_IN_1D * POINT_IN_TRIANGLE * MAT_POINTS *
+         3               7               1
+* INITIAL_STEP * DATA_TYPE  * INITIAL_PHASE * MULTI *
+         -1            0               0        0
+* NO_STEPS * INITIAL_TIME(s) *  DELTA_TIME(s) *
+  21         -5.e-4               5.e-4  
+* INITIAL_STEP * LAST_STEP * STEP_INTERVAL * TIME_DIFFERENCE *
+       1           200            1                3
+* INPUT_MESH_FILE *  UNIT  * NO_MESH *  MESHLESS * METIS*  REFINE *
+         5            0          1        0        1      0
+* POST_DATA_FILE * ELEM_OUT * NODE_OUT *NUMBER_OUTPUT_MATS *
+        5               1        0           0
+* MESH * CURRENT * MAGNETIC * FORCE_J_B* FORCE_NODAL * DISPLACEMENT * ELEMENT *  HEAT * MAGNETIZATION * IRON_LOSS * E * COIL_force *
+   1     1         1          0             0             1            0         0        0         0        0        0
+*   MESH   *   A   *   V   *   B   *   B_INTEG *    J_Q  *
+       0       0     0       0        0         0
+*  Q_AVERAGE *  HEAT  *  MAG_FLUX  * CUR_FLUX *
+       0          1        0          0
+* FORCE_J_B * FORCE_NODAL *  MAGNETIC_ENERGY * IRON_LOSS *
+    0           0         1        0
+* GEOMETRY * DELTA_Z(m) or DELTA_THETA(deg)*
+     1           0.037500
+*COORDINATE * NO_COORDINATES *
+COORDINATE         1
+* COORD_ID * TYPE   *    X0    *    Y0    *    Z0   *
+       1       2          0          0          0
+*                   *   EX_X   *   EX_Y   *   EX_Z  *
+                          1          0          0
+*                   *   EZ_X   *   EZ_Y   *   EZ_Z  *
+                          0         0          1 
+* FAR_BOUNDARY_CONDITION 
+       0
+* DISTANCE_JUDGE(m) * Distance for judgement (m)?@???b?V?Åc?EÅfu???e?e?ÅE
+       1e-4
+* NO_BN0_PLANES *
+    0
+* NO_HT0_PLANES *
+    0
+* NO_A0_LINE *
+    1
+*    SX(m) *    SY(m)  *    SZ(m)  *    EX(m)  *    EY(m)  *    EZ(m)  *
+    0.0        0.0        0.0         0.0         0.0         1.0
+* CYCLIC  *  SYMMETRICITY * DIVISION * SURFACE_MAT_ID * FITTNESS * LINE_INPUT * N_CYCLIC *
+     2              0          60         51	
+*   ANGLE(deg) *
+    180.
+* SEPERATE_ANGLE(deg)
+90
+* NO_MAT_IDS *  EXTEND_TOTAL *  NO_SMAT_IDS 
+    13               0
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+     1            0           1         0.0      1000.0       
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+     2            0           0         6.944e+005       1.024
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+     3            0           0         6.944e+005       1.024
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *?@?\?I
+     4            0           0         0.0      1.
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+     5            0           2         0.0      1000.0    
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+    6            0           0         0.0      1.0
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+    7            0           0         0.0      1.0
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+    8            0           0         0.0      1.0
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+    9            0           0         0.0      1.0
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+    10            0           0         0.0      1.0
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+    11            0           0         0.0      1.0
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+    12           0           0         0.0      1.0
+* MAT_ID  *  POTENTIAL * B_H_CURVE_ID * SIGMA * MU  * PACKING *
+    13            0           0         0.0      1.0
+*SOURCE *
+SOURCE  
+*MAFGNET *  SERIES_NO * TIME_ID *  NO_MAT_IDS *
+MAGNET        1             1        1         
+* MAT_ID   *  COORD_ID   *   MX(MR)    *    MY(MT)   *     MZ    *?@45Ågx?u?u?E0.9T?I?\ÅÒÅ‚
+  2           1         1.2        0        0.  
+MAGNET        2             1        1         
+* MAT_ID   *  COORD_ID   *   MX(MR)    *    MY(MT)   *     MZ    *?@45Ågx?u?u?E0.9T?I?\ÅÒÅ‚
+  3           1         -1.2        0        0.  
+END
+* NO_DATA *
+      5
+* TIME_ID * OPTION *
+      1     0
+*   C0    *   C1    *   C2    *   C3     *   C4     *  C5    *   C6    * ?\ÅÒÅ‚?I?eÅfe
+    1.0        0.0       0.0       0.0        0.0       0.0       0.0
+*  TEXP   *   TCYCLE  *
+    0.0       0.00
+* TIME_ID * OPTION *
+      2     0
+*   C0    *   C1    *   C2    *   C3     *   C4     *  C5    *   C6    *?@1Ågx/sec
+    0.0       9000.0       0.0       0.0        0.0       0.0       0.0
+*  TEXP   *   TCYCLE  *
+    0.0       0.00
+* TIME_ID *	OPTION	*
+	    3         2	 
+* AMPLITUDE * TCYCLE * PHASE *
+       3.0           0.01           -120
+* TIME_ID *	OPTION	*
+	    4         2	 
+* AMPLITUDE * TCYCLE * PHASE *
+        3.0           0.01              0
+* TIME_ID *	OPTION	*
+	    5         2	 
+* AMPLITUDE * TCYCLE * PHASE *
+        3.0           0.01            120
+* MOTION *  NO_MOTIONS *
+MOTION    1
+* MOTION_ID * X_TIME_ID * Y_TIME_ID * Z_TIME_ID * PHI_TIME_ID * COORD_ID
+    1           0          0          0            2           0
+* GLOBAL_MOTION_ID * SUBERI_S *
+       1             1.00000000000000
+* NO_CURVES *?@B-H?@curve?IÅfe?`
+          2
+* BH_CURVE_ID * NO_DATA *
+	    1             24
+*      H [A/m]    *    B [T]    *
+    0.00000000            0.00000000
+   20.00000000            0.07000000
+   30.00000000            0.13000000
+   40.00000000            0.22000000
+   50.00000000            0.33000000
+   60.00000000            0.47000000
+   70.00000000            0.61000000
+   80.00000000            0.73000000
+   90.00000000            0.82000000
+  100.00000000            0.88000000
+  150.00000000            1.07000000
+  200.00000000            1.16000000
+  300.00000000            1.28000000
+  400.00000000            1.34000000
+  500.00000000            1.38000000
+  700.00000000            1.44000000
+  1000.00000000            1.48000000
+  2000.00000000            1.56000000
+  4000.00000000            1.64000000
+  7000.00000000            1.73000000
+  10000.00000000            1.78000000
+  20000.00000000            1.90000000
+  40000.00000000            2.02000000
+	1380000		10.06
+* BH_CURVE_ID * NO_DATA *
+	    2             24
+*      H [A/m]    *    B [T]    *
+    0.00000000            0.00000000
+   58.00000000            0.01600000
+  107.00000000            0.06300000
+  140.00000000            0.12600000
+  170.00000000            0.20000000
+  227.00000000            0.35000000
+  294.00000000            0.51700000
+  327.00000000            0.58800000
+  400.00000000            0.70000000
+  490.00000000            0.80000000
+  600.00000000            0.89000000
+  700.00000000            0.95200000
+  820.00000000            1.00000000
+  1000.00000000            1.05000000
+  1230.00000000            1.10000000
+  1580.00000000            1.15200000
+  2000.00000000            1.19900000
+  2450.00000000            1.23400000
+  3540.00000000            1.29300000
+  6000.00000000            1.37800000
+  8900.00000000            1.43400000
+  13200.00000000            1.49300000
+  25800.00000000            1.58700000
+  1159800	            10.047
