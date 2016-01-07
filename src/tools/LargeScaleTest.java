@@ -221,7 +221,7 @@ public class LargeScaleTest {
 	private void writeOutputs(String folder) throws  WriteException{
 
 		
-		String path="/camparison.xlsx";
+		String path="/camparison.xls";
 		
 		if(folder!=null) path=folder+"/"+path;
 
@@ -803,8 +803,9 @@ public class LargeScaleTest {
 			
 			String[] lines2=Arrays.copyOf(lines, ix-1);
 			
-			
-			util.write("comparison", lines2);
+		
+			if(folder!=null)
+			util.write(folder+"/comparison", lines2);
 			
 /*			
 			String txtPath=folder+"/comparison.txt";
@@ -1038,7 +1039,7 @@ fr.close();
 				String[] dataSplitted=new String[1];
 				for(int j=0;j<data.length;j++){
 				//	util.pr(j+"  "+data[j][0]);
-					dataSplitted=this.splitToStrings(data[j][0],"  +");
+					dataSplitted=this.splitToStrings(data[j][0],"   +");
 					
 				
 					outputString[nfile][i][j]=new String[dataSplitted.length][nT[nfile]];
@@ -1048,7 +1049,7 @@ fr.close();
 					outputItemId[i][j]=dataSplitted[0];
 					
 
-					dataSplitted=this.splitToStrings(data[0][0],"  +");
+					dataSplitted=this.splitToStrings(data[0][0],"   +");
 					
 					outputItemEntity[i]=new String[dataSplitted.length-1];
 					for(int k=0;k<outputItemEntity[i].length;k++){
@@ -1070,7 +1071,7 @@ fr.close();
 					for(int k=0;k<nT[nfile];k++){
 						
 						
-						dataSplitted=this.splitToStrings(data[outputItemIndex[i][j]][k],"  +");
+						dataSplitted=this.splitToStrings(data[outputItemIndex[i][j]][k],"   +");
 			
 						for(int p=0;p<dataSplitted.length;p++){
 							outputString[nfile][i][j][p][k]=dataSplitted[p];

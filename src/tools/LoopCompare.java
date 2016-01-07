@@ -55,7 +55,7 @@ public class LoopCompare {
 	public static void main(String[] args) throws IOException{
 		
 		
-		boolean controlFile=false;
+		boolean controlFile=true;
 	
 		
 		if(controlFile){
