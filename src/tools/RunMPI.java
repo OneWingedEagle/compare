@@ -93,14 +93,14 @@ public class RunMPI {
 			nDomains=Integer.parseInt(args[0]);
 
 
-		x.runMPI(nDomains,false);
+		x.runMPI(nDomains,false,false);
 		//x.doLoopCompare(5,5);
 
 	}
 
 
 
-	public  boolean runMPI(int nDomains, boolean inputReady) throws IOException{
+	public  boolean runMPI(int nDomains, boolean inputReady,boolean seq) throws IOException{
 
 		boolean success=false;
 
@@ -128,8 +128,12 @@ public class RunMPI {
 				
 
 		boolean slide=this.isSlide(input);
+		
+
 
 		if(!slide){
+			
+		
 			String replacement1="         5            0          "+nDomains+"        0        1      "+refine;
 			
 			File input2=new File(execDir+File.separator+"input2");
@@ -154,7 +158,7 @@ public class RunMPI {
 			String replacement2="         1         1         0         0         0         0         "+nDomains+"         0";
 
 
-			this.setNO_Mesh(input, input2,replacement2);
+			this.setNO_Paras(input, input2,replacement2);
 
 			util.copyFile(input2, input);
 
@@ -180,6 +184,7 @@ public class RunMPI {
 
 
 
+		if(!seq)
 		for(int j=1;j<nDomains;j++){
 
 			String domainx=new File(execDir).getParent()+"/domain"+j;
@@ -231,14 +236,17 @@ public class RunMPI {
 		File logFile=new File(execDir+File.separator+"exec_log.txt");
 
 
+		String[] cmdAndArgsMPI = {"cmd.exe","/C","mpiexec.exe", "-n",Integer.toString(nDomains),execDir+"/EMSolBatch_MPI.exe","-f","input"};
+		
+		String[] cmdAndArgsSEQ = {execDir+"/EMSolWin.exe","-b","-m","-f","input"};
 
-		String[] cmdAndArgs = {"cmd.exe","/C","mpiexec.exe", "-n",Integer.toString(nDomains),execDir+"/EMSolBatch_MPI.exe","-f","input"};
 
 
-
-
-		ProcessBuilder builder = new ProcessBuilder(cmdAndArgs);
-
+		ProcessBuilder builder;
+		if(seq)
+		builder= new ProcessBuilder(cmdAndArgsSEQ);
+		else
+			builder= new ProcessBuilder(cmdAndArgsMPI);
 
 		/*	ProcessBuilder builder = new ProcessBuilder();
 
@@ -251,7 +259,6 @@ public class RunMPI {
 		builder.directory(new File(execDir));
 
 
-
 		builder.redirectOutput(Redirect.to(logFile));
 
 
@@ -259,6 +266,8 @@ public class RunMPI {
 		Process pp = null;
 		try {
 			pp = builder.start();
+			
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -267,6 +276,7 @@ public class RunMPI {
 		try {
 			pp.waitFor();
 
+	
 
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
@@ -335,7 +345,7 @@ public class RunMPI {
 				line=br.readLine();
 				if(line==null) break;
 
-				if(manip && !line.startsWith("*")){
+				if(manip && !line.contains("*")){
 					line=replacement;
 					/*			String[] sp=line.split(regex);
 					int ib=0; if(sp[0].equals("")) ib=1;
@@ -355,7 +365,7 @@ public class RunMPI {
 				pw.println(line);
 
 
-				if(line.startsWith("* INPUT_MESH_FILE")){
+				if(line.contains("INPUT_MESH_FILE")){
 					manip=true;
 				}
 
@@ -392,7 +402,7 @@ public class RunMPI {
 				line=br.readLine();
 				if(line==null) break;
 
-				if(manip && !line.startsWith("*")){
+				if(manip && !line.contains("*")){
 					line=replacement;
 					/*			String[] sp=line.split(regex);
 					int ib=0; if(sp[0].equals("")) ib=1;
@@ -412,7 +422,7 @@ public class RunMPI {
 				pw.println(line);
 
 
-				if(line.startsWith("* NODE_ORDER * EDGE_ORDER *")){
+				if(line.contains("NODE_ORDER * EDGE_ORDER")){
 					manip=true;
 				}
 
@@ -443,7 +453,6 @@ public class RunMPI {
 			PrintWriter pw = new PrintWriter(fr2);
 
 			String line="";
-			String line1="";
 
 			int ix=0;
 
@@ -455,9 +464,8 @@ public class RunMPI {
 				line=br.readLine();
 				if(line==null) break;
 
-				line1=util.dropLeadingSpaces(line);
 
-				if(manip && !line1.startsWith("*")){
+				if(manip && !line.contains("*")){
 
 					String[] matIDx=line.split(regex);
 					int ib=0; if(matIDx[0].equals("")) ib=1;
@@ -480,7 +488,7 @@ public class RunMPI {
 				pw.println(line);
 
 
-				if(line.startsWith("* MAT_ID  *  POTENTIAL *")){
+				if(line.contains("MAT_ID  *  POTENTIAL")){
 					manip=true;
 				}
 
@@ -513,7 +521,6 @@ public class RunMPI {
 			PrintWriter pw = new PrintWriter(fr2);
 
 			String line="";
-			String line1="";
 			int ix=0;
 
 
@@ -524,9 +531,7 @@ public class RunMPI {
 				line=br.readLine();
 				if(line==null) break;
 
-				line1=util.dropLeadingSpaces(line);
-
-				if(manip && !line1.startsWith("*")){
+				if(manip && !line.contains("*")){
 
 					String[] ss=line.split(regex);
 					int ib=0; if(ss[0].equals("")) ib=1;
@@ -549,7 +554,7 @@ public class RunMPI {
 				pw.println(line);
 
 
-				if(line.startsWith("* M-STATIC * STEP ")|| line.startsWith("* STATIC * STEP ")){
+				if(line.contains("STATIC")){
 					manip=true;
 				}
 
@@ -581,7 +586,6 @@ public class RunMPI {
 			PrintWriter pw = new PrintWriter(fr2);
 
 			String line="";
-			String line1="";
 
 			int ix=0;
 
@@ -593,9 +597,8 @@ public class RunMPI {
 				line=br.readLine();
 				if(line==null) break;
 
-				line1=util.dropLeadingSpaces(line);
 
-				if(manip && !line1.startsWith("*")){
+				if(manip && !line.contains("*")){
 
 					String[] tIDx=line.split(regex);
 					int ib=0; if(tIDx[0].equals("")) ib=1;
@@ -607,9 +610,8 @@ public class RunMPI {
 
 					if(tIDx[ib].equals(Integer.toString(tID))){
 						line=br.readLine();
-						line1=util.dropLeadingSpaces(line);
 
-						while(line1.startsWith("*")){
+						while(line.contains("*")){
 
 							pw.println(line);
 							line=br.readLine();
@@ -640,7 +642,7 @@ public class RunMPI {
 				pw.println(line);
 
 
-				if(line.startsWith("* TIME_ID *	OPTION	*")){
+				if(line.contains("TIME_ID *	OPTION")){
 					manip=true;
 				}
 
@@ -673,7 +675,6 @@ public class RunMPI {
 			PrintWriter pw = new PrintWriter(fr2);
 
 			String line="";
-			String line1="";
 			int ix=0;
 
 
@@ -684,9 +685,8 @@ public class RunMPI {
 				line=br.readLine();
 				if(line==null) break;
 
-				line1=util.dropLeadingSpaces(line);
 
-				if(manip && !line1.startsWith("*")){
+				if(manip && !line.contains("*")){
 
 
 					line=Integer.toString(BH.length);
@@ -717,7 +717,7 @@ public class RunMPI {
 
 
 
-				if(line.startsWith("* NO_BH_CURVES *")){
+				if(line.contains("NO_BH_CURVES")){
 					manip=true;
 				}
 
@@ -749,7 +749,6 @@ public class RunMPI {
 			PrintWriter pw = new PrintWriter(fr2);
 
 			String line="";
-			String line1="";
 
 			int ix=0;
 
@@ -759,9 +758,8 @@ public class RunMPI {
 
 				if(line==null) break;
 
-				line1=util.dropLeadingSpaces(line);
 
-				if(manip && !line1.startsWith("*")){
+				if(manip && !line.contains("*")){
 					String[] sp=line.split(regex);
 					int ib=0; if(sp[0].equals("")) ib=1;
 
@@ -798,7 +796,7 @@ public class RunMPI {
 				pw.println(line);
 
 
-				if(line.startsWith("*  CYCLIC  *  SYMMETRY")){
+				if(line.contains("CYCLIC")){
 					manip=true;
 				}
 
@@ -837,11 +835,10 @@ public class RunMPI {
 
 				if(line==null) break;
 
-				line1=util.dropLeadingSpaces(line);
-
+			
 				if(manip ){
 
-					if(!line1.startsWith("*"))
+					if(!line.contains("*"))
 						line=br.readLine();
 
 
@@ -854,8 +851,8 @@ public class RunMPI {
 
 				pw.println(line);
 
-
-				if(line.startsWith("* SEPERATE_ANGLE(deg)")){
+				if(line.contains("SEP")){
+		
 
 					manip=true;
 				}
@@ -886,7 +883,6 @@ public class RunMPI {
 			PrintWriter pw = new PrintWriter(fr2);
 
 			String line="";
-			String line1="";
 
 			int ix=0;
 
@@ -896,9 +892,7 @@ public class RunMPI {
 
 				if(line==null) break;
 
-				line1=util.dropLeadingSpaces(line);
-
-				if(manip && !line1.startsWith("*")){
+				if(manip && !line.contains("*")){
 
 					String[] sp=line.split(regex);
 					int ib=0;
@@ -912,9 +906,8 @@ public class RunMPI {
 					{
 
 						line=br.readLine();
-						line1=util.dropLeadingSpaces(line);
 
-						if(!line1.startsWith("*")){
+						if(!line.contains("*")){
 							line="*"+line;
 							ib++;
 							if(ib<nB)
@@ -933,7 +926,7 @@ public class RunMPI {
 				pw.println(line);
 
 
-				if(line.startsWith("* NO_BN0_PLANES *")){
+				if(line.contains("NO_BN0_PLANES")){
 					manip=true;
 				}
 
@@ -977,7 +970,7 @@ public class RunMPI {
 			
 				if(line==null) break;
 
-				if(manip && !line.startsWith("*")){
+				if(manip && !line.contains("*")){
 
 					double[] numbs=util.getCSV(line);
 					geom=(int)(numbs[0]);
@@ -989,7 +982,7 @@ public class RunMPI {
 
 
 
-				if(line.startsWith("* GEOMETRY")){
+				if(line.contains("GEOMETRY")){
 					manip=true;
 				}
 
@@ -1030,11 +1023,10 @@ public class RunMPI {
 				line=br.readLine();
 				if(line==null) break;
 
-				if(manip && !line.startsWith("*")){
+				if(manip && !line.contains("*")){
 					
-					String line2=util.dropLeadingSpaces(line);
 
-					int[] numbs=util.getCSInt(line2);
+					int[] numbs=util.getCSInt(line);
 					if(numbs[4]>0)
 						slide=true;
 					break;
@@ -1045,7 +1037,7 @@ public class RunMPI {
 
 
 
-				if(line.contains("TRANSIENT * DISPLACEMENT *")){
+				if(line.contains("TRANSIENT * DISPLACEMENT")){
 					manip=true;
 				}
 
@@ -1085,11 +1077,10 @@ public class RunMPI {
 				line=br.readLine();
 				if(line==null) break;
 
-				if(manip && !line.startsWith("*")){
+				if(manip && !line.contains("*")){
 					
-					String line2=util.dropLeadingSpaces(line);
 
-					int[] numbs=util.getCSInt(line2);
+					double[] numbs=util.getCSV(line);
 					if(numbs[0]>0)
 						periodic=true;
 					break;
@@ -1100,7 +1091,7 @@ public class RunMPI {
 
 
 
-				if(line.contains("*  CYCLIC  *")){
+				if(line.contains("CYCLIC")){
 					manip=true;
 				}
 

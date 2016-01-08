@@ -780,7 +780,7 @@ public static void plot(double[][] XY){
 
 					pw.close();
 
-					util.pr("string array was written to: "+file);
+				//	util.pr("string array was written to: "+file);
 	
 				}
 
@@ -881,20 +881,27 @@ public static void plot(double[][] XY){
 
 				double[] v=new double[L];
 
-				for( int p=0;p<L;p++){
+				for( int p=p0;p<L;p++){
 
-					v[p]=Double.parseDouble(sp[p+p0]);
+					v[p-p0]=Double.parseDouble(sp[p]);
 				}
 
 				return v;
 			}
 
 			public static int[] getCSInt(String line){
+				
 				String[] sp=line.split(regex);	
+
+				int p0=0;
+				if(sp[0].equals(""))
+				{
+					p0=1;
+				}
 				int L=sp.length;
 				int[] v=new int[L];
-				for( int p=0;p<L;p++)
-							v[p]=Integer.parseInt(sp[p]);
+				for( int p=p0;p<L;p++)
+							v[p-p0]=Integer.parseInt(sp[p]);
 
 				return v;
 			}

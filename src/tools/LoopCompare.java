@@ -68,7 +68,7 @@ public class LoopCompare {
 			
 			x.execDir=System.getProperty("user.dir");
 			
-			x.execDir="C:\\Users\\hassan\\Documents\\Large Scale Test\\FieldSources\\domain";
+		//	x.execDir="C:\\Users\\hassan\\Documents\\Large Scale Test\\FieldSources\\domain";
 
 			
 			x.readInput();
@@ -100,6 +100,8 @@ public class LoopCompare {
 	public  void doLoopCompare() throws IOException{
 
 		File rootFolder=new File(caseFolder);
+
+		
 		String[] folderNames = rootFolder.list();
 		Arrays.sort(folderNames);
 
