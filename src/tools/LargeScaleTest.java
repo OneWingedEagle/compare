@@ -98,7 +98,7 @@ public class LargeScaleTest {
 
 	PrintWriter stderr;
 	
-	public static void main2(String[] args) throws WriteException{
+	public static void main(String[] args) throws WriteException{
 
 		LargeScaleTest x=new LargeScaleTest();
 
@@ -154,6 +154,7 @@ public class LargeScaleTest {
 		key[3]="*            Magnetic fluxes of flux loops";
 		key[4]="*** Total magnetic";
 		key[5]="*** Total Joule heat";
+		key[6]="***   Total NODAL Forces";
 		
 		
 		nLineAfter=new int[nOutputGroupsMax];
@@ -163,6 +164,7 @@ public class LargeScaleTest {
 		nLineAfter[3]=4;
 		nLineAfter[4]=1;
 		nLineAfter[5]=1;
+		nLineAfter[6]=1;
 		
 
 		outputTitles=new String[nOutputGroupsMax];
@@ -173,6 +175,7 @@ public class LargeScaleTest {
 		outputTitles[3]="Magn. fluxes";
 		outputTitles[4]="Magn. energies";
 		outputTitles[5]="Joule heats";
+		outputTitles[6]="Nodal force";
 
 
 		nKeys=0;
@@ -616,6 +619,10 @@ public class LargeScaleTest {
 					 for(int j=1;j<outputString[fRef][i].length;j++)
 						 for(int p=1;p<outputString[fRef][i][j].length;p++){
 							 for(int nfile=0;nfile<nFiles;nfile++){
+							//	 util.pr(i+" / "+outputString[fRef][i][j].length);
+								 if(p>6/* && outputString[nfile][i][0][p][0]*/) continue;
+							//	 util.pr(outputString[nfile][i][0][2][0]);
+								 
 								 if(outputString[nfile][i][0][p][0].equals("Amplitude(Current)"))
 								titles[1][col++]="Current";
 							 else
@@ -988,7 +995,6 @@ fr.close();
 
 			if(time[nfile]==null)
 			{
-				
 				time[nfile]=time[0].deepCopy();
 				
 				stepNumbs[nfile]=Arrays.copyOf(stepNumbs[0], time[nfile].length);
@@ -1041,14 +1047,15 @@ fr.close();
 				//	util.pr(j+"  "+data[j][0]);
 					dataSplitted=this.splitToStrings(data[j][0],"   +");
 					
-				
-					outputString[nfile][i][j]=new String[dataSplitted.length][nT[nfile]];
+				int ncolumns=dataSplitted.length;
+
+			
+					outputString[nfile][i][j]=new String[ncolumns][nT[nfile]];
 
 
 				
 					outputItemId[i][j]=dataSplitted[0];
 					
-
 					dataSplitted=this.splitToStrings(data[0][0],"   +");
 					
 					outputItemEntity[i]=new String[dataSplitted.length-1];
@@ -1108,6 +1115,7 @@ fr.close();
 			
 			for(int j=0;j<outputString[nfile][i].length;j++){
 				outputString[nfile][i][j]=new String[outputString[nRef][i][j].length][nT[nRef]];
+				util.pr(outputString[nRef][i][j].length);
 				
 				for(int k=0;k<outputString[nfile][i][j].length;k++)
 					for(int p=0;p<outputString[nfile][i][j][0].length;p++)
@@ -1337,9 +1345,6 @@ fr.close();
 		
 		int rw=1;
 
-
-		
-		
 		Number number=null;
 		Label label;
 

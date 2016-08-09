@@ -9,6 +9,7 @@ import java.awt.Frame;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,19 +21,16 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-
-
-
-
-
-
-
 
 
 
@@ -45,16 +43,237 @@ public class util {
 	
 	public util(){}
 	
-	public static void main2(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception {
 		
-		double[] y=new double[100];
+		util.combineCurrents();
+		
+		//util.moveReuslts();
+		
+/*		double[] y=new double[100];
 		for(int i=0;i<y.length;i++)
 			y[i]=util.triangWave(i*.02);
 		
 		plot(y);
 		
 		util.show(y);
+*/
+	}
+	
+	private static void combineCurrents() throws Exception{
+		
 
+String source0="C:/Users/hassan/Documents/Large Scale Test/FieldSources";
+		
+		String dest0="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/PHICOIL TEST 201609/model2_Dmodel_statorNoCyclic/MPI para 16";
+		
+		dest0="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/PHICOIL TEST 201609/fieldSource/MPI para 8";
+		
+		
+		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(dest0+"/currentCombined")));	
+
+		int nd=8;
+		
+		int nsteps=1;
+
+		String dest;
+		
+		String source;
+		
+		FileReader[] fr=new FileReader[nd];
+		
+		BufferedReader[] br=new BufferedReader[nd];
+		
+		for(int j=0;j<nd;j++){
+			if(j==0){
+				source=source0+"/domain";
+				}
+				else{
+					source=source0+"/domain"+j;
+				}
+			
+			fr[j]=new FileReader(source+"/current");
+			br[j] = new BufferedReader(fr[j]);
+		}
+		
+
+		
+		String[][][][] lines=new String[nd][nsteps][5][10000];
+			
+		int[] ix=new int[nd];
+
+		for(int i=0;i<nd;i++){
+			String line="";
+			for(int ks=1;ks<=nsteps;ks++)
+			{
+				for(int k=1;k<=5;k++)				
+				{
+					ix[i]=0;
+			
+				//	while(line!=null && !line.contains("elem")){
+
+						while(line!=null &&!line.contains("elem")){
+						
+							line=br[i].readLine();
+
+							if(line==null) break;
+						}
+						
+						for(int j=0;j<5;j++){
+							line=br[i].readLine();
+							if(line==null) break;
+						}
+						
+						int flag=0;
+						while(flag!=-1){
+							line=br[i].readLine();
+							if(line==null) break;
+							String line2=util.dropLeadingSpaces(line);
+							String[] sp=line2.split("[:; ,\\t]+");
+							int ib=0;
+							if(sp[0].equals("")) ib=1;
+							if(sp[ib].equals("-1"))
+							flag=-1;
+
+							if(flag!=-1){
+								lines[i][ks-1][k-1][ix[i]++]=new String(line);
+
+								}
+						}
+					
+			//	}
+			}
+				
+		}
+		}
+		
+	//	util.show(ix);
+		
+		//util.show(lines[2][0][0]);
+		
+		pw.println("   -1");
+		pw.println("   100");
+		pw.println("<NULL>");
+		pw.println("4.41,");
+
+		
+		int i=0;
+
+		double time=0;
+		String line="";
+		for(int ks=1;ks<=nsteps;ks++)
+		{
+
+			pw.println("   -1");
+			pw.println("   -1");
+			pw.println("   450");
+			pw.println(ks+",");
+			pw.println("STEP:"+ks+" Time:"+time);
+			pw.println("0,3,");
+			pw.println(time);
+			//pw.println("   100");
+			pw.println("1");
+			pw.println("<NULL>");
+		
+			pw.println("   -1");
+			pw.println("   -1");
+			pw.println("   451");
+		
+			for(int k=1;k<=5;k++)				
+			{
+				pw.println(ks+", 6001"+k+",1,");
+				pw.println("CURR-elem-"+k);
+				pw.println("0.,-1.,0.,");
+				pw.println("6001"+k+",0,0,0,0,0,0,0,0,0,");
+				pw.println("0,0,0,0,0,0,0,0,0,0,");	
+				pw.println("0,0,3,8,");
+				pw.println("0,1,1,");
+
+					
+					for(int i1=0;i1<nd;i1++){
+						for(int j1=0;j1<ix[i1];j1++)
+							pw.println(lines[i1][ks-1][k-1][j1]);
+					}
+					
+			pw.println("-1,0.,");
+			}
+				
+		}
+	
+			
+	pw.println("   -1");
+	
+	pw.close();
+
+	for(int j=0;j<nd;j++){
+		fr[j].close();
+		br[j].close();
+	}
+	
+
+
+
+	}
+	
+	private static void moveReuslts() throws Exception{
+String source0="C:/Users/hassan/Documents/Large Scale Test/FieldSources";
+		
+		String dest0="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/PHICOIL TEST 201609/model2_Dmodel_statorNoCyclic/MPI para 16";
+		dest0="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/PHICOIL TEST 201609/fieldSource/MPI para 8";
+		
+		
+		String dest3=dest0+"/postGeomsNeu";
+		File fdestFolder3=new File(dest3);
+		if(!fdestFolder3.exists()) fdestFolder3.mkdirs();
+		
+		int nd=8;
+		
+		for(int i=0;i<nd;i++){
+			
+			String dest;
+			String source;
+			
+			if(i==0){
+			 dest=dest0+"/domain";
+			source=source0+"/domain";
+			}
+			else{
+				 dest=dest0+"/domain"+i;
+					source=source0+"/domain"+i;
+			}
+			
+			File fdestFolder2=new File(dest);
+			if(!fdestFolder2.exists()) fdestFolder2.mkdirs();
+			
+			File f1=new File(source+"/current");
+			
+			File f2=new File(dest+"/current");
+			
+			util.copyFile(f1, f2);
+			
+			f1=new File(source+"/post_geom");
+			
+			 f2=new File(dest+"/post_geom");
+			 
+			File f3=new File(dest3+"/post_geom"+i+".neu");
+			
+			util.copyFile(f1, f2);
+			
+			util.copyFile(f1, f3);
+			
+			if(i>0){
+			f1=new File(source+"/output");
+				
+			 f2=new File(dest+"/output");
+			
+			util.copyFile(f1, f2);
+			}
+			
+			
+			
+		
+			
+		}
+		
 	}
 	
 	
@@ -905,6 +1124,33 @@ public static void plot(double[][] XY){
 
 				return v;
 			}
-
-		   
+			
+			
+			
+			public static void hardLink(File source, File dest) throws IOException  {
+				
+				 hardLink( source.getAbsolutePath(),dest.getAbsolutePath());
+			}
+			
+			
+			public static void hardLink(String source, String dest) throws IOException {
+				
+				 Path sourcePath = Paths.get(source);
+				    Path destPath = Paths.get(dest);
+				    
+							    
+				    try {
+					    Files.createLink(destPath, sourcePath);
+				    } catch (IOException x) {
+				        System.err.println(x);
+				    } catch (UnsupportedOperationException x) {
+				        // Some file systems do not
+				        // support adding an existing
+				        // file to a directory.
+				        System.err.println(x);
+				    }
+			}
+	
 }
+
+

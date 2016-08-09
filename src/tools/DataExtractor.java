@@ -50,19 +50,30 @@ public class DataExtractor {
 				line=br.readLine();
 				}
 			if(line==null) {break;}
-			
 
-	
-			
 			sourceIndex=0;
 
 
 			data1[sourceIndex++][ix]=line;
 			line=br.readLine();
+			
+		
+
+
 
 			while(line!=null && !line.startsWith("*")){
+				
+				if(key.startsWith("***   Total NODAL Forces") && line.contains("  MAT")){
+					StringBuilder sb = new StringBuilder(line);
+					for(int kx=6;kx<8;kx++)
+					sb.delete(6,9);
+					sb.insert(6, '.');
+					line=sb.toString();
+				}
+
 		
 				sp=line.split("  +");
+		
 			
 				if(sp.length>1 && nLinesAfter==4){
 					line="";
@@ -109,7 +120,6 @@ public class DataExtractor {
 
 public Vect loadTimesSteps(int[] stepNumb,String file,PrintWriter stderr){
 
-
 	Vect time1=new Vect(stepNumb.length);
 
 	try{
@@ -120,6 +130,8 @@ public Vect loadTimesSteps(int[] stepNumb,String file,PrintWriter stderr){
 		String[] sp;
 		int ix=0;
 		while((line=br.readLine())!=null){
+
+
 			while((line=br.readLine())!=null && !line.startsWith("*                            Step No.   ")){}
 			if(line==null) {break;}
 
@@ -129,6 +141,7 @@ public Vect loadTimesSteps(int[] stepNumb,String file,PrintWriter stderr){
 
 
 			time1.el[ix]=Double.parseDouble(sp[5]);
+			
 
 			ix++;
 

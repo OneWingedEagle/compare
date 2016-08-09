@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class RunMPI {
 
 	String regex="[:; . ,\\t]+";
 
+	boolean twoMeshes=false;
 
 	int refine=0;
 	String[][] inputMesh=new String[2][2];
@@ -46,6 +48,8 @@ public class RunMPI {
 
 
 	String caseFolder,execDir;
+	
+	public RunMPI(){};
 
 	public  RunMPI(String exDir,String rr){
 
@@ -92,6 +96,7 @@ public class RunMPI {
 		if(args.length>0)
 			nDomains=Integer.parseInt(args[0]);
 
+		util.pr("Execution folder: " +execDir);
 
 		x.runMPI(nDomains,false,false);
 		//x.doLoopCompare(5,5);
@@ -106,6 +111,9 @@ public class RunMPI {
 
 
 		File input=new File(execDir+File.separator+"input");
+		
+		if(!input.exists())  throw new FileNotFoundException("Input File not found.");
+		
 
 		int geomx=this.getGeomCode(input);
 		
@@ -116,25 +124,28 @@ public class RunMPI {
 		if(!inputReady){
 			boolean periodic=this.isPeriodic(input);
 
-			
+/*			
 			if(periodic){
 			
 				File tmp=new File(execDir+File.separator+"input1");
 			this.removeSepAng(input, tmp);
 			util.copyFile(tmp, input);
-			}
+			}*/
 			
 	
 				
 
 		boolean slide=this.isSlide(input);
+
 		
-
-
 		if(!slide){
+			
 			
 		
 			String replacement1="         5            0          "+nDomains+"        0        1      "+refine;
+			if(twoMeshes)
+				 replacement1="         5            0          "+2+"        0        0      "+refine;
+		
 			
 			File input2=new File(execDir+File.separator+"input2");
 			this.setNO_Mesh(input, input2,replacement1);
@@ -171,13 +182,12 @@ public class RunMPI {
 
 		File file1=null;
 
-		File file2=null;
 		File file3=null;
 
 		File file4=null;
 
 
-		File rotFile=new File(inputMesh[geom][1]);
+		File rotFile=new File(execDir+File.separator+inputMesh[geom][1]);
 		
 		
 
@@ -195,13 +205,17 @@ public class RunMPI {
 			file1=new File(domainx+"/input");
 
 
-			file2=new File(domainx+"/"+inputMesh[geom][0]);
+		//	file2=new File(domainx+"/"+inputMesh[geom][0]);
 
 			file3=new File(domainx+"/2D_to_3D");
 
 			if(rotFile.exists())
 				file4=new File(domainx+"/"+inputMesh[geom][1]);
+			
 
+
+
+			
 
 
 
@@ -209,7 +223,7 @@ public class RunMPI {
 
 				util.copyFile(new File(execDir+File.separator+"input"), file1);
 
-				util.copyFile(new File(inputMesh[geom][0]), file2);
+			//	util.copyFile(new File(execDir+File.separator+inputMesh[geom][0]), file2);
 
 
 				if(geomx==4){
@@ -221,6 +235,7 @@ public class RunMPI {
 
 				if(rotFile.exists())
 					util.copyFile(rotFile, file4);
+				//	util.hardLink(rotFile, file4);
 
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -950,7 +965,7 @@ public class RunMPI {
 
 
 
-	private int getGeomCode(File source){
+	public int getGeomCode(File source){
 		int geom=1;
 		
 

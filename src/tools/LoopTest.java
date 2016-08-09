@@ -45,14 +45,28 @@ public class LoopTest {
 	boolean[] success;
 	
 	boolean inputsReady=false;
-	int refine=0;
+	
+	boolean twoMeshes=false;
+
 	String[][] inputMesh=new String[2][2];
-	int geom=1;
+	static int geom=1;
 
 
 	
 
 	String caseFolder,execDir;
+	
+public  LoopTest(){
+
+		inputMesh[1][0]="pre_geom2D.neu";
+		inputMesh[0][0]="pre_geom.neu";
+		
+		inputMesh[1][1]="rotor_mesh2D.neu";
+		inputMesh[0][1]="rotor_mesh.neu";
+
+
+	};
+	
 
 	public  LoopTest(String exDir,String rr){
 		
@@ -72,20 +86,52 @@ public class LoopTest {
 
 	public static void main(String[] args) throws IOException{
 		
+
 		
-		boolean controlFile=true;
+		LoopTest x=new LoopTest();
 		
+		x.runHere();
+		
+	//	x.runFromControl();
+
+	}
 	
-		String execDir="C:/Users/hassan/Documents/Large Scale Test/FieldSources/domain";
+private  void runHere() throws IOException{
 		
 
-		String caseFolder="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/refine0";
-		caseFolder="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/refine0";
-
-		//rr="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM_tetra/refine0";
+	
+		this.execDir="C:/Users/hassan/Documents/Large Scale Test/FieldSources/domain";
 		
-		if(controlFile){
+
+		this.caseFolder="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/SLIDE TESTS 2015.12.23/SPM-nonlinear/disp1/refine0";
+		this.caseFolder="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/PHICOIL TEST 201609";
+		
+	//	this.caseFolder="C:/Users/hassan/Documents/Large Scale Test/FieldSources/results/REGULATIZATION-ANTISYM";
+		
+		
+
 			
+	//	execDir=System.getProperty("user.dir");
+			
+			boolean overWrite=true;
+			boolean inputReady=false;
+			
+			int nDomains=0;
+			int nBegin=17;
+			int nEnd=17;
+	
+		doLoopTest(nBegin,nEnd,nDomains,overWrite,inputReady);
+		
+		//x.doLoopTest(13,13,0,true,true);
+		
+		//x.doLoopCompare(11, 11);
+		
+
+	}
+
+	
+private  void runFromControl() throws IOException{
+		
 		execDir=System.getProperty("user.dir");
 			
 			boolean overWrite=false,meshReady=false, inputReady=false;
@@ -156,29 +202,14 @@ public class LoopTest {
 
 			catch(IOException e){System.err.println("Failed in reading control file.");		}
 			
-			
-			
-			
-			LoopTest x=new LoopTest(execDir,caseFolder);
-			x.doLoopTest(nBegin,nEnd,nDomains,overWrite,inputReady);
-			
-		}
-
-		else{
-		 
-
-		LoopTest x=new LoopTest(execDir,caseFolder);
-
-		//x.deleteData();
 		
-		x.doLoopTest(3,3,16,true,true);
-		
-		//x.doLoopCompare(11, 11);
-		}
-
-
+		//	LoopTest x=new LoopTest(execDir,caseFolder);
+			
+			doLoopTest(nBegin,nEnd,nDomains,overWrite,inputReady);
+			
 
 	}
+
 
 	public  void doLoopTestCRelease(int nBegin, int nEnd,boolean overWrite,boolean inputReady) throws IOException{
 		doLoopTest(nBegin, nEnd, 0, overWrite,inputReady);
@@ -202,8 +233,9 @@ public class LoopTest {
 		File caseFolderFodler=new File(caseFolder);
 		String[] names = caseFolderFodler.list();
 		
-		Arrays.sort(names);
-
+	//	Arrays.sort(names);
+		  Arrays.sort(names, new WindowsExplorerStringComparator());
+		//util.show(names);
 
 		int nMaxFold=500;
 
@@ -310,13 +342,21 @@ public class LoopTest {
 
 		File source1=new File(sourceFolderX+"/input");
 
-		File dest1=new File(execDir+"/input");
 
+		
 		if(!source1.exists()) {
 			System.err.println(" no input file in "+sourceFolderX);
 
 			return success;
 		}
+		
+		File dest1=new File(execDir+"/input");
+		
+		
+		int geomx=new RunMPI().getGeomCode(source1);
+		
+		if(geomx>0) geom=1;
+		else geom=0;
 
 
 		File source2=new File(sourceFolderX+"/"+inputMesh[geom][0]);
@@ -345,12 +385,6 @@ public class LoopTest {
 
 		if(dest3.exists()) dest3.delete();
 
-		if(dest4.exists()) dest4.delete();
-		
-		if(dest5.exists()) dest5.delete();
-
-	
-		if(dest7.exists()) dest7.delete();
 
 		if(source8.exists())
 			if(dest8.exists()) dest8.delete();
@@ -361,6 +395,8 @@ public class LoopTest {
 		util.copyFile(source1, dest1);
 		
 		util.copyFile(source2, dest2);
+		
+		//util.hardLink(source2, dest2);
 		
 		if(source3.exists())
 		util.copyFile(source3, dest3);
@@ -381,6 +417,8 @@ public class LoopTest {
 		try {
 		
 			RunMPI rmpi=new RunMPI(execDir, caseFolder);
+			rmpi.twoMeshes=this.twoMeshes;
+			
 			success=rmpi.runMPI(nDomains,inputReady,seq );
 
 			
@@ -474,12 +512,21 @@ public class LoopTest {
 
 		File source1=new File(sourceFolder+"/input");
 		File dest1=new File(execDir+"/input");
+		
+		
 
 		if(!source1.exists()) {
 			System.err.println(" no input file in "+sourceFolder);
 
 			return success;
 		}
+		
+		int geomx=new RunMPI().getGeomCode(dest1);
+		
+		if(geomx>0) geom=1;
+		else geom=0;
+		
+		
 
 		File source2=new File(sourceFolder+"/"+inputMesh[geom][0]);
 		File dest2=new File(execDir+"/"+inputMesh[geom][0]);
@@ -768,119 +815,7 @@ public class LoopTest {
 	}
 
 
-	private void setNO_Mesh(File source, File dest,String replacement){
 
-		try{
-			FileReader fr=new FileReader(source);
-			BufferedReader br = new BufferedReader(fr);
-
-			FileWriter fr2=new FileWriter(dest);
-			PrintWriter pw = new PrintWriter(fr2);
-
-			String line="";
-
-			int ix=0;
-
-			boolean manip=false;
-			while(line!=null){
-				line=br.readLine();
-				if(line==null) break;
-
-				if(manip && !line.startsWith("*")){
-					line=replacement;
-		/*			String[] sp=line.split(regex);
-					int ib=0; if(sp[0].equals("")) ib=1;
-					String nMesh=Integer.toString(nDomains);
-
-					sp[ib+2]=nMesh;
-					line="";
-
-					for(int j=0;j<sp.length;j++ )
-
-						line=line+sp[j]+"\t";*/
-
-					manip=false;
-
-				}
-
-				pw.println(line);
-
-
-				if(line.startsWith("* INPUT_MESH_FILE")){
-					manip=true;
-				}
-
-			}
-
-			fr2.close();
-
-			pw.close();
-
-			br.close();
-			fr.close();
-
-
-		}
-
-		catch(IOException e2){e2.printStackTrace();}
-	}
-	
-	private void setNO_Paras(File source, File dest,String replacement){
-
-		try{
-			FileReader fr=new FileReader(source);
-			BufferedReader br = new BufferedReader(fr);
-
-			FileWriter fr2=new FileWriter(dest);
-			PrintWriter pw = new PrintWriter(fr2);
-
-			String line="";
-
-			int ix=0;
-
-			boolean manip=false;
-			while(line!=null){
-				line=br.readLine();
-				if(line==null) break;
-
-				if(manip && !line.startsWith("*")){
-					line=replacement;
-		/*			String[] sp=line.split(regex);
-					int ib=0; if(sp[0].equals("")) ib=1;
-					String nMesh=Integer.toString(nDomains);
-
-					sp[ib+2]=nMesh;
-					line="";
-
-					for(int j=0;j<sp.length;j++ )
-
-						line=line+sp[j]+"\t";*/
-
-					manip=false;
-
-				}
-
-				pw.println(line);
-
-
-				if(line.startsWith("* NODE_ORDER * EDGE_ORDER *")){
-					manip=true;
-				}
-
-			}
-
-			fr2.close();
-
-			pw.close();
-
-			br.close();
-			fr.close();
-
-
-		}
-
-		catch(IOException e2){e2.printStackTrace();}
-	}
 
 
 	private void setToNolinPart2(File source,File dest,int matID,int BHID){
